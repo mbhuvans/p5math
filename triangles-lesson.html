@@ -3,746 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Triangles – P5 Maths</title>
+<title>Triangles - P5 Maths</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #FFF8F0;
-  --card: #FFFFFF;
-  --primary: #FF6B35;
-  --primary-light: #FFF0E8;
-  --secondary: #2EC4B6;
-  --secondary-light: #E8FAF8;
-  --accent: #7B2D8E;
-  --accent-light: #F3E8F7;
-  --text: #2D2A32;
-  --text-light: #6B6577;
-  --success: #4CAF50;
-  --error: #E53935;
-  --shadow: 0 4px 20px rgba(45,42,50,0.08);
-  --shadow-hover: 0 8px 30px rgba(45,42,50,0.14);
-  --radius: 18px;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── Hero ── */
-.hero {
-  background: linear-gradient(135deg, #FF6B35 0%, #FF8F65 40%, #2EC4B6 100%);
-  padding: 40px 24px 60px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.hero::after {
-  content: '';
-  position: absolute; bottom: -2px; left: 0; right: 0;
-  height: 40px;
-  background: var(--bg);
-  border-radius: 50% 50% 0 0;
-}
-.hero-triangles {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  opacity: 0.15;
-}
-.hero h1 {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 2.4rem;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.hero p {
-  color: rgba(255,255,255,0.92);
-  font-size: 1.1rem;
-  margin-top: 8px;
-  font-weight: 600;
-  position: relative; z-index: 1;
-}
-.hero .name { color: #FFE066; }
-
-/* ── Nav Tabs ── */
-.nav-wrap {
-  display: flex; justify-content: center;
-  margin: -28px auto 24px;
-  position: relative; z-index: 2;
-  padding: 0 12px;
-}
-.nav-tabs {
-  display: flex; gap: 6px;
-  background: var(--card);
-  border-radius: 16px;
-  padding: 6px;
-  box-shadow: var(--shadow);
-  overflow-x: auto;
-  max-width: 100%;
-}
-.nav-tab {
-  padding: 10px 18px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 0.88rem;
-  cursor: pointer;
-  background: transparent;
-  color: var(--text-light);
-  white-space: nowrap;
-  transition: all 0.25s;
-}
-.nav-tab.active { background: var(--primary); color: #fff; }
-.nav-tab:hover:not(.active) { background: var(--primary-light); color: var(--primary); }
-
-/* ── Container ── */
-.container { max-width: 820px; margin: 0 auto; padding: 0 18px 60px; }
-
-/* ── Section ── */
-.section { display: none; animation: fadeUp 0.4s ease; }
-.section.active { display: block; }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Cards ── */
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 28px 24px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow);
-  transition: box-shadow 0.3s;
-}
-.card:hover { box-shadow: var(--shadow-hover); }
-.card h2 {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1.4rem;
-  margin-bottom: 12px;
-  color: var(--primary);
-}
-.card h3 {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1.15rem;
-  margin-bottom: 8px;
-}
-.card p, .card li { line-height: 1.7; font-size: 0.98rem; }
-.card ul { padding-left: 20px; }
-.card li { margin-bottom: 6px; }
-
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-.badge-orange { background: var(--primary-light); color: var(--primary); }
-.badge-teal { background: var(--secondary-light); color: var(--secondary); }
-.badge-purple { background: var(--accent-light); color: var(--accent); }
-
-/* ── Triangle SVG demos ── */
-.tri-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
-.tri-item {
-  background: #FAFAFA;
-  border-radius: 14px;
-  padding: 18px;
-  text-align: center;
-  border: 2px solid transparent;
-  transition: 0.3s;
-  cursor: default;
-}
-.tri-item:hover { border-color: var(--primary); transform: translateY(-3px); }
-.tri-item svg { max-width: 140px; height: auto; margin: 0 auto 10px; display: block; }
-.tri-item strong { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; display: block; margin-bottom: 4px; }
-.tri-item span { font-size: 0.82rem; color: var(--text-light); }
-
-/* ── Key fact box ── */
-.key-fact {
-  background: linear-gradient(135deg, #FFF6E0, #FFF0E8);
-  border-left: 5px solid var(--primary);
-  border-radius: 0 14px 14px 0;
-  padding: 18px 20px;
-  margin: 16px 0;
-  font-weight: 600;
-}
-.key-fact .emoji { font-size: 1.3rem; margin-right: 6px; }
-
-/* ── Interactive angle explorer ── */
-.angle-explorer {
-  background: #F7F7FB;
-  border-radius: 14px;
-  padding: 24px;
-  text-align: center;
-  margin-top: 16px;
-}
-.angle-explorer canvas {
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: inset 0 1px 4px rgba(0,0,0,0.06);
-  max-width: 100%;
-}
-.angle-inputs {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 14px;
-}
-.angle-input-group { text-align: center; }
-.angle-input-group label {
-  display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;
-  color: var(--text-light);
-}
-.angle-input-group input {
-  width: 80px; padding: 8px; text-align: center;
-  border: 2px solid #E0DCE8; border-radius: 10px;
-  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1rem;
-  transition: 0.2s;
-}
-.angle-input-group input:focus { outline: none; border-color: var(--secondary); }
-.angle-sum {
-  margin-top: 12px; font-weight: 800; font-size: 1.15rem;
-}
-
-/* ── Quiz ── */
-.quiz-question {
-  background: #F7F7FB;
-  border-radius: 14px;
-  padding: 22px;
-  margin-bottom: 18px;
-}
-.quiz-question p.q-text { font-weight: 700; margin-bottom: 14px; font-size: 1.02rem; }
-.quiz-question .q-num {
-  display: inline-block;
-  background: var(--primary);
-  color: #fff;
-  width: 28px; height: 28px;
-  line-height: 28px;
-  border-radius: 50%;
-  text-align: center;
-  font-size: 0.82rem;
-  font-weight: 800;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.quiz-options { display: flex; flex-direction: column; gap: 8px; }
-.quiz-opt {
-  padding: 12px 16px;
-  border: 2px solid #E0DCE8;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.2s;
-  background: #fff;
-  text-align: left;
-}
-.quiz-opt:hover { border-color: var(--secondary); background: var(--secondary-light); }
-.quiz-opt.correct { border-color: var(--success); background: #E8F5E9; }
-.quiz-opt.wrong { border-color: var(--error); background: #FFEBEE; }
-.quiz-opt.disabled { pointer-events: none; }
-.quiz-feedback {
-  margin-top: 10px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  display: none;
-}
-.quiz-feedback.show { display: block; }
-.quiz-feedback.correct { background: #E8F5E9; color: #2E7D32; }
-.quiz-feedback.wrong { background: #FFEBEE; color: #C62828; }
-
-.score-box {
-  text-align: center;
-  padding: 24px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--secondary-light), var(--accent-light));
-  margin-top: 20px;
-  display: none;
-}
-.score-box h2 { font-family: 'Fredoka', sans-serif; font-size: 2rem; color: var(--accent); }
-.score-box p { font-weight: 600; margin-top: 6px; }
-
-.btn-retry {
-  margin-top: 14px;
-  padding: 12px 28px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.btn-retry:hover { background: #e55a25; }
-
-/* ── Responsive ── */
-@media (max-width: 520px) {
-  .hero h1 { font-size: 1.7rem; }
-  .nav-tab { padding: 8px 13px; font-size: 0.8rem; }
-  .card { padding: 20px 16px; }
-  .tri-gallery { grid-template-columns: 1fr 1fr; }
-}
+:root{--bg:#FFF8F0;--card:#FFFFFF;--primary:#FF6B35;--primary-light:#FFF0E8;--secondary:#2EC4B6;--secondary-light:#E8FAF8;--accent:#7B2D8E;--accent-light:#F3E8F7;--text:#2D2A32;--text-light:#6B6577;--success:#4CAF50;--error:#E53935;--shadow:0 4px 20px rgba(45,42,50,0.08);--shadow-hover:0 8px 30px rgba(45,42,50,0.14);--radius:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.hero{background:linear-gradient(135deg,#FF6B35 0%,#FF8F65 40%,#2EC4B6 100%);padding:40px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:40px;background:var(--bg);border-radius:50% 50% 0 0}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2.4rem;color:#fff;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hero p{color:rgba(255,255,255,.92);font-size:1.1rem;margin-top:8px;font-weight:600;position:relative;z-index:1}
+.hero .name{color:#FFE066}
+.nav-wrap{display:flex;justify-content:center;margin:-28px auto 24px;position:relative;z-index:2;padding:0 12px}
+.nav-tabs{display:flex;gap:4px;background:var(--card);border-radius:16px;padding:5px;box-shadow:var(--shadow);overflow-x:auto;max-width:100%}
+.nav-tab{padding:9px 14px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;background:transparent;color:var(--text-light);white-space:nowrap;transition:.25s}
+.nav-tab.active{background:var(--primary);color:#fff}
+.nav-tab:hover:not(.active){background:var(--primary-light);color:var(--primary)}
+.container{max-width:820px;margin:0 auto;padding:0 18px 60px}
+.section{display:none;animation:fadeUp .4s ease}.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;margin-bottom:20px;box-shadow:var(--shadow);transition:box-shadow .3s}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h2{font-family:'Fredoka',sans-serif;font-size:1.35rem;margin-bottom:12px;color:var(--primary)}
+.card h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;margin-bottom:8px}
+.card p,.card li{line-height:1.7;font-size:.96rem}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:10px}
+.badge-orange{background:var(--primary-light);color:var(--primary)}
+.badge-teal{background:var(--secondary-light);color:var(--secondary)}
+.badge-purple{background:var(--accent-light);color:var(--accent)}
+.tri-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:16px}
+.tri-item{background:#FAFAFA;border-radius:14px;padding:18px;text-align:center;border:2px solid transparent;transition:.3s}
+.tri-item:hover{border-color:var(--primary);transform:translateY(-3px)}
+.tri-item svg{max-width:140px;height:auto;margin:0 auto 10px;display:block}
+.tri-item strong{font-family:'Fredoka',sans-serif;font-size:.95rem;display:block;margin-bottom:4px}
+.tri-item span{font-size:.82rem;color:var(--text-light)}
+.key-fact{background:linear-gradient(135deg,#FFF6E0,#FFF0E8);border-left:5px solid var(--primary);border-radius:0 14px 14px 0;padding:18px 20px;margin:16px 0;font-weight:600}
+.key-fact .emoji{font-size:1.3rem;margin-right:6px}
+.warn-box{background:#FFF3E0;border-left:5px solid #FF9800;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.tip-box{background:#E3F2FD;border-left:5px solid #2196F3;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.step-box{padding:14px 18px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:.95rem;line-height:1.9;margin-top:10px}
+.formula-box{background:linear-gradient(135deg,#FFF6E0,#F3E8F7);border:3px dashed var(--accent);border-radius:16px;padding:24px;text-align:center;margin:18px 0}
+.formula-box .formula{font-family:'Fredoka',sans-serif;font-size:1.5rem;color:var(--accent);margin:8px 0}
+.formula-frac{display:inline-block;text-align:center;vertical-align:middle}
+.formula-frac .num{display:block;border-bottom:3px solid var(--accent);padding-bottom:4px;font-family:'Fredoka',sans-serif;font-size:1.4rem;color:var(--accent)}
+.formula-frac .den{display:block;padding-top:4px;font-family:'Fredoka',sans-serif;font-size:1.4rem;color:var(--accent)}
+.angle-explorer,.area-calc,.grid-wrap{background:#F7F7FB;border-radius:14px;padding:24px;text-align:center;margin-top:16px}
+.angle-explorer canvas,.area-calc canvas,.grid-wrap canvas{border-radius:10px;background:#fff;box-shadow:inset 0 1px 4px rgba(0,0,0,.06);max-width:100%}
+.angle-inputs,.area-calc-inputs{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.angle-input-group{text-align:center}
+.angle-input-group label{display:block;font-size:.8rem;font-weight:700;margin-bottom:4px;color:var(--text-light)}
+.angle-input-group input{width:80px;padding:8px;text-align:center;border:2px solid #E0DCE8;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;transition:.2s}
+.angle-input-group input:focus{outline:none;border-color:var(--secondary)}
+.angle-sum{margin-top:12px;font-weight:800;font-size:1.15rem}
+.area-calc-inputs .angle-input-group input{width:100px}
+.area-result{text-align:center;padding:16px;background:linear-gradient(135deg,#E8FAF8,#FFF0E8);border-radius:12px;font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--primary);margin-top:12px}
+.area-result span{color:var(--secondary)}
+.bh-demo{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;justify-content:center}
+.bh-card{background:#FAFAFA;border-radius:14px;padding:16px;text-align:center;flex:1 1 220px;max-width:260px;border:2px solid #E0DCE8}
+.bh-card h4{font-family:'Fredoka',sans-serif;font-size:.9rem;margin-bottom:8px}
+.bh-card svg{max-width:200px;margin:0 auto;display:block}
+.bh-card p{font-size:.82rem;margin-top:8px;color:var(--text-light);line-height:1.5}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.subtab{padding:8px 14px;border-radius:10px;border:2px solid #E0DCE8;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;background:#fff;color:var(--text-light);transition:.2s}
+.subtab.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.subtab:hover:not(.active){border-color:var(--accent)}
+.subsection{display:none;animation:fadeUp .3s ease}.subsection.active{display:block}
+.quiz-question{background:#F7F7FB;border-radius:14px;padding:22px;margin-bottom:18px}
+.quiz-question p.q-text{font-weight:700;margin-bottom:14px;font-size:1.02rem}
+.quiz-question .q-num{display:inline-block;background:var(--primary);color:#fff;width:28px;height:28px;line-height:28px;border-radius:50%;text-align:center;font-size:.82rem;font-weight:800;margin-right:8px;vertical-align:middle}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px 16px;border:2px solid #E0DCE8;border-radius:12px;cursor:pointer;font-weight:600;font-size:.95rem;transition:.2s;background:#fff;text-align:left}
+.quiz-opt:hover{border-color:var(--secondary);background:var(--secondary-light)}
+.quiz-opt.correct{border-color:var(--success);background:#E8F5E9}
+.quiz-opt.wrong{border-color:var(--error);background:#FFEBEE}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.9rem;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#E8F5E9;color:#2E7D32}
+.quiz-feedback.wrong{background:#FFEBEE;color:#C62828}
+.score-box{text-align:center;padding:24px;border-radius:14px;background:linear-gradient(135deg,var(--secondary-light),var(--accent-light));margin-top:20px;display:none}
+.score-box h2{font-family:'Fredoka',sans-serif;font-size:2rem;color:var(--accent)}
+.score-box p{font-weight:600;margin-top:6px}
+.btn-retry{margin-top:14px;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
+@media(max-width:520px){.hero h1{font-size:1.7rem}.nav-tab{padding:8px 10px;font-size:.76rem}.card{padding:20px 16px}.tri-gallery{grid-template-columns:1fr 1fr}.bh-demo{flex-direction:column;align-items:center}}
 </style>
 </head>
 <body>
-
-<!-- ── HERO ── -->
-<div class="hero">
-  <svg class="hero-triangles" viewBox="0 0 800 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="60,200 160,40 260,200" fill="#fff"/>
-    <polygon points="300,220 400,80 500,220" fill="#fff"/>
-    <polygon points="520,210 650,30 720,210" fill="#fff"/>
-    <polygon points="140,250 220,160 300,250" fill="#fff"/>
-    <polygon points="580,250 660,150 740,250" fill="#fff"/>
-  </svg>
-  <h1>🔺 Triangles</h1>
-  <p>Primary 5 Maths &middot; Hello, <span class="name">Saina</span>!</p>
-</div>
-
-<!-- ── NAV ── -->
-<div class="nav-wrap">
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showSection('learn')">📖 Learn</button>
-    <button class="nav-tab" onclick="showSection('types')">📐 Types</button>
-    <button class="nav-tab" onclick="showSection('angles')">🔢 Angles</button>
-    <button class="nav-tab" onclick="showSection('explore')">🧪 Explore</button>
-    <button class="nav-tab" onclick="showSection('quiz')">✏️ Quiz</button>
-  </div>
-</div>
-
+<div class="hero"><h1>&#x1F53A; Triangles</h1><p>Primary 5 Maths &middot; Hello, <span class="name">Saina</span>!</p></div>
+<div class="nav-wrap"><div class="nav-tabs">
+<button class="nav-tab active" onclick="showS('learn',this)">&#x1F4D6; Learn</button>
+<button class="nav-tab" onclick="showS('types',this)">&#x1F4D0; Types</button>
+<button class="nav-tab" onclick="showS('angles',this)">&#x1F522; Angles</button>
+<button class="nav-tab" onclick="showS('explore',this)">&#x1F9EA; Explore</button>
+<button class="nav-tab" onclick="showS('area',this)">&#x1F4CF; Area</button>
+<button class="nav-tab" onclick="showS('quiz',this)">&#x270F;&#xFE0F; Quiz</button>
+</div></div>
 <div class="container">
-
-<!-- ═══════ SECTION 1: LEARN ═══════ -->
+ 
 <div class="section active" id="sec-learn">
-  <div class="card">
-    <span class="badge badge-orange">Basics</span>
-    <h2>What is a Triangle?</h2>
-    <p>A <strong>triangle</strong> is a closed figure with <strong>3 straight sides</strong> and <strong>3 angles</strong>. It is one of the simplest shapes in geometry!</p>
-    <div class="key-fact">
-      <span class="emoji">💡</span> Every triangle has exactly <strong>3 vertices</strong> (corners), <strong>3 sides</strong>, and <strong>3 angles</strong>.
-    </div>
-    <p style="margin-top:10px;">We name triangles using their vertices. For example, <strong>Triangle ABC</strong> has vertices A, B, and C.</p>
-    <svg viewBox="0 0 300 220" style="max-width:280px;margin:20px auto;display:block;" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="150,30 40,190 260,190" fill="none" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/>
-      <circle cx="150" cy="30" r="5" fill="#FF6B35"/>
-      <circle cx="40" cy="190" r="5" fill="#FF6B35"/>
-      <circle cx="260" cy="190" r="5" fill="#FF6B35"/>
-      <text x="148" y="20" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">A</text>
-      <text x="25" y="208" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">B</text>
-      <text x="275" y="208" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">C</text>
-      <!-- angle arcs -->
-      <path d="M 150,58 A 28,28 0 0,0 132,48" fill="none" stroke="#2EC4B6" stroke-width="2"/>
-      <path d="M 68,190 A 28,28 0 0,0 54,170" fill="none" stroke="#2EC4B6" stroke-width="2"/>
-      <path d="M 232,190 A 28,28 0 0,1 246,170" fill="none" stroke="#2EC4B6" stroke-width="2"/>
-    </svg>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-teal">Key Rule</span>
-    <h2>Angle Sum Property</h2>
-    <p>The <strong>three angles</strong> inside any triangle <strong>always add up to 180°</strong>. This is true for every triangle — big or small!</p>
-    <div class="key-fact">
-      <span class="emoji">⭐</span> <strong>Angle A + Angle B + Angle C = 180°</strong>
-    </div>
-    <p style="margin-top:10px;"><strong>Example:</strong> If two angles are 60° and 70°, the third angle = 180° − 60° − 70° = <strong>50°</strong>.</p>
-  </div>
+<div class="card"><span class="badge badge-orange">Basics</span><h2>What is a Triangle?</h2><p>A <strong>triangle</strong> is a closed figure with <strong>3 straight sides</strong> and <strong>3 angles</strong>.</p><div class="key-fact"><span class="emoji">&#x1F4A1;</span> Every triangle has exactly <strong>3 vertices</strong>, <strong>3 sides</strong>, and <strong>3 angles</strong>.</div><svg viewBox="0 0 300 220" style="max-width:260px;margin:20px auto;display:block" xmlns="http://www.w3.org/2000/svg"><polygon points="150,30 40,190 260,190" fill="none" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/><circle cx="150" cy="30" r="5" fill="#FF6B35"/><circle cx="40" cy="190" r="5" fill="#FF6B35"/><circle cx="260" cy="190" r="5" fill="#FF6B35"/><text x="148" y="20" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">A</text><text x="25" y="208" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">B</text><text x="275" y="208" font-family="Fredoka" font-size="16" font-weight="600" fill="#2D2A32">C</text></svg></div>
+<div class="card"><span class="badge badge-teal">Key Rule</span><h2>Angle Sum Property</h2><p>The <strong>three angles</strong> inside any triangle <strong>always add up to 180&deg;</strong>.</p><div class="key-fact"><span class="emoji">&#x2B50;</span> <strong>&ang;A + &ang;B + &ang;C = 180&deg;</strong></div></div>
 </div>
-
-<!-- ═══════ SECTION 2: TYPES ═══════ -->
+ 
 <div class="section" id="sec-types">
-  <div class="card">
-    <span class="badge badge-purple">Classify by Sides</span>
-    <h2>Types of Triangles (by Sides)</h2>
-    <div class="tri-gallery">
-      <div class="tri-item">
-        <svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="80,15 15,135 145,135" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/>
-          <text x="40" y="85" font-size="12" font-weight="700" fill="#FF6B35" font-family="Nunito">5 cm</text>
-          <text x="100" y="85" font-size="12" font-weight="700" fill="#FF6B35" font-family="Nunito">5 cm</text>
-          <text x="62" y="150" font-size="12" font-weight="700" fill="#FF6B35" font-family="Nunito">5 cm</text>
-        </svg>
-        <strong>Equilateral</strong>
-        <span>All 3 sides are equal.<br>All angles = 60°.</span>
-      </div>
-      <div class="tri-item">
-        <svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="80,15 20,135 140,135" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="3" stroke-linejoin="round"/>
-          <text x="38" y="82" font-size="12" font-weight="700" fill="#2EC4B6" font-family="Nunito">6 cm</text>
-          <text x="100" y="82" font-size="12" font-weight="700" fill="#2EC4B6" font-family="Nunito">6 cm</text>
-          <text x="56" y="150" font-size="12" font-weight="700" fill="#2EC4B6" font-family="Nunito">8 cm</text>
-          <!-- tick marks for equal sides -->
-          <line x1="48" y1="70" x2="54" y2="76" stroke="#2EC4B6" stroke-width="2"/>
-          <line x1="108" y1="76" x2="114" y2="70" stroke="#2EC4B6" stroke-width="2"/>
-        </svg>
-        <strong>Isosceles</strong>
-        <span>2 sides are equal.<br>2 base angles are equal.</span>
-      </div>
-      <div class="tri-item">
-        <svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="30,20 10,135 150,135" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/>
-          <text x="4" y="82" font-size="12" font-weight="700" fill="#7B2D8E" font-family="Nunito">5 cm</text>
-          <text x="55" y="150" font-size="12" font-weight="700" fill="#7B2D8E" font-family="Nunito">7 cm</text>
-          <text x="82" y="72" font-size="12" font-weight="700" fill="#7B2D8E" font-family="Nunito">9 cm</text>
-        </svg>
-        <strong>Scalene</strong>
-        <span>All 3 sides are different.<br>All 3 angles are different.</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-orange">Classify by Angles</span>
-    <h2>Types of Triangles (by Angles)</h2>
-    <div class="tri-gallery">
-      <div class="tri-item">
-        <svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="80,20 20,130 140,130" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/>
-          <text x="64" y="118" font-size="11" font-weight="700" fill="#FF6B35" font-family="Nunito">All &lt; 90°</text>
-        </svg>
-        <strong>Acute Triangle</strong>
-        <span>All 3 angles are <strong>less than 90°</strong>.</span>
-      </div>
-      <div class="tri-item">
-        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="15,15 15,140 145,140" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="3" stroke-linejoin="round"/>
-          <!-- right angle marker -->
-          <rect x="15" y="115" width="22" height="22" fill="none" stroke="#2EC4B6" stroke-width="2"/>
-          <text x="55" y="128" font-size="11" font-weight="700" fill="#2EC4B6" font-family="Nunito">90°</text>
-        </svg>
-        <strong>Right Triangle</strong>
-        <span>Has one angle = <strong>exactly 90°</strong>.</span>
-      </div>
-      <div class="tri-item">
-        <svg viewBox="0 0 170 150" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="85,18 5,135 165,135" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/>
-          <path d="M 85,50 A 32,32 0 0,0 65,38" fill="none" stroke="#E53935" stroke-width="2.5"/>
-          <text x="52" y="56" font-size="11" font-weight="700" fill="#E53935" font-family="Nunito">&gt;90°</text>
-        </svg>
-        <strong>Obtuse Triangle</strong>
-        <span>Has one angle <strong>greater than 90°</strong>.</span>
-      </div>
-    </div>
-    <div class="key-fact" style="margin-top:18px;">
-      <span class="emoji">🤔</span> Saina, can a triangle have <strong>two</strong> right angles? No! Because 90° + 90° = 180°, leaving 0° for the third angle — impossible!
-    </div>
-  </div>
+<div class="card"><span class="badge badge-purple">By Sides</span><h2>Types of Triangles (by Sides)</h2><div class="tri-gallery"><div class="tri-item"><svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg"><polygon points="80,15 15,135 145,135" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/></svg><strong>Equilateral</strong><span>All 3 sides equal. All angles = 60&deg;.</span></div><div class="tri-item"><svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg"><polygon points="80,15 20,135 140,135" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="3" stroke-linejoin="round"/></svg><strong>Isosceles</strong><span>2 sides equal. 2 base angles equal.</span></div><div class="tri-item"><svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg"><polygon points="30,20 10,135 150,135" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/></svg><strong>Scalene</strong><span>All 3 sides different.</span></div></div></div>
+<div class="card"><span class="badge badge-orange">By Angles</span><h2>Types (by Angles)</h2><div class="tri-gallery"><div class="tri-item"><svg viewBox="0 0 160 140" xmlns="http://www.w3.org/2000/svg"><polygon points="80,15 20,125 140,125" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/></svg><strong>Acute</strong><span>All &lt; 90&deg;</span></div><div class="tri-item"><svg viewBox="0 0 160 150" xmlns="http://www.w3.org/2000/svg"><polygon points="15,15 15,135 145,135" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="3" stroke-linejoin="round"/><rect x="15" y="112" width="18" height="18" fill="none" stroke="#2EC4B6" stroke-width="2"/></svg><strong>Right-angled</strong><span>One = 90&deg;</span></div><div class="tri-item"><svg viewBox="0 0 170 140" xmlns="http://www.w3.org/2000/svg"><polygon points="85,15 5,125 165,125" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/></svg><strong>Obtuse</strong><span>One &gt; 90&deg;</span></div></div></div>
 </div>
-
-<!-- ═══════ SECTION 3: FINDING UNKNOWN ANGLES ═══════ -->
+ 
 <div class="section" id="sec-angles">
-  <div class="card">
-    <span class="badge badge-teal">Method</span>
-    <h2>Finding an Unknown Angle</h2>
-    <p>Since all three angles add up to <strong>180°</strong>, if you know two angles, you can always find the third!</p>
-    <div class="key-fact">
-      <span class="emoji">📝</span> <strong>Unknown angle = 180° − (sum of the other two angles)</strong>
-    </div>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-orange">Worked Example 1</span>
-    <h3>Find angle <em>x</em>.</h3>
-    <svg viewBox="0 0 320 230" style="max-width:300px;margin:10px auto;display:block;" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="160,25 30,200 290,200" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/>
-      <text x="155" y="60" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#E53935">x</text>
-      <text x="60" y="195" font-family="Nunito" font-size="15" font-weight="700" fill="#2D2A32">50°</text>
-      <text x="230" y="195" font-family="Nunito" font-size="15" font-weight="700" fill="#2D2A32">65°</text>
-    </svg>
-    <p><strong>Solution:</strong></p>
-    <p style="padding:12px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:0.95rem;">
-      x = 180° − 50° − 65°<br>
-      x = 180° − 115°<br>
-      x = <strong>65°</strong>
-    </p>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-teal">Worked Example 2</span>
-    <h3>Isosceles triangle — find angle <em>y</em>.</h3>
-    <svg viewBox="0 0 320 240" style="max-width:300px;margin:10px auto;display:block;" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="160,25 40,210 280,210" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="3" stroke-linejoin="round"/>
-      <!-- tick marks -->
-      <line x1="93" y1="108" x2="103" y2="118" stroke="#2EC4B6" stroke-width="2.5"/>
-      <line x1="89" y1="112" x2="99" y2="122" stroke="#2EC4B6" stroke-width="2.5"/>
-      <line x1="217" y1="118" x2="227" y2="108" stroke="#2EC4B6" stroke-width="2.5"/>
-      <line x1="221" y1="122" x2="231" y2="112" stroke="#2EC4B6" stroke-width="2.5"/>
-      <text x="155" y="58" text-anchor="middle" font-family="Fredoka" font-size="16" font-weight="600" fill="#E53935">40°</text>
-      <text x="75" y="205" font-family="Nunito" font-size="15" font-weight="700" fill="#2D2A32">y</text>
-      <text x="235" y="205" font-family="Nunito" font-size="15" font-weight="700" fill="#2D2A32">y</text>
-    </svg>
-    <p><strong>Tip:</strong> The two base angles of an isosceles triangle are <strong>equal</strong>.</p>
-    <p style="padding:12px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:0.95rem;">
-      40° + y + y = 180°<br>
-      2y = 180° − 40° = 140°<br>
-      y = 140° ÷ 2<br>
-      y = <strong>70°</strong>
-    </p>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-purple">Worked Example 3</span>
-    <h3>Right-angled triangle — find angle <em>z</em>.</h3>
-    <svg viewBox="0 0 300 240" style="max-width:280px;margin:10px auto;display:block;" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="20,20 20,210 270,210" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="3" stroke-linejoin="round"/>
-      <rect x="20" y="185" width="22" height="22" fill="none" stroke="#7B2D8E" stroke-width="2"/>
-      <text x="35" y="175" font-family="Nunito" font-size="14" font-weight="700" fill="#2D2A32">90°</text>
-      <text x="25" y="55" font-family="Nunito" font-size="15" font-weight="700" fill="#E53935">z</text>
-      <text x="200" y="205" font-family="Nunito" font-size="15" font-weight="700" fill="#2D2A32">35°</text>
-    </svg>
-    <p style="padding:12px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:0.95rem;">
-      z + 90° + 35° = 180°<br>
-      z = 180° − 90° − 35°<br>
-      z = <strong>55°</strong>
-    </p>
-    <div class="key-fact" style="margin-top:14px;">
-      <span class="emoji">💡</span> In a right-angled triangle, the two other angles always add up to <strong>90°</strong>.
-    </div>
-  </div>
+<div class="card"><span class="badge badge-teal">Method</span><h2>Finding an Unknown Angle</h2><div class="key-fact"><span class="emoji">&#x1F4DD;</span> <strong>Unknown = 180&deg; &minus; (sum of the other two)</strong></div></div>
+<div class="card"><span class="badge badge-orange">Example 1</span><h3>Find x: angles 50&deg; and 65&deg;</h3><div class="step-box">x = 180&deg; &minus; 50&deg; &minus; 65&deg; = <strong>65&deg;</strong></div></div>
+<div class="card"><span class="badge badge-teal">Example 2</span><h3>Isosceles: top = 40&deg;, find base angles y</h3><div class="step-box">40&deg; + 2y = 180&deg; &rarr; y = <strong>70&deg;</strong></div></div>
+<div class="card"><span class="badge badge-purple">Example 3</span><h3>Right triangle: 90&deg; and 35&deg;, find z</h3><div class="step-box">z = 180&deg; &minus; 90&deg; &minus; 35&deg; = <strong>55&deg;</strong></div><div class="key-fact"><span class="emoji">&#x1F4A1;</span> In a right triangle, the other two angles add to <strong>90&deg;</strong>.</div></div>
 </div>
-
-<!-- ═══════ SECTION 4: EXPLORE ═══════ -->
+ 
 <div class="section" id="sec-explore">
-  <div class="card">
-    <span class="badge badge-teal">Interactive</span>
-    <h2>🧪 Angle Explorer</h2>
-    <p>Enter any two angles, Saina, and watch the triangle update! The third angle is calculated automatically.</p>
-    <div class="angle-explorer">
-      <canvas id="triCanvas" width="380" height="280"></canvas>
-      <div class="angle-inputs">
-        <div class="angle-input-group">
-          <label>Angle A (°)</label>
-          <input type="number" id="angA" value="60" min="1" max="178" oninput="updateExplorer()">
-        </div>
-        <div class="angle-input-group">
-          <label>Angle B (°)</label>
-          <input type="number" id="angB" value="70" min="1" max="178" oninput="updateExplorer()">
-        </div>
-        <div class="angle-input-group">
-          <label>Angle C (°)</label>
-          <input type="text" id="angC" value="50" disabled style="background:#E8FAF8;color:#2EC4B6;border-color:#2EC4B6;">
-        </div>
-      </div>
-      <div class="angle-sum" id="angleSum">60° + 70° + 50° = <span style="color:#2EC4B6;">180°</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <span class="badge badge-purple">Try These!</span>
-    <h2>Quick Challenges</h2>
-    <p>Type in these angles to see interesting triangles:</p>
-    <ul>
-      <li><strong>Equilateral:</strong> A = 60, B = 60 → C = ?</li>
-      <li><strong>Right-angled:</strong> A = 90, B = 45 → C = ?</li>
-      <li><strong>Very flat:</strong> A = 10, B = 10 → C = ?</li>
-      <li><strong>Isosceles right:</strong> A = 90, B = 45 → C = ?</li>
-    </ul>
-  </div>
+<div class="card"><span class="badge badge-teal">Interactive</span><h2>&#x1F9EA; Angle Explorer</h2><p>Enter two angles and the triangle updates live!</p>
+<div class="angle-explorer"><canvas id="triCanvas" width="380" height="280"></canvas>
+<div class="angle-inputs"><div class="angle-input-group"><label>&ang;A</label><input type="number" id="angA" value="60" min="1" max="178" oninput="updateExplorer()"></div><div class="angle-input-group"><label>&ang;B</label><input type="number" id="angB" value="70" min="1" max="178" oninput="updateExplorer()"></div><div class="angle-input-group"><label>&ang;C</label><input type="text" id="angC" value="50" disabled style="background:#E8FAF8;color:#2EC4B6;border-color:#2EC4B6"></div></div>
+<div class="angle-sum" id="angleSum">60&deg; + 70&deg; + 50&deg; = <span style="color:#2EC4B6">180&deg;</span></div></div></div>
 </div>
-
-<!-- ═══════ SECTION 5: QUIZ ═══════ -->
+ 
+<div class="section" id="sec-area">
+<div class="subtabs"><button class="subtab active" onclick="showSub('a1',this)">&#x1F4D0; Formula</button><button class="subtab" onclick="showSub('a2',this)">&#x1F3AF; Base&amp;Height</button><button class="subtab" onclick="showSub('a3',this)">&#x270D;&#xFE0F; Examples</button><button class="subtab" onclick="showSub('a4',this)">&#x1F532; Grids</button><button class="subtab" onclick="showSub('a5',this)">&#x1F9E9; Composite</button><button class="subtab" onclick="showSub('a6',this)">&#x1F441;&#xFE0F; Visualisation</button><button class="subtab" onclick="showSub('a7',this)">&#x1F9EE; Calculator</button></div>
+ 
+<div class="subsection active" id="sub-a1">
+<div class="card"><span class="badge badge-purple">Core</span><h2>Area of a Triangle</h2><p>A triangle is exactly <strong>half of a rectangle</strong> when its base and height match the rectangle.</p><svg viewBox="0 0 340 220" style="max-width:310px;margin:16px auto;display:block" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="30" width="280" height="155" fill="none" stroke="#E0DCE8" stroke-width="2" stroke-dasharray="8,6"/><polygon points="170,30 30,185 310,185" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/><line x1="170" y1="30" x2="170" y2="185" stroke="#2EC4B6" stroke-width="2.5" stroke-dasharray="6,4"/><rect x="170" y="169" width="12" height="12" fill="none" stroke="#2EC4B6" stroke-width="1.5"/><text x="170" y="204" text-anchor="middle" font-family="Fredoka" font-size="13" font-weight="600" fill="#FF6B35">base</text><text x="188" y="115" font-family="Fredoka" font-size="12" font-weight="600" fill="#2EC4B6">height</text></svg><div class="formula-box"><p style="font-weight:700;margin-bottom:6px">Area of a triangle</p><div class="formula">Area = <span class="formula-frac"><span class="num">1</span><span class="den">2</span></span> &times; base &times; height</div></div><div class="key-fact"><span class="emoji">&#x1F4A1;</span> Height must be <strong>perpendicular</strong> (90&deg;) to the base.</div></div>
+<div class="card"><span class="badge badge-orange">Important!</span><h2>Half of Rectangle &mdash; or Not?</h2><div class="bh-demo"><div class="bh-card" style="border-color:#4CAF50"><h4 style="color:#4CAF50">&#x2705; YES</h4><svg viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="160" height="100" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="90,10 10,110 170,110" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2.5" stroke-linejoin="round"/></svg><p>Apex within rectangle</p></div><div class="bh-card" style="border-color:#E53935"><h4 style="color:#E53935">&#x274C; NO</h4><svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="30" width="120" height="90" fill="none" stroke="#999" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="180,30 10,120 130,120" fill="#FFEBEE" stroke="#E53935" stroke-width="2.5" stroke-linejoin="round"/></svg><p>Apex <strong>beyond</strong> rectangle</p></div></div><div class="warn-box">&#x26A0;&#xFE0F; Always check if the triangle fits inside!</div></div>
+</div>
+ 
+<div class="subsection" id="sub-a2">
+<div class="card"><span class="badge badge-teal">Critical Skill</span><h2>&#x1F3AF; Identifying Base &amp; Height</h2><p>Base can be <strong>any side</strong>. Height = <strong>perpendicular distance</strong> from opposite vertex.</p><div class="key-fact"><span class="emoji">&#x2B50;</span> Look for the &#x22A5; symbol (small square) showing 90&deg;!</div></div>
+<div class="card"><span class="badge badge-purple">3 Types of Height</span><h2>Where Does the Height Fall?</h2><div class="bh-demo"><div class="bh-card"><h4>Type 1: Inside</h4><svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg"><polygon points="90,10 20,120 160,120" fill="#FFF0E8" stroke="#FF6B35" stroke-width="2.5" stroke-linejoin="round"/><line x1="90" y1="10" x2="90" y2="120" stroke="#2EC4B6" stroke-width="2" stroke-dasharray="5,3"/><rect x="90" y="106" width="9" height="9" fill="none" stroke="#2EC4B6" stroke-width="1.5"/></svg><p>Acute triangles</p></div><div class="bh-card"><h4>Type 2: On a Side</h4><svg viewBox="0 0 180 130" xmlns="http://www.w3.org/2000/svg"><polygon points="20,10 20,120 160,120" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="2.5" stroke-linejoin="round"/><rect x="20" y="106" width="9" height="9" fill="none" stroke="#7B2D8E" stroke-width="1.5"/></svg><p>Right-angled triangles</p></div><div class="bh-card"><h4>Type 3: Outside!</h4><svg viewBox="0 0 200 140" xmlns="http://www.w3.org/2000/svg"><polygon points="155,10 20,120 165,120" fill="#F3E8F7" stroke="#7B2D8E" stroke-width="2.5" stroke-linejoin="round"/><line x1="155" y1="10" x2="155" y2="120" stroke="#2EC4B6" stroke-width="2" stroke-dasharray="5,3"/><line x1="155" y1="120" x2="165" y2="120" stroke="#999" stroke-width="1" stroke-dasharray="3,2"/><rect x="147" y="106" width="9" height="9" fill="none" stroke="#2EC4B6" stroke-width="1.5"/></svg><p>Obtuse &mdash; extend base!</p></div></div></div>
+<div class="card"><span class="badge badge-orange">Practice</span><h2>AD is the height. What is the base?</h2><svg viewBox="0 0 320 190" style="max-width:290px;margin:10px auto;display:block" xmlns="http://www.w3.org/2000/svg"><polygon points="160,15 30,165 290,165" fill="#FFF0E8" stroke="#FF6B35" stroke-width="2.5" stroke-linejoin="round"/><line x1="160" y1="15" x2="160" y2="165" stroke="#2EC4B6" stroke-width="2" stroke-dasharray="5,3"/><rect x="160" y="151" width="10" height="10" fill="none" stroke="#2EC4B6" stroke-width="1.5"/><text x="160" y="10" text-anchor="middle" font-family="Fredoka" font-size="13" fill="#2D2A32">A</text><text x="20" y="180" font-family="Fredoka" font-size="13" fill="#2D2A32">B</text><text x="298" y="180" font-family="Fredoka" font-size="13" fill="#2D2A32">C</text><text x="168" y="180" font-family="Fredoka" font-size="13" fill="#2EC4B6">D</text></svg><div class="key-fact"><span class="emoji">&#x2705;</span> Base = <strong>BC</strong>, because AD &#x22A5; BC.</div></div>
+</div>
+ 
+<div class="subsection" id="sub-a3">
+<div class="card"><span class="badge badge-orange">Example 1 &mdash; Distractor Alert!</span><h3>Not every number is base or height!</h3><svg viewBox="0 0 340 210" style="max-width:310px;margin:10px auto;display:block" xmlns="http://www.w3.org/2000/svg"><polygon points="170,15 20,185 310,185" fill="#FFF0E8" stroke="#FF6B35" stroke-width="3" stroke-linejoin="round"/><line x1="170" y1="15" x2="170" y2="185" stroke="#2EC4B6" stroke-width="2" stroke-dasharray="6,4"/><rect x="170" y="171" width="10" height="10" fill="none" stroke="#2EC4B6" stroke-width="1.5"/><text x="78" y="108" font-size="12" font-weight="700" fill="#999" font-family="Nunito">14 cm</text><text x="232" y="108" font-size="12" font-weight="700" fill="#999" font-family="Nunito">20 cm</text><text x="182" y="110" font-size="12" font-weight="700" fill="#2EC4B6" font-family="Nunito">12 cm</text><text x="165" y="202" text-anchor="middle" font-size="12" font-weight="700" fill="#FF6B35" font-family="Nunito">16 cm</text></svg><div class="warn-box">&#x26A0;&#xFE0F; 14 &amp; 20 cm are slant sides &mdash; NOT the height! Only 12 cm is perpendicular.</div><div class="step-box">Area = &frac12; &times; 16 &times; 12 = <strong>96 cm&sup2;</strong></div></div>
+<div class="card"><span class="badge badge-teal">Example 2</span><h3>Right-angled triangle</h3><div class="key-fact"><span class="emoji">&#x2B50;</span> Two legs = base &amp; height. Ignore hypotenuse!</div><p>Legs: 10 &amp; 13 cm. Hypotenuse: 17 cm.</p><div class="step-box">Area = &frac12; &times; 10 &times; 13 = <strong>65 cm&sup2;</strong></div></div>
+<div class="card"><span class="badge badge-purple">Example 3 &mdash; Reverse</span><h3>Area = 36 cm&sup2;, base = 9 cm. Find height.</h3><div class="step-box">36 = &frac12; &times; 9 &times; h<br>h = (2 &times; 36) &div; 9 = <strong>8 cm</strong></div><div class="key-fact"><span class="emoji">&#x1F511;</span> <strong>h = (2 &times; Area) &div; base</strong></div><div class="tip-box">&#x1F4A1; <strong>Simplify early!</strong> &frac12; &times; 10 &times; 15 &rarr; 5 &times; 15 = <strong>75</strong></div></div>
+</div>
+ 
+<div class="subsection" id="sub-a4">
+<div class="card"><span class="badge badge-teal">Grid Method</span><h2>&#x1F532; Triangles on Square Grids</h2><p>Count grid squares for base and height, then use the formula.</p><div class="grid-wrap"><canvas id="gridCanvas" width="360" height="280"></canvas><p style="margin-top:10px;font-size:.88rem">Base = <strong>6</strong> cm | Height = <strong>5</strong> cm | Area = &frac12; &times; 6 &times; 5 = <strong>15 cm&sup2;</strong></p></div></div>
+<div class="card"><span class="badge badge-purple">Fraction of Figure</span><h3>12 squares (1 cm&sup2; each). Triangle: base 4, height 3.</h3><div class="step-box">Triangle = &frac12; &times; 4 &times; 3 = 6 cm&sup2;<br>Fraction = 6 &div; 12 = <strong>&frac12;</strong></div></div>
+</div>
+ 
+<div class="subsection" id="sub-a5">
+<div class="card"><span class="badge badge-orange">Two Strategies</span><h2>&#x1F9E9; Composite Figures</h2><div class="key-fact"><span class="emoji">&#x2795;</span> <strong>Add:</strong> Break into shapes, add areas.</div><div class="key-fact"><span class="emoji">&#x2796;</span> <strong>Subtract:</strong> Rectangle area minus unwanted parts.</div></div>
+<div class="card"><span class="badge badge-teal">Example &mdash; Add</span><h3>Rectangle (12&times;6) + Triangle (base 12, h 9)</h3><svg viewBox="0 0 320 250" style="max-width:290px;margin:10px auto;display:block" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="120" width="260" height="100" fill="#E8FAF8" stroke="#2EC4B6" stroke-width="2.5"/><polygon points="30,120 160,20 290,120" fill="#FFF0E8" stroke="#FF6B35" stroke-width="2.5" stroke-linejoin="round"/><text x="160" y="237" text-anchor="middle" font-size="12" font-weight="700" fill="#2EC4B6" font-family="Nunito">12 cm</text><text x="14" y="175" font-size="12" font-weight="700" fill="#2EC4B6">6</text><text x="170" y="78" font-size="12" font-weight="700" fill="#FF6B35">9</text></svg><div class="step-box">72 + 54 = <strong>126 cm&sup2;</strong></div></div>
+<div class="card"><span class="badge badge-purple">Example &mdash; Shaded Part</span><h3>Rectangle 14&times;8. Triangle DEC inside.</h3><div class="step-box">Base DC = 14, height = 8<br>Area = &frac12; &times; 14 &times; 8 = <strong>56 cm&sup2;</strong></div><div class="tip-box">&#x1F4A1; Where E sits on AB doesn&rsquo;t change the area!</div></div>
+<div class="card"><span class="badge badge-orange">Example &mdash; Square + Triangles</span><h3>Square (8&times;8) + two triangles (&frac12;&times;4&times;8 each)</h3><div class="step-box">64 + 16 + 16 = <strong>96 cm&sup2;</strong></div></div>
+</div>
+ 
+<div class="subsection" id="sub-a6">
+<div class="card"><span class="badge badge-purple">Advanced</span><h2>&#x1F441;&#xFE0F; Common Base / Common Height</h2><p>Same base + same height = <strong>equal area</strong>, even if the triangles look different!</p><svg viewBox="0 0 360 190" style="max-width:330px;margin:14px auto;display:block" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="15" width="300" height="155" fill="none" stroke="#999" stroke-width="1.5"/><polygon points="20,170 320,170 100,15" fill="#FFF0E8" fill-opacity=".5" stroke="#FF6B35" stroke-width="2" stroke-linejoin="round"/><polygon points="20,170 320,170 250,15" fill="#E8FAF8" fill-opacity=".5" stroke="#2EC4B6" stroke-width="2" stroke-linejoin="round"/><text x="92" y="10" font-family="Fredoka" font-size="11" fill="#FF6B35">P</text><text x="252" y="10" font-family="Fredoka" font-size="11" fill="#2EC4B6">Q</text></svg><div class="key-fact"><span class="emoji">&#x1F4A1;</span> Both triangles: same base, same height &rarr; <strong>equal area</strong>!</div></div>
+<div class="card"><span class="badge badge-teal">Diagonals of a Rectangle</span><h3>20&times;10 rectangle. C = 40 cm&sup2;. Find B.</h3><svg viewBox="0 0 340 190" style="max-width:310px;margin:14px auto;display:block" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="15" width="280" height="140" fill="#FAFAFA" stroke="#999" stroke-width="2"/><line x1="20" y1="15" x2="300" y2="155" stroke="#999" stroke-width="1.5"/><line x1="300" y1="15" x2="20" y2="155" stroke="#999" stroke-width="1.5"/><text x="80" y="90" font-family="Fredoka" font-size="16" fill="#FF6B35">A</text><text x="160" y="50" text-anchor="middle" font-family="Fredoka" font-size="16" fill="#2EC4B6">B</text><text x="230" y="90" font-family="Fredoka" font-size="16" fill="#7B2D8E">D</text><text x="160" y="140" text-anchor="middle" font-family="Fredoka" font-size="16" fill="#E53935">C</text></svg><div class="step-box">B + C = &frac12; &times; 200 = 100<br>B = 100 &minus; 40 = <strong>60 cm&sup2;</strong></div><div class="key-fact"><span class="emoji">&#x2B50;</span> Opposite triangles = half the rectangle. Common exam question!</div></div>
+<div class="card"><span class="badge badge-purple">Challenge</span><h3>4 triangles: 40, 30, 60 cm&sup2;. Find unknown.</h3><div class="step-box">40 + ? = 30 + 60 = 90<br>? = <strong>50 cm&sup2;</strong></div></div>
+</div>
+ 
+<div class="subsection" id="sub-a7">
+<div class="card"><span class="badge badge-orange">Try It!</span><h2>&#x1F9EE; Area Calculator</h2><p>Enter base and height!</p><div class="area-calc"><canvas id="areaCanvas" width="380" height="240"></canvas><div class="area-calc-inputs"><div class="angle-input-group"><label>Base (cm)</label><input type="number" id="areaBase" value="12" min="1" max="100" oninput="updateAreaCalc()"></div><div class="angle-input-group"><label>Height (cm)</label><input type="number" id="areaHeight" value="8" min="1" max="100" oninput="updateAreaCalc()"></div></div><div class="area-result" id="areaResult">Area = &frac12; &times; 12 &times; 8 = <span>48 cm&sup2;</span></div></div></div>
+</div>
+</div>
+ 
 <div class="section" id="sec-quiz">
-  <div class="card">
-    <span class="badge badge-orange">Test Yourself</span>
-    <h2>✏️ Quiz Time, Saina!</h2>
-    <p>Answer all 5 questions. Let's see how well you've learned!</p>
-  </div>
-  <div id="quizContainer"></div>
-  <div class="score-box" id="scoreBox">
-    <h2 id="scoreText"></h2>
-    <p id="scoreMsg"></p>
-    <button class="btn-retry" onclick="resetQuiz()">Try Again</button>
-  </div>
+<div class="card"><span class="badge badge-orange">Test Yourself</span><h2>&#x270F;&#xFE0F; Quiz Time, Saina!</h2><p>12 questions covering angles, area, base/height, composite figures, and visualisation!</p></div>
+<div id="quizContainer"></div>
+<div class="score-box" id="scoreBox"><h2 id="scoreText"></h2><p id="scoreMsg"></p><button class="btn-retry" onclick="resetQuiz()">Try Again</button></div>
 </div>
-
-</div><!-- container -->
-
+ 
+</div>
 <script>
-// ── NAV ──
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ── ANGLE EXPLORER ──
-function updateExplorer() {
-  const a = parseFloat(document.getElementById('angA').value) || 0;
-  const b = parseFloat(document.getElementById('angB').value) || 0;
-  const c = 180 - a - b;
-  document.getElementById('angC').value = c > 0 ? c : '—';
-
-  const sumEl = document.getElementById('angleSum');
-  if (c > 0 && a > 0 && b > 0) {
-    sumEl.innerHTML = `${a}° + ${b}° + ${c}° = <span style="color:#2EC4B6;">180°</span>`;
-    drawTriangle(a, b, c);
-  } else {
-    sumEl.innerHTML = `<span style="color:#E53935;">Invalid — angles must be positive and sum to 180°</span>`;
-    const ctx = document.getElementById('triCanvas').getContext('2d');
-    ctx.clearRect(0, 0, 380, 280);
-  }
-}
-
-function drawTriangle(angA_deg, angB_deg, angC_deg) {
-  const canvas = document.getElementById('triCanvas');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const toRad = d => d * Math.PI / 180;
-  // Place B at bottom-left, C at bottom-right, A at top
-  const baseLen = 200;
-  const Bx = 90, By = 240;
-  const Cx = Bx + baseLen, Cy = By;
-  const angB = toRad(angB_deg);
-  const angC = toRad(angC_deg);
-  // law of sines to get side lengths
-  const a_side = baseLen * Math.sin(toRad(angA_deg)) / Math.sin(toRad(angA_deg)); // normalise via BC
-  const AB = baseLen * Math.sin(angC) / Math.sin(toRad(angA_deg));
-  const Ax = Bx + AB * Math.cos(angB);
-  const Ay = By - AB * Math.sin(angB);
-
-  ctx.beginPath();
-  ctx.moveTo(Ax, Ay);
-  ctx.lineTo(Bx, By);
-  ctx.lineTo(Cx, Cy);
-  ctx.closePath();
-  ctx.fillStyle = '#FFF0E8';
-  ctx.fill();
-  ctx.strokeStyle = '#FF6B35';
-  ctx.lineWidth = 3;
-  ctx.lineJoin = 'round';
-  ctx.stroke();
-
-  // Labels
-  ctx.font = '700 15px Nunito';
-  ctx.fillStyle = '#E53935';
-  ctx.textAlign = 'center';
-  ctx.fillText(`A (${angA_deg}°)`, Ax, Ay - 12);
-  ctx.fillStyle = '#2D2A32';
-  ctx.fillText(`B (${angB_deg}°)`, Bx - 8, By + 20);
-  ctx.fillText(`C (${angC_deg}°)`, Cx + 8, Cy + 20);
-
-  // Vertices dots
-  [[[Ax,Ay],'#FF6B35'],[[Bx,By],'#2EC4B6'],[[Cx,Cy],'#7B2D8E']].forEach(([[x,y],col]) => {
-    ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fillStyle=col; ctx.fill();
-  });
-}
+function showS(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function showSub(id,el){document.querySelectorAll('.subsection').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));document.getElementById('sub-'+id).classList.add('active');el.classList.add('active')}
+function updateExplorer(){var a=parseFloat(document.getElementById('angA').value)||0,b=parseFloat(document.getElementById('angB').value)||0,c=180-a-b;document.getElementById('angC').value=c>0?c:'-';var s=document.getElementById('angleSum');if(c>0&&a>0&&b>0){s.innerHTML=a+'\u00B0 + '+b+'\u00B0 + '+c+'\u00B0 = <span style="color:#2EC4B6">180\u00B0</span>';drawTri(a,b,c)}else{s.innerHTML='<span style="color:#E53935">Invalid</span>';document.getElementById('triCanvas').getContext('2d').clearRect(0,0,380,280)}}
+function drawTri(A,B,C){var cv=document.getElementById('triCanvas'),cx=cv.getContext('2d');cx.clearRect(0,0,cv.width,cv.height);var r=function(d){return d*Math.PI/180},bl=200,Bx=90,By=240,Cx=Bx+bl,Cy=By,aB=r(B),AB=bl*Math.sin(r(C))/Math.sin(r(A)),Ax=Bx+AB*Math.cos(aB),Ay=By-AB*Math.sin(aB);cx.beginPath();cx.moveTo(Ax,Ay);cx.lineTo(Bx,By);cx.lineTo(Cx,Cy);cx.closePath();cx.fillStyle='#FFF0E8';cx.fill();cx.strokeStyle='#FF6B35';cx.lineWidth=3;cx.lineJoin='round';cx.stroke();cx.font='700 15px Nunito';cx.textAlign='center';cx.fillStyle='#E53935';cx.fillText('A ('+A+'\u00B0)',Ax,Ay-12);cx.fillStyle='#2D2A32';cx.fillText('B ('+B+'\u00B0)',Bx-8,By+20);cx.fillText('C ('+C+'\u00B0)',Cx+8,Cy+20);[[[Ax,Ay],'#FF6B35'],[[Bx,By],'#2EC4B6'],[[Cx,Cy],'#7B2D8E']].forEach(function(v){cx.beginPath();cx.arc(v[0][0],v[0][1],5,0,Math.PI*2);cx.fillStyle=v[1];cx.fill()})}
 updateExplorer();
-
-// ── QUIZ ──
-const quizData = [
-  {
-    q: 'The three angles of a triangle always add up to ___.',
-    opts: ['90°', '180°', '270°', '360°'],
-    ans: 1,
-    explain: 'The angle sum of a triangle is always 180°.'
-  },
-  {
-    q: 'A triangle has angles 45° and 85°. What is the third angle?',
-    opts: ['40°', '50°', '55°', '60°'],
-    ans: 1,
-    explain: '180° − 45° − 85° = 50°'
-  },
-  {
-    q: 'An equilateral triangle has how many equal sides?',
-    opts: ['0', '1', '2', '3'],
-    ans: 3,
-    explain: 'All 3 sides (and all 3 angles) of an equilateral triangle are equal.'
-  },
-  {
-    q: 'An isosceles triangle has two base angles of 55° each. What is the top angle?',
-    opts: ['55°', '60°', '70°', '80°'],
-    ans: 2,
-    explain: '180° − 55° − 55° = 70°'
-  },
-  {
-    q: 'In a right-angled triangle, one angle is 90° and another is 32°. What is the third angle?',
-    opts: ['48°', '58°', '68°', '78°'],
-    ans: 1,
-    explain: '180° − 90° − 32° = 58°'
-  }
+function updateAreaCalc(){var b=parseFloat(document.getElementById('areaBase').value)||0,h=parseFloat(document.getElementById('areaHeight').value)||0,a=(b*h)/2,r=document.getElementById('areaResult');if(b>0&&h>0){r.innerHTML='Area = \u00BD \u00D7 '+b+' \u00D7 '+h+' = <span>'+a+' cm\u00B2</span>';drawArea(b,h)}else r.innerHTML='<span style="color:#E53935">Enter positive values.</span>'}
+function drawArea(base,height){var cv=document.getElementById('areaCanvas'),cx=cv.getContext('2d');cx.clearRect(0,0,cv.width,cv.height);var s=Math.min(300/base,180/height),w=base*s,h=height*s,sx=(cv.width-w)/2,by=20+h;cx.beginPath();cx.moveTo(sx+w/2,20);cx.lineTo(sx,by);cx.lineTo(sx+w,by);cx.closePath();cx.fillStyle='#FFF0E8';cx.fill();cx.strokeStyle='#FF6B35';cx.lineWidth=3;cx.lineJoin='round';cx.stroke();cx.setLineDash([6,4]);cx.beginPath();cx.moveTo(sx+w/2,20);cx.lineTo(sx+w/2,by);cx.strokeStyle='#2EC4B6';cx.lineWidth=2;cx.stroke();cx.setLineDash([]);cx.strokeRect(sx+w/2,by-12,10,12);cx.font='700 14px Nunito';cx.textAlign='center';cx.fillStyle='#FF6B35';cx.fillText(base+' cm',(sx+sx+w)/2,by+22);cx.fillStyle='#2EC4B6';cx.textAlign='left';cx.fillText(height+' cm',sx+w/2+10,(20+by)/2+5)}
+updateAreaCalc();
+function drawGrid(){var cv=document.getElementById('gridCanvas');if(!cv)return;var cx=cv.getContext('2d'),u=38,co=8,ro=6,ox=20,oy=15;cv.width=co*u+40;cv.height=ro*u+35;cx.strokeStyle='#E0DCE8';cx.lineWidth=1;for(var i=0;i<=co;i++){cx.beginPath();cx.moveTo(ox+i*u,oy);cx.lineTo(ox+i*u,oy+ro*u);cx.stroke()}for(var i=0;i<=ro;i++){cx.beginPath();cx.moveTo(ox,oy+i*u);cx.lineTo(ox+co*u,oy+i*u);cx.stroke()}var bx=ox+u,by=oy+ro*u,cx2=bx+6*u,ax=bx+2*u,ay=oy+u;cx.beginPath();cx.moveTo(ax,ay);cx.lineTo(bx,by);cx.lineTo(cx2,by);cx.closePath();cx.fillStyle='rgba(255,107,53,.2)';cx.fill();cx.strokeStyle='#FF6B35';cx.lineWidth=2.5;cx.stroke();cx.setLineDash([5,3]);cx.beginPath();cx.moveTo(ax,ay);cx.lineTo(ax,by);cx.strokeStyle='#2EC4B6';cx.lineWidth=2;cx.stroke();cx.setLineDash([]);cx.strokeRect(ax,by-9,8,8)}
+drawGrid();
+var Q=[
+{q:'The three angles of a triangle add up to ___.',o:['90\u00B0','180\u00B0','270\u00B0','360\u00B0'],a:1,e:'Angle sum = 180\u00B0.'},
+{q:'Angles 45\u00B0 and 85\u00B0. Third angle?',o:['40\u00B0','50\u00B0','55\u00B0','60\u00B0'],a:1,e:'180\u2212 45\u221285 = 50\u00B0'},
+{q:'Equilateral triangle: how many equal sides?',o:['0','1','2','3'],a:3,e:'All 3 sides and angles are equal.'},
+{q:'Isosceles base angles: 55\u00B0 each. Top angle?',o:['55\u00B0','60\u00B0','70\u00B0','80\u00B0'],a:2,e:'180\u221255\u221255 = 70\u00B0'},
+{q:'Right triangle: 90\u00B0 and 32\u00B0. Third angle?',o:['48\u00B0','58\u00B0','68\u00B0','78\u00B0'],a:1,e:'180\u221290\u221232 = 58\u00B0'},
+{q:'Base 16 cm, height 12 cm. Slant sides 14 & 20 cm. Area?',o:['96 cm\u00B2','140 cm\u00B2','160 cm\u00B2','112 cm\u00B2'],a:0,e:'\u00BD\u00D716\u00D712 = 96. Slant sides are distractors!'},
+{q:'Area = 24 cm\u00B2, base = 8 cm. Height?',o:['3 cm','4 cm','6 cm','12 cm'],a:2,e:'h = (2\u00D724)\u00F78 = 6 cm'},
+{q:'Height must be at what angle to the base?',o:['45\u00B0','60\u00B0','90\u00B0','180\u00B0'],a:2,e:'Height is always perpendicular (90\u00B0).'},
+{q:'Right triangle: legs 5 & 12, hypotenuse 13. Base & height pair?',o:['5 and 13','12 and 13','5 and 12','13 and 13'],a:2,e:'The two legs are base and height.'},
+{q:'Rectangle 20\u00D710. Triangle inside, base 20 on one side. Area?',o:['200 cm\u00B2','100 cm\u00B2','50 cm\u00B2','150 cm\u00B2'],a:1,e:'\u00BD\u00D720\u00D710 = 100. Half the rectangle!'},
+{q:'Rectangle split by diagonals: one triangle = 40 cm\u00B2. Opposite?',o:['20 cm\u00B2','40 cm\u00B2','60 cm\u00B2','80 cm\u00B2'],a:1,e:'Opposite triangles from diagonals are always equal.'},
+{q:'Rectangle (10\u00D76) + triangle on top (base 10, h 4). Total?',o:['60 cm\u00B2','80 cm\u00B2','100 cm\u00B2','70 cm\u00B2'],a:1,e:'Rect=60 + \u25B3=20 \u2192 Total=80 cm\u00B2.'}
 ];
-
-let answered = 0;
-let score = 0;
-
-function buildQuiz() {
-  const container = document.getElementById('quizContainer');
-  container.innerHTML = '';
-  answered = 0;
-  score = 0;
-  document.getElementById('scoreBox').style.display = 'none';
-
-  quizData.forEach((item, qi) => {
-    const div = document.createElement('div');
-    div.className = 'quiz-question';
-    div.innerHTML = `
-      <p class="q-text"><span class="q-num">${qi+1}</span>${item.q}</p>
-      <div class="quiz-options" id="qopts-${qi}">
-        ${item.opts.map((o, oi) => `<button class="quiz-opt" onclick="checkAnswer(${qi},${oi})">${o}</button>`).join('')}
-      </div>
-      <div class="quiz-feedback" id="qfb-${qi}"></div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function checkAnswer(qi, oi) {
-  const opts = document.querySelectorAll(`#qopts-${qi} .quiz-opt`);
-  if (opts[0].classList.contains('disabled')) return;
-  opts.forEach(o => o.classList.add('disabled'));
-
-  const fb = document.getElementById(`qfb-${qi}`);
-  if (oi === quizData[qi].ans) {
-    opts[oi].classList.add('correct');
-    fb.className = 'quiz-feedback show correct';
-    fb.textContent = '✅ Correct! ' + quizData[qi].explain;
-    score++;
-  } else {
-    opts[oi].classList.add('wrong');
-    opts[quizData[qi].ans].classList.add('correct');
-    fb.className = 'quiz-feedback show wrong';
-    fb.textContent = '❌ Not quite. ' + quizData[qi].explain;
-  }
-  answered++;
-  if (answered === quizData.length) showScore();
-}
-
-function showScore() {
-  const box = document.getElementById('scoreBox');
-  box.style.display = 'block';
-  const pct = score / quizData.length;
-  document.getElementById('scoreText').textContent = `${score} / ${quizData.length}`;
-  const msgs = [
-    "Keep practising, Saina! You'll get there! 💪",
-    "Good effort, Saina! Review the lesson and try again! 📖",
-    "Nice work, Saina! Almost perfect! 🌟",
-    "Well done, Saina! 🎉",
-    "Perfect score, Saina! You're a triangle expert! 🏆"
-  ];
-  document.getElementById('scoreMsg').textContent = msgs[score] || msgs[4];
-  box.scrollIntoView({ behavior: 'smooth' });
-}
-
-function resetQuiz() { buildQuiz(); window.scrollTo({ top: document.getElementById('sec-quiz').offsetTop - 60, behavior: 'smooth' }); }
-
+var ans=0,sc=0;
+function buildQuiz(){var c=document.getElementById('quizContainer');c.innerHTML='';ans=0;sc=0;document.getElementById('scoreBox').style.display='none';Q.forEach(function(q,i){var d=document.createElement('div');d.className='quiz-question';d.innerHTML='<p class="q-text"><span class="q-num">'+(i+1)+'</span>'+q.q+'</p><div class="quiz-options" id="qo-'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="chk('+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="qf-'+i+'"></div>';c.appendChild(d)})}
+function chk(i,j){var o=document.querySelectorAll('#qo-'+i+' .quiz-opt');if(o[0].classList.contains('disabled'))return;o.forEach(function(x){x.classList.add('disabled')});var f=document.getElementById('qf-'+i);if(j===Q[i].a){o[j].classList.add('correct');f.className='quiz-feedback show correct';f.textContent='\u2705 Correct! '+Q[i].e;sc++}else{o[j].classList.add('wrong');o[Q[i].a].classList.add('correct');f.className='quiz-feedback show wrong';f.textContent='\u274C Not quite. '+Q[i].e}ans++;if(ans===Q.length)showSc()}
+function showSc(){var b=document.getElementById('scoreBox');b.style.display='block';document.getElementById('scoreText').textContent=sc+' / '+Q.length;var p=sc/Q.length,m;if(p===1)m="Perfect, Saina! Triangle master! \uD83C\uDFC6";else if(p>=.8)m="Excellent, Saina! Almost perfect! \uD83C\uDF89";else if(p>=.6)m="Good effort, Saina! Review & retry! \uD83C\uDF1F";else if(p>=.4)m="Keep practising, Saina! \uD83D\uDCAA";else m="Let's review together, Saina! \uD83D\uDCD6";document.getElementById('scoreMsg').textContent=m;b.scrollIntoView({behavior:'smooth'})}
+function resetQuiz(){buildQuiz();window.scrollTo({top:document.getElementById('sec-quiz').offsetTop-60,behavior:'smooth'})}
 buildQuiz();
 </script>
 </body>
