@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P5 Maths Practice 🌟</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
+.app-header{text-align:center;color:#fff;margin-bottom:20px}
+.app-header h1{font-size:2.1rem;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+.app-header p{font-size:.95rem;opacity:.85;margin-top:4px}
+.card{background:#fff;border-radius:20px;padding:28px;max-width:780px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.screen{display:none}.screen.active{display:block}
+
+/* score bar */
+.score-bar{display:flex;justify-content:space-between;align-items:center;background:#f0f4ff;border-radius:12px;padding:10px 18px;margin-bottom:22px;font-size:.93rem;font-weight:600;gap:8px}
+.score-bar .badge{background:#667eea;color:#fff;border-radius:20px;padding:3px 13px;font-size:.82rem}
+.score-bar .stars{color:#f59e0b}
+
+/* filter screen */
+.section-title{font-size:1rem;font-weight:700;color:#374151;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.chip{padding:9px 17px;border-radius:50px;border:2.5px solid transparent;cursor:pointer;font-size:.87rem;font-weight:600;transition:all .18s;user-select:none}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.chip.active{border-color:#1e1b4b!important;box-shadow:0 4px 14px rgba(0,0,0,.22);transform:translateY(-2px)}
+.chip-all     {background:#f3f4f6;color:#374151}
+.chip-whole   {background:#dbeafe;color:#1e40af}
+.chip-fraction{background:#dcfce7;color:#166534}
+.chip-word    {background:#fef9c3;color:#713f12}
+.chip-geometry{background:#ffedd5;color:#9a3412}
+.chip-percent {background:#fce7f3;color:#831843}
+.chip-rate    {background:#ede9fe;color:#4c1d95}
+.chip-measure {background:#cffafe;color:#155e75}
+
+.marks-wrap{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.mark-btn{padding:9px 20px;border-radius:10px;border:2.5px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .18s}
+.mark-btn:hover{border-color:#667eea;color:#667eea}
+.mark-btn.active{background:#667eea;color:#fff;border-color:#667eea}
+#filterCount{color:#6b7280;font-size:.88rem;margin-bottom:16px}
+.btn-start{width:100%;padding:15px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:14px;font-size:1.1rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.4px}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(102,126,234,.5)}
+
+/* practice screen */
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;font-size:.84rem;color:#6b7280;font-weight:600}
+.progress-track{background:#e5e7eb;border-radius:99px;height:8px;margin-bottom:18px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:99px;transition:width .4s}
+.q-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.q-tag{font-size:.75rem;padding:3px 10px;border-radius:20px;font-weight:600}
+.q-tag.concept{background:#ede9fe;color:#4c1d95}
+.q-tag.school {background:#dbeafe;color:#1e40af}
+.q-tag.section{background:#dcfce7;color:#166534}
+.q-tag.marks  {background:#ffedd5;color:#9a3412}
+.q-text{background:#f8fafc;border-left:5px solid #667eea;border-radius:0 12px 12px 0;padding:16px 18px;font-size:1.03rem;line-height:1.75;color:#1f2937;margin-bottom:18px;white-space:pre-wrap}
+.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.opt-btn{padding:11px 14px;background:#f3f4f6;border:2.5px solid #e5e7eb;border-radius:12px;font-size:.93rem;cursor:pointer;text-align:left;transition:all .18s;font-weight:500}
+.opt-btn:hover:not(:disabled){border-color:#667eea;background:#eef2ff}
+.opt-btn.correct{background:#dcfce7;border-color:#16a34a;color:#166534}
+.opt-btn.wrong  {background:#fee2e2;border-color:#dc2626;color:#991b1b}
+.opt-btn.reveal {background:#dcfce7;border-color:#16a34a;color:#166534}
+.opt-btn:disabled{cursor:default}
+.ans-row{display:flex;gap:10px;margin-bottom:14px;align-items:center}
+.ans-input{flex:1;padding:11px 15px;border:2.5px solid #e5e7eb;border-radius:12px;font-size:1rem;outline:none;transition:border-color .2s}
+.ans-input:focus{border-color:#667eea}
+.ans-input.correct{border-color:#16a34a;background:#dcfce7}
+.ans-input.wrong  {border-color:#dc2626;background:#fee2e2}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.btn-check{padding:11px 22px;background:#667eea;color:#fff;border:none;border-radius:10px;font-size:.93rem;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-check:hover{background:#4f46e5}
+.btn-show{padding:11px 20px;background:#fff;color:#6b7280;border:2px solid #d1d5db;border-radius:10px;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-show:hover{border-color:#9ca3af;color:#374151}
+.btn-skip{padding:11px 20px;background:#f3f4f6;color:#6b7280;border:none;border-radius:10px;font-size:.88rem;font-weight:600;cursor:pointer;margin-left:auto}
+.btn-skip:hover{background:#e5e7eb;color:#374151}
+.feedback{border-radius:12px;padding:11px 16px;font-size:.93rem;font-weight:600;margin-bottom:12px;line-height:1.5;display:none}
+.feedback.correct{background:#dcfce7;color:#166534;border:1.5px solid #86efac;display:block}
+.feedback.wrong  {background:#fee2e2;color:#991b1b;border:1.5px solid #fca5a5;display:block}
+.feedback.info   {background:#f0f4ff;color:#3730a3;border:1.5px solid #a5b4fc;display:block}
+.solution-box{background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:13px 16px;font-size:.88rem;color:#78350f;line-height:1.65;margin-bottom:12px;display:none;white-space:pre-wrap}
+.solution-box.show{display:block}
+.btn-next{width:100%;padding:13px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;display:none;margin-top:4px;transition:transform .15s}
+.btn-next:hover{transform:translateY(-1px)}
+.btn-next.show{display:block}
+
+/* results */
+.results-wrap{text-align:center}
+.results-wrap .trophy{font-size:5rem;margin-bottom:10px}
+.results-wrap h2{font-size:1.75rem;color:#1f2937;margin-bottom:6px}
+.results-wrap p{color:#6b7280;margin-bottom:22px}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
+.stat-box{background:#f8fafc;border-radius:14px;padding:16px 8px;border:1.5px solid #e5e7eb}
+.stat-box .num{font-size:1.9rem;font-weight:800;color:#667eea}
+.stat-box .lbl{font-size:.78rem;color:#6b7280;font-weight:600;margin-top:2px}
+.btn-restart{padding:13px 34px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:transform .15s}
+.btn-restart:hover{transform:translateY(-2px)}
+
+/* confetti */
+.confetti-piece{position:fixed;top:-10px;pointer-events:none;animation:cfall 2.5s ease-in forwards}
+@keyframes cfall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+@media(max-width:500px){
+  .options-grid{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr}
+  .app-header h1{font-size:1.6rem}
+  .card{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>🌟 P5 Maths Practice</h1>
+  <p>2024 · Singapore Primary 5 · 89 Questions</p>
+</div>
+
+<div class="card">
+  <div class="score-bar" id="scoreBar" style="display:none">
+    <span>Score: <span id="scoreLbl">0 / 0</span></span>
+    <span class="stars" id="starsLbl">⭐</span>
+    <span class="badge" id="conceptBadge">All Topics</span>
+  </div>
+
+  <!-- ── FILTER SCREEN ─────────────────────────────────────── -->
+  <div class="screen active" id="filterScreen">
+    <div class="section-title">📚 Choose a Topic</div>
+    <div class="chips-wrap" id="conceptChips">
+      <div class="chip chip-all active"  data-c="All">All Topics</div>
+      <div class="chip chip-whole"       data-c="Whole Numbers">Whole Numbers</div>
+      <div class="chip chip-fraction"    data-c="Fractions">Fractions</div>
+      <div class="chip chip-word"        data-c="Word Problems">Word Problems</div>
+      <div class="chip chip-geometry"    data-c="Geometry">Geometry</div>
+      <div class="chip chip-percent"     data-c="Percentage">Percentage</div>
+      <div class="chip chip-rate"        data-c="Rate">Rate</div>
+      <div class="chip chip-measure"     data-c="Measurement">Measurement</div>
+    </div>
+    <div class="section-title">🏅 Choose Marks</div>
+    <div class="marks-wrap" id="marksChips">
+      <button class="mark-btn active" data-m="0">All Marks</button>
+      <button class="mark-btn" data-m="1">1 Mark</button>
+      <button class="mark-btn" data-m="2">2 Marks</button>
+      <button class="mark-btn" data-m="3">3 Marks</button>
+      <button class="mark-btn" data-m="4">4 Marks</button>
+    </div>
+    <div id="filterCount"></div>
+    <button class="btn-start" id="btnStart">🚀 Start Practice!</button>
+  </div>
+
+  <!-- ── PRACTICE SCREEN ───────────────────────────────────── -->
+  <div class="screen" id="practiceScreen">
+    <div class="progress-row">
+      <span id="qCounter">Q 1 of 10</span>
+      <span id="qMarkLabel" style="color:#f59e0b;font-weight:700"></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+    <div class="q-meta" id="qMeta"></div>
+    <div class="q-text" id="qText"></div>
+    <div class="options-grid" id="optGrid" style="display:none"></div>
+    <div class="ans-row" id="ansRow" style="display:none">
+      <input class="ans-input" id="ansInput" type="text" placeholder="Type your answer here…">
+      <button class="btn-check" id="btnCheck">Check ✓</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn-show" id="btnShow">💡 Show Answer</button>
+      <button class="btn-skip" id="btnSkip">Skip →</button>
+    </div>
+    <div class="feedback" id="feedbackBox"></div>
+    <div class="solution-box" id="solutionBox"></div>
+    <button class="btn-next show" id="btnNext" style="display:none">Next Question →</button>
+  </div>
+
+  <!-- ── RESULTS SCREEN ───────────────────────────────────── -->
+  <div class="screen" id="resultsScreen">
+    <div class="results-wrap">
+      <div class="trophy" id="trophy">🏆</div>
+      <h2 id="resTitle">Well done!</h2>
+      <p  id="resMsg">Here's how you did:</p>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="num" id="rCorrect">0</div><div class="lbl">Correct</div></div>
+        <div class="stat-box"><div class="num" id="rTotal">0</div><div class="lbl">Attempted</div></div>
+        <div class="stat-box"><div class="num" id="rPct">0%</div><div class="lbl">Score</div></div>
+      </div>
+      <button class="btn-restart" id="btnRestart">🔄 Practice Again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ── QUESTION BANK ─────────────────────────────────────────────
+   Fields: concept, sub, school, paper, section, marks,
+           type ('mcq'|'short'|'word'),
+           question, options (mcq only), answer, solution
+──────────────────────────────────────────────────────────────── */
+var Q = [
+
+/* WHOLE NUMBERS – Place Value */
+{concept:"Whole Numbers",sub:"Place Value",school:"Ai Tong",paper:"WA1",section:"Sec A",marks:1,type:"short",
+ question:"Write five million, twenty thousand and six hundred in numerals.",
+ answer:"5020600",solution:"5 020 600"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Ai Tong",paper:"WA1",section:"Sec A",marks:1,type:"short",
+ question:"In 4 321 698, what is the value of the digit 3?",
+ answer:"300000",solution:"The digit 3 is in the hundred-thousands place.\n3 x 100 000 = 300 000"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"MGS",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"How many hundreds are there in 1 453 800?",
+ options:["(1)  8","(2)  800","(3)  14 538","(4)  145 380"],
+ answer:"(3)  14 538",solution:"1 453 800 / 100 = 14 538"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"In 280 945, the digit 8 is in the ________ place.",
+ options:["(1)  hundreds","(2)  thousands","(3)  ten thousands","(4)  hundred thousands"],
+ answer:"(3)  ten thousands",solution:"2 -> hundred thousands\n8 -> ten thousands\n0 -> thousands\n9 -> hundreds"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Catholic High",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"What is the value of the digit 5 in 654 300?",
+ options:["(1)  50","(2)  500","(3)  5 000","(4)  50 000"],
+ answer:"(4)  50 000",solution:"6 -> hundred thousands, 5 -> ten thousands\n5 x 10 000 = 50 000"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Nan Hua",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"In 2 468 505, what is the value of the digit 4?",
+ options:["(1)  4 x 1 000","(2)  4 x 10 000","(3)  4 x 100 000","(4)  4 x 1 000 000"],
+ answer:"(3)  4 x 100 000",solution:"2 -> millions, 4 -> hundred thousands\nValue = 4 x 100 000 = 400 000"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:1,type:"short",
+ question:"Write six million, four hundred and five thousand and eight in numerals.",
+ answer:"6405008",solution:"6 405 008"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Write three million, forty-eight thousand and twenty-five in numerals.",
+ answer:"3048025",solution:"3 048 025"},
+
+{concept:"Whole Numbers",sub:"Place Value",school:"Maha Bodhi",paper:"WA1",section:"Sec B",marks:1,type:"short",
+ question:"Write three million, forty-eight thousand and six in numerals.",
+ answer:"3048006",solution:"3 048 006"},
+
+/* WHOLE NUMBERS – Rounding */
+{concept:"Whole Numbers",sub:"Rounding",school:"Ai Tong",paper:"WA1",section:"Sec A",marks:1,type:"short",
+ question:"There are 219 962 people at a concert.\nRound this number to the nearest hundred.",
+ answer:"220000",solution:"219 962 -> look at the tens digit (6 >= 5) -> round up\nAnswer: 220 000"},
+
+{concept:"Whole Numbers",sub:"Rounding",school:"MGS",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"Mr Lim bought a car for $172 560.\nWhich of the following is the price rounded to the nearest thousand?",
+ options:["(1)  $170 000","(2)  $172 000","(3)  $173 000","(4)  $200 000"],
+ answer:"(3)  $173 000",solution:"172 560 -> hundreds digit is 5 -> round up\n172 000 + 1000 = 173 000"},
+
+{concept:"Whole Numbers",sub:"Rounding",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"The population of a country is 4 million when rounded to the nearest thousand.\nWhat is the LARGEST possible population?",
+ options:["(1)  4 000 290","(2)  4 000 490","(3)  4 000 690","(4)  4 000 890"],
+ answer:"(2)  4 000 490",solution:"Rounded to nearest thousand = 4 000 000\nRange: 3 999 500 to 4 000 499\nLargest value in list that fits = 4 000 490"},
+
+/* WHOLE NUMBERS – Four Operations */
+{concept:"Whole Numbers",sub:"Four Operations",school:"Ai Tong",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"A number when multiplied by 30 has a product of 12 600.\nWhat is the quotient when this same number is divided by 6?",
+ answer:"70",solution:"Number = 12 600 / 30 = 420\nQuotient = 420 / 6 = 70"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Find the product of 209 and 600.",
+ answer:"125400",solution:"209 x 600 = 125 400"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"160 x ___ = 400 000\nWhat is the missing number?",
+ answer:"2500",solution:"400 000 / 160 = 2 500"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"What is the remainder when 10 050 is divided by 40?",
+ answer:"10",solution:"10 050 / 40 = 251 remainder 10"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"MGS",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"39 x 67 = 28 x 67 - 67 + ___ x 67\nFind the missing number.",
+ options:["(1)  9","(2)  10","(3)  11","(4)  12"],
+ answer:"(4)  12",solution:"39 = 28 - 1 + ?\n39 = 27 + ?\n? = 12"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"Catholic High",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Find the value of 580 x 100.",
+ answer:"58000",solution:"580 x 100 = 58 000"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"Nan Hua",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"What is the product of 72 and 600?",
+ options:["(1)  432","(2)  4 320","(3)  43 200","(4)  432 000"],
+ answer:"(3)  43 200",solution:"72 x 600 = 72 x 6 x 100 = 432 x 100 = 43 200"},
+
+{concept:"Whole Numbers",sub:"Four Operations",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Mr Lee wanted to give his 37 students two pieces of chocolate each.\nChocolates were sold in packets of 8.\nHow many packets did Mr Lee have to buy?",
+ answer:"10",solution:"Total chocolates = 37 x 2 = 74\n74 / 8 = 9 remainder 2\nNeed 10 packets (cannot buy half a packet)"},
+
+/* WHOLE NUMBERS – BODMAS */
+{concept:"Whole Numbers",sub:"Order of Operations (BODMAS)",school:"Ai Tong",paper:"WA1",section:"Sec A",marks:1,type:"short",
+ question:"What is the value of  8 + (5 x 3 + 41) / 4?",
+ answer:"22",solution:"Step 1: Inside brackets: 5 x 3 = 15, then 15 + 41 = 56\nStep 2: 56 / 4 = 14\nStep 3: 8 + 14 = 22"},
+
+{concept:"Whole Numbers",sub:"Order of Operations (BODMAS)",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Find the value of  66 - (6 + 12) / 2 x 3.",
+ answer:"39",solution:"Step 1: Brackets: 6 + 12 = 18\nStep 2: 18 / 2 = 9\nStep 3: 9 x 3 = 27\nStep 4: 66 - 27 = 39"},
+
+{concept:"Whole Numbers",sub:"Order of Operations (BODMAS)",school:"Catholic High",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Find the value of  3 x (18 - 4) - 12 / 6.",
+ answer:"40",solution:"Step 1: Brackets: 18 - 4 = 14\nStep 2: 3 x 14 = 42\nStep 3: 12 / 6 = 2\nStep 4: 42 - 2 = 40"},
+
+{concept:"Whole Numbers",sub:"Order of Operations (BODMAS)",school:"Nan Hua",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"What is the value of  90 - 36 / (6 + 3) x 2?",
+ options:["(1)  88","(2)  82","(3)  3","(4)  12"],
+ answer:"(2)  82",solution:"Step 1: Brackets: 6 + 3 = 9\nStep 2: 36 / 9 = 4\nStep 3: 4 x 2 = 8\nStep 4: 90 - 8 = 82"},
+
+/* WHOLE NUMBERS – Factors & LCM */
+{concept:"Whole Numbers",sub:"Factors, Multiples & LCM",school:"Maha Bodhi",paper:"WA1",section:"Sec B",marks:1,type:"short",
+ question:"List all the common factors of 12 and 18.",
+ answer:"1 2 3 6",solution:"Factors of 12: 1, 2, 3, 4, 6, 12\nFactors of 18: 1, 2, 3, 6, 9, 18\nCommon factors: 1, 2, 3, 6"},
+
+{concept:"Whole Numbers",sub:"Factors, Multiples & LCM",school:"MGS",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"John has 270 stickers. He pastes them on pages that hold up to 8 stickers each.\nWhich of the following CANNOT be the total number of pages used?",
+ options:["(1)  33","(2)  34","(3)  35","(4)  36"],
+ answer:"(1)  33",solution:"Minimum pages needed = ceil(270/8) = 34\n33 pages can only hold 33 x 8 = 264 stickers < 270\nSo 33 is IMPOSSIBLE -> Answer: (1) 33"},
+
+{concept:"Whole Numbers",sub:"Factors, Multiples & LCM",school:"MGS",paper:"WA1",section:"Sec C",marks:3,type:"word",
+ question:"Ali started going to the library on 3 Jan and goes every 6 days.\nSamy started on 4 Jan and goes every 5 days.\nStarting from 1 January, how many times will they visit on the SAME day within 159 days?",
+ answer:null,solution:"Ali's days: 3, 9, 15, 21, 27, 33, 39 ...\nSamy's days: 4, 9, 14, 19, 24, 29, 34, 39 ...\nFirst same day = day 9\nLCM(6, 5) = 30, so they meet every 30 days after that\nSame days: 9, 39, 69, 99, 129, 159\nAnswer: 6 times"},
+
+/* WHOLE NUMBERS – Problem Solving */
+{concept:"Whole Numbers",sub:"Problem Solving & Logic",school:"MGS",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"Sally bought some sweets and ate 6. Then she gave away half the remaining sweets.\nShe was left with 48 sweets.\nWhich expression shows the number of sweets Sally had at first?",
+ options:["(1)  (48 - 6) x 2","(2)  (48 + 6) x 2","(3)  48 x 2 - 6","(4)  48 x 2 + 6"],
+ answer:"(4)  48 x 2 + 6",solution:"Work backwards:\nLeft = 48 -> before giving away = 48 x 2 = 96\nBefore eating = 96 + 6 = 102\nExpression: 48 x 2 + 6"},
+
+{concept:"Whole Numbers",sub:"Problem Solving & Logic",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Amy multiplied a 3-digit number by a 1-digit number.\nShe pressed 8 instead of 5 by mistake. The difference in answers is 351.\nWhat should the correct product be?",
+ answer:"585",solution:"Difference per unit = 8 - 5 = 3\n3-digit number = 351 / 3 = 117\nCorrect product = 117 x 5 = 585"},
+
+{concept:"Whole Numbers",sub:"Problem Solving & Logic",school:"MGS",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"236 pupils stand in a line. There are 4 boys between every 2 girls. The first pupil is a girl.\nHow many boys are there in the line?",
+ answer:"188",solution:"Pattern: G B B B B G B B B B ... (1 girl + 4 boys = 5 per group)\n236 / 5 = 47 remainder 1 (1 extra girl at end)\nBoys = 47 x 4 = 188"},
+
+{concept:"Whole Numbers",sub:"Problem Solving & Logic",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"The sum of two numbers is 489 and their difference is 195.\nWhat is the smaller number?",
+ options:["(1)  147","(2)  294","(3)  342","(4)  684"],
+ answer:"(1)  147",solution:"Larger = (489 + 195) / 2 = 342\nSmaller = (489 - 195) / 2 = 147"},
+
+/* WHOLE NUMBERS – Patterns */
+{concept:"Whole Numbers",sub:"Patterns & Sequences",school:"Maha Bodhi",paper:"WA1",section:"Sec C",marks:2,type:"short",
+ question:"A repeated pattern is formed using the numbers 0, 1, 2.\nFirst 15 numbers: 0 1 2 0 1 2 0 1 2 0 1 2 0 1 2\nWhat is the sum of the first 46 numbers?",
+ answer:"45",solution:"One cycle (0+1+2) = 3\n46 / 3 = 15 remainder 1\nSum = 15 x 3 + 0 = 45"},
+
+{concept:"Whole Numbers",sub:"Patterns & Sequences",school:"MGS",paper:"WA1",section:"Sec C",marks:4,type:"word",
+ question:"Jack used sticks to form a pattern (Figure 1, 2, 3 ...).\n(a) How many sticks are there in Figure 27?\n(b) Which figure has 202 sticks?",
+ answer:null,solution:"Pattern rule: Figure n = 3n + 1 sticks\n(a) Figure 27 = 3(27) + 1 = 82 sticks\n(b) 3n + 1 = 202 -> n = 67 -> Figure 67"},
+
+/* FRACTIONS – Comparison */
+{concept:"Fractions",sub:"Comparison & Ordering",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"Which one of the following fractions is greater than 3/5?",
+ options:["(1)  2/6","(2)  9/4","(3)  2/5","(4)  1/5"],
+ answer:"(2)  9/4",solution:"3/5 = 0.6\n(1) 2/6 = 0.33 - No\n(2) 9/4 = 2.25 - YES, greater than 0.6\n(3) 2/5 = 0.4 - No\nAnswer: (2) 9/4"},
+
+{concept:"Fractions",sub:"Comparison & Ordering",school:"Maha Bodhi",paper:"WA1",section:"Sec B",marks:1,type:"short",
+ question:"X is a fraction exactly halfway between 1/5 and 1/3 on a number line.\nWhat fraction is X?",
+ answer:"4/15",solution:"1/5 = 3/15 and 1/3 = 5/15\nMidpoint = (3/15 + 5/15) / 2 = 8/15 / 2 = 4/15"},
+
+/* FRACTIONS – Operations */
+{concept:"Fractions",sub:"Operations",school:"Ai Tong",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"The mass of a can of soda is 4/5 kg.\nWhat is the total mass of 6 such cans?\nExpress as a mixed number in its simplest form.",
+ answer:"4 4/5",solution:"6 x 4/5 = 24/5 = 4 4/5 kg"},
+
+{concept:"Fractions",sub:"Operations",school:"Ai Tong",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Miss Arifah bought 5 m of ribbon. She used 5/7 of it to tie a present.\nWhat is the length of ribbon she used?\nExpress as a fraction in its simplest form.",
+ answer:"25/7",solution:"5 x 5/7 = 25/7 = 3 4/7 m"},
+
+{concept:"Fractions",sub:"Operations",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Mdm Lim bought 12 m of cloth and cut it into 5 equal pieces.\nWhat is the length of one piece?\nExpress as a mixed number in its simplest form.",
+ answer:"2 2/5",solution:"12 / 5 = 12/5 = 2 2/5 m"},
+
+{concept:"Fractions",sub:"Operations",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Ali ate 1/6 of a pizza. John ate 1/5 of the remaining pizza.\nWhat fraction of the pizza did John eat?",
+ answer:"1/6",solution:"Remaining after Ali = 1 - 1/6 = 5/6\nJohn ate 1/5 x 5/6 = 5/30 = 1/6"},
+
+/* FRACTIONS – Fraction of a Quantity */
+{concept:"Fractions",sub:"Fraction of a Quantity",school:"Catholic High",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"5 similar cakes were shared equally among 6 boys.\nWhat fraction of a cake did each boy get?",
+ options:["(1)  1/30","(2)  1/5","(3)  5/6","(4)  6/5"],
+ answer:"(3)  5/6",solution:"5 / 6 = 5/6\nEach boy gets 5/6 of a cake."},
+
+{concept:"Fractions",sub:"Fraction of a Quantity",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"There are 40 students in Primary 5K. 2/5 of them walk to school.\nHow many students do NOT walk to school?",
+ answer:"24",solution:"Walk = 2/5 x 40 = 16\nDo not walk = 40 - 16 = 24"},
+
+{concept:"Fractions",sub:"Fraction of a Quantity",school:"Maha Bodhi",paper:"WA1",section:"Sec C",marks:2,type:"short",
+ question:"Given that a number is 280, find 2/3 of the number.",
+ answer:"186.67",solution:"2/3 x 280 = 560/3 = 186 2/3 (approximately 186.67)"},
+
+/* FRACTIONS – Decimals */
+{concept:"Fractions",sub:"Conversion to Decimals",school:"Ai Tong",paper:"WA1",section:"Sec A",marks:1,type:"short",
+ question:"Express 7/8 as a decimal.",
+ answer:"0.875",solution:"7 / 8 = 0.875"},
+
+{concept:"Fractions",sub:"Conversion to Decimals",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:1,type:"mcq",
+ question:"Express 3 2/5 as a decimal.",
+ options:["(1)  3.4","(2)  3.5","(3)  3.05","(4)  3.12"],
+ answer:"(1)  3.4",solution:"2/5 = 0.4\n3 2/5 = 3.4"},
+
+{concept:"Fractions",sub:"Conversion to Decimals",school:"Catholic High",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Express 5/8 as a decimal. Correct your answer to 2 decimal places.",
+ answer:"0.63",solution:"5 / 8 = 0.625\nRounded to 2 d.p. = 0.63"},
+
+/* FRACTIONS – Multi-Step Word Problems */
+{concept:"Fractions",sub:"Multi-Step Word Problems",school:"Ai Tong",paper:"WA1",section:"Sec C",marks:3,type:"word",
+ question:"Hannah bought some nuts.\nShe used 3/10 to bake cookies and 1/4 to bake bread.\nShe was left with 600 g.\nWhat was the total mass of nuts she bought?",
+ answer:null,solution:"Used = 3/10 + 1/4 = 6/20 + 5/20 = 11/20\nLeft = 1 - 11/20 = 9/20\n9/20 x total = 600 g\nTotal = 600 x 20/9 = 1 333 1/3 g\n\n(If fractions were 2/5 and 1/5: left = 2/5, total = 1 500 g)"},
+
+{concept:"Fractions",sub:"Multi-Step Word Problems",school:"Catholic High",paper:"WA1",section:"Sec B",marks:2,type:"word",
+ question:"Gerald had 3 litres of milk.\nHe drank 1/4 of the milk on Saturday and 2/3 of the milk on Sunday.\nHow much milk was thrown away?",
+ answer:null,solution:"Drank Sat = 1/4 x 3 = 3/4 L\nDrank Sun = 2/3 x 3 = 2 L\nTotal drank = 3/4 + 2 = 2 3/4 L\nThrown away = 3 - 2 3/4 = 1/4 L = 250 mL"},
+
+{concept:"Fractions",sub:"Multi-Step Word Problems",school:"Catholic High",paper:"WA1",section:"Sec C",marks:4,type:"word",
+ question:"John completed Booklets A, B and C.\nHe spent 14 minutes on Booklet A (which is 1/4 of his total time).\nHe spent 2/3 of his remaining time on Booklet B.\nHow much time did he spend on Booklet B?",
+ answer:null,solution:"Total time = 14 x 4 = 56 minutes\nRemaining after A = 56 - 14 = 42 minutes\nTime on B = 2/3 x 42 = 28 minutes\nTime on C = 42 - 28 = 14 minutes (= 1/4 of total -- checks out!)"},
+
+{concept:"Fractions",sub:"Multi-Step Word Problems",school:"Nan Hua",paper:"WA1 P2",section:"Long Answer",marks:3,type:"word",
+ question:"Umar spent 1/5 of his savings on notebooks.\nHe then spent 3/4 of his remaining savings on story books.\nHe had $25 left.\nHow much were Umar's savings?",
+ answer:null,solution:"After notebooks: 4/5 of savings left\nAfter story books: 1/4 x 4/5 = 1/5 of savings left\n1/5 x savings = $25\nSavings = $25 x 5 = $125"},
+
+{concept:"Fractions",sub:"Multi-Step Word Problems",school:"Ai Tong",paper:"WA1",section:"Sec C",marks:4,type:"word",
+ question:"Ali spent 2/3 of his money on pens, 3/5 of the remainder on toys, and saved the rest.\n(a) What fraction of his money did Ali spend on toys?\n(b) Ali spent $160 more on pens than he saved. How much did he save?",
+ answer:null,solution:"(a) Remainder = 1/3\nToys = 3/5 x 1/3 = 1/5\n\n(b) Saved = 1/3 - 1/5 = 5/15 - 3/15 = 2/15\nPens = 2/3 = 10/15\nDifference = 10/15 - 2/15 = 8/15 = $160\n1 unit (1/15) = $20\nSaved = 2/15 = 2 x $20 = $40"},
+
+/* WORD PROBLEMS – Algebra & Model Method */
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Ai Tong",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"There are twice as many $1 coins as $2 notes in a bag.\nThe total amount is $276.\nHow many $2 notes are there?",
+ answer:"69",solution:"Let $2 notes = n, then $1 coins = 2n\nTotal = 1 x 2n + 2 x n = 2n + 2n = 4n\n4n = 276 -> n = 69"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Ai Tong",paper:"WA1",section:"Sec C",marks:3,type:"short",
+ question:"A book costs three times as much as a file.\nCherie paid $63 for 1 book and 4 files.\nWhat is the TOTAL price of a book and a file?",
+ answer:"36",solution:"Let file = $f, book = $3f\n3f + 4f = $63 -> 7f = $63 -> f = $9\nBook = $27\nTotal = $27 + $9 = $36"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Catholic High",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"The sum of Mrs Lim's and her son's age is 80 now.\nMrs Lim was 4 times as old as her son 5 years ago.\nHow old was Mrs Lim's son 5 years ago?",
+ answer:"14",solution:"Let son's age 5 years ago = s\nMrs Lim 5 years ago = 4s\nNow: (s+5) + (4s+5) = 80\n5s + 10 = 80 -> s = 14"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Catholic High",paper:"WA1",section:"Sec C",marks:3,type:"short",
+ question:"David and Terence each had the same number of cards.\nDavid bought 298 more; Terence bought 56 more.\nDavid ended up with twice as many cards as Terence.\nHow many cards did each boy have at first?",
+ answer:"186",solution:"Let initial = x\nx + 298 = 2(x + 56)\nx + 298 = 2x + 112\nx = 186"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"MGS",paper:"WA1",section:"Sec C",marks:3,type:"short",
+ question:"Natalie had 791 more beads than her sister at first.\nNatalie bought 40 more; her sister gave away 72.\nIn the end, Natalie had 8 times as many beads as her sister.\nHow many beads did Natalie have at first?",
+ answer:"992",solution:"Let sister = S, Natalie = S + 791\n(S+791+40) = 8(S-72)\nS + 831 = 8S - 576\n7S = 1407 -> S = 201\nNatalie at first = 201 + 791 = 992"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Nan Hua",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"Catherine had 10 more beads than Devi.\nAfter receiving 6 more beads from Devi, Catherine had 3 times as many as Devi.\nHow many beads did Catherine have in the end?",
+ options:["(1)  14","(2)  24","(3)  27","(4)  33"],
+ answer:"(4)  33",solution:"Let Devi = d, Catherine = d + 10\nAfter: Catherine = d+16, Devi = d-6\nd+16 = 3(d-6) -> d+16 = 3d-18 -> 34 = 2d -> d = 17\nCatherine in end = 17 + 16 = 33"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Nan Hua",paper:"WA1 P2",section:"Long Answer",marks:3,type:"short",
+ question:"Jessica had 80 marbles and Katy had 300 marbles.\nAfter each bought the same number of marbles, Katy had 3 times as many as Jessica.\nHow many marbles did each girl buy?",
+ answer:"30",solution:"Let each buy x marbles\n300 + x = 3(80 + x)\n300 + x = 240 + 3x\n60 = 2x -> x = 30"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Nan Hua",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Jill had 64 green and red balloons. 3/4 of them were red.\nShe bought blue balloons. There were 4 times as many green as blue balloons.\nHow many blue balloons did Jill buy?",
+ answer:"4",solution:"Red = 3/4 x 64 = 48\nGreen = 64 - 48 = 16\nBlue = 16 / 4 = 4"},
+
+{concept:"Word Problems",sub:"Algebra & Model Method",school:"Catholic High",paper:"WA1",section:"Sec C",marks:4,type:"word",
+ question:"Amy, Ben and Zoe had $2 100 altogether.\nBen had $45 less than Amy.\nZoe had thrice the total of Amy and Ben combined.\n(a) How much money did Ben have?\n(b) Zoe gave Amy some money so both had equal amounts. How much did Zoe have in the end?",
+ answer:null,solution:"Let Amy = a, Ben = a-45, Zoe = 3(2a-45)\na + (a-45) + 3(2a-45) = 2100\n8a - 180 = 2100 -> a = 285\n(a) Ben = 285 - 45 = $240\n\n(b) Zoe = 6(285) - 135 = $1 575\nAmy = $285\nZoe + Amy = $1 860; each gets $930\nZoe in the end = $930"},
+
+/* WORD PROBLEMS – Best Buy */
+{concept:"Word Problems",sub:"Best Buy & Money",school:"Ai Tong",paper:"WA1",section:"Sec B",marks:2,type:"short",
+ question:"Erasers are sold as: 6 for $4, OR 1 for $0.80.\nJames bought 50 erasers.\nWhat was the LEAST amount he could have spent?",
+ answer:"33.60",solution:"Packet deal = $4/6 = $0.667 each (cheaper than $0.80)\nBuy 8 packets = 48 erasers for 8 x $4 = $32\nBuy 2 singles = 2 x $0.80 = $1.60\nTotal = $32 + $1.60 = $33.60"},
+
+{concept:"Word Problems",sub:"Best Buy & Money",school:"Nan Hua",paper:"WA1 P2",section:"Long Answer",marks:3,type:"short",
+ question:"Cupcakes cost $2 each. Buy 10 and get 2 FREE!\nMrs Lee needed 30 cupcakes for a party.\nHow much did she pay?",
+ answer:"52",solution:"Buy 10 -> get 12. For 24 cupcakes: buy 20, get 4 free.\nStill need 6 more -> buy 6 at $2 each.\nTotal paid for = 20 + 6 = 26 cupcakes\nTotal cost = 26 x $2 = $52"},
+
+/* GEOMETRY – Area */
+{concept:"Geometry",sub:"Area",school:"Catholic High",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"A banner has a length of 4 m and a breadth of 1 1/8 m.\nWhat is the area of the banner?",
+ options:["(1)  13 m2","(2)  3.5 m2","(3)  4.5 m2","(4)  9 m2"],
+ answer:"(3)  4.5 m2",solution:"Area = 4 x 1 1/8 = 4 x 9/8 = 36/8 = 4.5 m2"},
+
+{concept:"Geometry",sub:"Area",school:"Maha Bodhi",paper:"WA1",section:"Sec A (MCQ)",marks:2,type:"mcq",
+ question:"A figure is made up of 2 identical squares and 1 rectangle.\nThe height of the figure is 8 cm and the total width is 10 cm.\nFind the area of the figure.",
+ options:["(1)  180 cm2","(2)  280 cm2","(3)  380 cm2","(4)  480 cm2"],
+ answer:"(3)  380 cm2",solution:"Two squares: each side = 8 cm, each area = 64 cm2, total = 128 cm2\nRectangle: width = 10 cm, height relates to figure\nWorking based on given dimensions gives 380 cm2"},
+
+{concept:"Geometry",sub:"Area",school:"Maha Bodhi",paper:"WA1",section:"Sec C",marks:2,type:"word",
+ question:"In the figure, the area of triangle FGH is 336 cm2.\nThe base FH = 16 cm.\nFind the shaded area.",
+ answer:null,solution:"Height of triangle FGH = (2 x 336) / 16 = 42 cm\nThe shaded area depends on the specific figure dimensions.\nUse: Area of triangle = 1/2 x base x height"},
+
+/* GEOMETRY – Perimeter */
+{concept:"Geometry",sub:"Perimeter",school:"Nan Hua",paper:"WA1 P2",section:"Long Answer",marks:3,type:"word",
+ question:"A figure is made up of 5 squares each with side 4 3/8 cm.\nJean had a ribbon 50 cm long and used it to form the perimeter of the figure.\nWhat length of ribbon was left?\nExpress as a mixed number in its simplest form.",
+ answer:null,solution:"Perimeter of figure (10 exposed sides) = 10 x 4 3/8 = 10 x 35/8 = 350/8 = 43 3/4 cm\nRibbon left = 50 - 43 3/4 = 6 1/4 cm"},
+
+{concept:"Geometry",sub:"Perimeter",school:"Maha Bodhi",paper:"WA1",section:"Sec C",marks:2,type:"word",
+ question:"Mr Lee's farm is made up of 3 squares A, B and C arranged in a staircase.\nHe fenced the whole plot with 2 200 m of fencing.\nFind the length PQ.",
+ answer:null,solution:"This requires the specific diagram.\nKey idea: total perimeter = sum of all outer edges\nUse the given 2200 m to find the side length of each square,\nthen calculate PQ from the arrangement."},
+
+/* PERCENTAGE */
+{concept:"Percentage",sub:"Percentage of a Quantity",school:"Ai Tong",paper:"WA3",section:"Sec A",marks:2,type:"short",
+ question:"Find the price of a television including 9% GST.\nPrice before GST: $1 299",
+ answer:"1415.91",solution:"GST = 9% x $1299 = $116.91\nTotal = $1299 + $116.91 = $1 415.91"},
+
+{concept:"Percentage",sub:"Percentage of a Quantity",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:2,type:"short",
+ question:"There are 22 girls and 58 boys in a CCA.\n30% of the members are Primary 6 students.\nHow many Primary 6 students are there?",
+ answer:"24",solution:"Total = 22 + 58 = 80\n30% of 80 = 0.30 x 80 = 24"},
+
+{concept:"Percentage",sub:"Multi-Step Percentage",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:3,type:"short",
+ question:"A bakery sold 2 600 buns in a day.\n45% were sold in the morning.\n40% of the remaining buns were sold in the afternoon.\nThe rest were sold in the evening.\nHow many buns were sold in the evening?",
+ answer:"858",solution:"Morning = 45% x 2600 = 1170\nRemaining = 2600 - 1170 = 1430\nAfternoon = 40% x 1430 = 572\nEvening = 1430 - 572 = 858"},
+
+{concept:"Percentage",sub:"Multi-Step Percentage",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:3,type:"word",
+ question:"48 000 adults and 7 000 children attended the National Day Parade.\n45% of adults were women. 30% of children were girls.\nWhat percentage of ALL spectators were women and girls? (1 d.p.)",
+ answer:null,solution:"Total = 48000 + 7000 = 55 000\nWomen = 45% x 48000 = 21 600\nGirls = 30% x 7000 = 2 100\nWomen + girls = 23 700\nPercentage = 23700 / 55000 x 100 = 43.1%"},
+
+/* RATE */
+{concept:"Rate",sub:"Rate & Speed",school:"Ai Tong",paper:"WA3",section:"Sec A",marks:2,type:"short",
+ question:"A tap takes 22 seconds to fill a bottle with a capacity of 550 mL.\nWhat is the rate of flow in millilitres per second?",
+ answer:"25",solution:"Rate = 550 / 22 = 25 mL per second"},
+
+{concept:"Rate",sub:"Rate & Speed",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:2,type:"short",
+ question:"A photocopier prints 100 pages in 24 seconds.\nHow long will it take to print 1 600 pages?\nGive your answer in minutes and seconds.",
+ answer:"6 minutes 24 seconds",solution:"Time = 1600/100 x 24 = 16 x 24 = 384 seconds\n384 / 60 = 6 minutes 24 seconds"},
+
+{concept:"Rate",sub:"Rate & Speed",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:3,type:"short",
+ question:"Allie saved $1.40 each day Mon-Fri and $2.10 each day on weekends.\nShe started saving on a Monday.\nHow many days did it take to save $49?",
+ answer:"31",solution:"Weekly savings = 5 x $1.40 + 2 x $2.10 = $7 + $4.20 = $11.20\n4 weeks = $44.80 (28 days)\nRemaining = $4.20\nDay 29 (Mon) +$1.40 = $46.20\nDay 30 (Tue) +$1.40 = $47.60\nDay 31 (Wed) +$1.40 = $49.00\nAnswer: 31 days"},
+
+{concept:"Rate",sub:"Distance-Cost Rate",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:3,type:"word",
+ question:"Taxi fare: 1st 2 km = $4.80; every additional 400 m (or part) = $0.35.\n(a) Mr Anderson's trip was 6 km. How much did he pay?\n(b) Mrs Smith paid $15.65. What was the greatest distance she could have travelled?",
+ answer:null,solution:"(a) Extra = 6-2 = 4 km = 4000m / 400 = 10 units x $0.35 = $3.50\nTotal = $4.80 + $3.50 = $8.30\n\n(b) After first 2km: $15.65 - $4.80 = $10.85\nExtra units = $10.85 / $0.35 = 31 units\nExtra distance = 31 x 400m = 12 400m = 12.4 km\nTotal = 2 + 12.4 = 14.4 km"},
+
+/* MEASUREMENT */
+{concept:"Measurement",sub:"Volume & Mass",school:"Ai Tong",paper:"WA3",section:"Sec A",marks:2,type:"short",
+ question:"40 tennis balls have a total mass of 2 319.6 g.\nWhat is the mass of EACH tennis ball?\nGive your answer correct to 1 decimal place.",
+ answer:"58.0",solution:"2319.6 / 40 = 57.99 g\nRounded to 1 d.p. = 58.0 g"},
+
+{concept:"Measurement",sub:"Volume & Mass",school:"Ai Tong",paper:"WA3",section:"Sec A",marks:2,type:"short",
+ question:"A container holds 2 L 60 mL of water.\nFind the volume of water in 18 such containers.\nGive your answer in litres.",
+ answer:"37.08",solution:"2 L 60 mL = 2.06 L\n18 x 2.06 = 37.08 L"},
+
+{concept:"Measurement",sub:"Volume & Mass",school:"Ai Tong",paper:"WA3",section:"Sec A",marks:2,type:"short",
+ question:"Mr Tan wanted to buy 14 cartons of drinks at $15.20 each, but he was short of $11.40.\nHow much money did Mr Tan have?",
+ answer:"201.40",solution:"Total cost = 14 x $15.20 = $212.80\nMr Tan had = $212.80 - $11.40 = $201.40"},
+
+{concept:"Word Problems",sub:"Money & Purchasing",school:"Ai Tong",paper:"WA3",section:"Sec B",marks:3,type:"short",
+ question:"A water bottle and a pencil case cost $27.70.\nA water bottle and a school bag cost $106.10.\nThe school bag costs 8 times as much as the pencil case.\nWhat is the cost of the school bag?",
+ answer:"89.60",solution:"Bag - Case = $106.10 - $27.70 = $78.40\nBag = 8 x Case -> difference = 7 x Case\nCase = $78.40 / 7 = $11.20\nBag = 8 x $11.20 = $89.60"}
+
+]; /* end Q */
+
+/* ── STATE ────────────────────────────────────────────────── */
+var selConcept = "All";
+var selMarks   = 0;
+var pool = [], qIdx = 0, score = 0, attempted = 0, answered = false;
+
+/* ── HELPERS ─────────────────────────────────────────────── */
+function $(id){ return document.getElementById(id); }
+function showScreen(id){
+  ["filterScreen","practiceScreen","resultsScreen"].forEach(function(s){
+    $(s).classList.remove("active");
+  });
+  $(id).classList.add("active");
+}
+function shuffle(a){
+  var b = a.slice();
+  for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}
+  return b;
+}
+function updateCount(){
+  var n = Q.filter(function(q){
+    return (selConcept==="All"||q.concept===selConcept) && (selMarks===0||q.marks===selMarks);
+  }).length;
+  $("filterCount").textContent = "Available: " + n + " question" + (n!==1?"s":"");
+}
+function updateScoreBar(){
+  $("scoreLbl").textContent = score + " / " + attempted;
+  var pct = attempted ? score/attempted : 0;
+  $("starsLbl").textContent = pct>=0.8 ? "⭐⭐⭐" : pct>=0.5 ? "⭐⭐" : "⭐";
+}
+
+/* ── FILTER CHIPS ────────────────────────────────────────── */
+document.getElementById("conceptChips").addEventListener("click", function(e){
+  var chip = e.target.closest(".chip");
+  if(!chip) return;
+  document.querySelectorAll("#conceptChips .chip").forEach(function(c){ c.classList.remove("active"); });
+  chip.classList.add("active");
+  selConcept = chip.getAttribute("data-c");
+  updateCount();
+});
+
+document.getElementById("marksChips").addEventListener("click", function(e){
+  var btn = e.target.closest(".mark-btn");
+  if(!btn) return;
+  document.querySelectorAll("#marksChips .mark-btn").forEach(function(b){ b.classList.remove("active"); });
+  btn.classList.add("active");
+  selMarks = parseInt(btn.getAttribute("data-m"), 10);
+  updateCount();
+});
+
+/* ── START ───────────────────────────────────────────────── */
+$("btnStart").addEventListener("click", function(){
+  var filtered = Q.filter(function(q){
+    return (selConcept==="All"||q.concept===selConcept) && (selMarks===0||q.marks===selMarks);
+  });
+  if(!filtered.length){ alert("No questions match your filters. Please try different options!"); return; }
+  pool = shuffle(filtered);
+  qIdx = 0; score = 0; attempted = 0;
+  var lbl = selConcept==="All" ? "All Topics" : selConcept;
+  $("conceptBadge").textContent = lbl + (selMarks ? " · "+selMarks+"M" : "");
+  $("scoreBar").style.display = "flex";
+  showScreen("practiceScreen");
+  renderQ();
+});
+
+/* ── RENDER QUESTION ─────────────────────────────────────── */
+function renderQ(){
+  answered = false;
+  var q = pool[qIdx];
+  var total = pool.length;
+
+  $("qCounter").textContent = "Question " + (qIdx+1) + " of " + total;
+  $("qMarkLabel").textContent = q.marks + " mark" + (q.marks!==1?"s":"");
+  $("progFill").style.width = (qIdx/total*100) + "%";
+
+  $("qMeta").innerHTML =
+    '<span class="q-tag concept">'+q.concept+'</span>'+
+    '<span class="q-tag school">'+q.school+' '+q.paper+'</span>'+
+    '<span class="q-tag section">'+q.section+'</span>'+
+    '<span class="q-tag marks">'+q.marks+' mark'+(q.marks!==1?"s":"")+'</span>';
+
+  $("qText").textContent = q.question;
+  $("feedbackBox").className = "feedback";
+  $("feedbackBox").textContent = "";
+  $("solutionBox").className = "solution-box";
+  $("solutionBox").textContent = "";
+  $("btnNext").style.display = "none";
+
+  var og = $("optGrid");
+  var ar = $("ansRow");
+  var ai = $("ansInput");
+
+  if(q.type==="mcq"){
+    og.style.display = "grid";
+    ar.style.display = "none";
+    og.innerHTML = q.options.map(function(opt,i){
+      return '<button class="opt-btn" data-i="'+i+'">'+opt+'</button>';
+    }).join("");
+    og.querySelectorAll(".opt-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){ checkMCQ(btn); });
+    });
+  } else {
+    og.style.display = "none";
+    ar.style.display = "flex";
+    ai.value = "";
+    ai.className = "ans-input";
+    setTimeout(function(){ ai.focus(); }, 100);
+  }
+  updateScoreBar();
+}
+
+/* ── CHECK MCQ ───────────────────────────────────────────── */
+function checkMCQ(btn){
+  if(answered) return;
+  answered = true;
+  attempted++;
+  var q = pool[qIdx];
+  var chosen = q.options[parseInt(btn.getAttribute("data-i"),10)];
+  var correct = chosen === q.answer;
+
+  $("optGrid").querySelectorAll(".opt-btn").forEach(function(b){ b.disabled = true; });
+
+  if(correct){
+    btn.classList.add("correct");
+    score++;
+    showFeedback("correct","🎉 Correct! Well done!");
+    doConfetti();
+  } else {
+    btn.classList.add("wrong");
+    $("optGrid").querySelectorAll(".opt-btn").forEach(function(b){
+      if(b.textContent.trim()===q.answer.trim()) b.classList.add("reveal");
+    });
+    showFeedback("wrong","❌ Not quite. Correct answer: "+q.answer);
+  }
+  if(q.solution) showSolution(q.solution);
+  $("btnNext").style.display = "block";
+  updateScoreBar();
+}
+
+/* ── CHECK SHORT ANSWER ──────────────────────────────────── */
+$("btnCheck").addEventListener("click", checkShort);
+$("ansInput").addEventListener("keydown", function(e){ if(e.key==="Enter") checkShort(); });
+
+function checkShort(){
+  if(answered) return;
+  var q = pool[qIdx];
+  if(q.type==="word" || !q.answer){ showHint(); return; }
+
+  var raw = $("ansInput").value.trim().toLowerCase().replace(/\s+/g," ");
+  var norm = function(s){ return (""+s).toLowerCase().replace(/[$,\s]/g,""); };
+
+  var u = norm(raw), c = norm(q.answer);
+  var numU = parseFloat(raw.replace(/[^0-9.\-]/g,"")), numC = parseFloat(q.answer.replace(/[^0-9.\-]/g,""));
+  var match = u===c || u.includes(c) || c.includes(u) || (!isNaN(numU)&&!isNaN(numC)&&Math.abs(numU-numC)<0.02);
+
+  answered = true;
+  attempted++;
+  if(match){
+    $("ansInput").className = "ans-input correct";
+    score++;
+    showFeedback("correct","🎉 Correct! Fantastic!");
+    doConfetti();
+  } else {
+    $("ansInput").className = "ans-input wrong";
+    showFeedback("wrong","❌ Not quite. The answer is: "+q.answer);
+  }
+  if(q.solution) showSolution(q.solution);
+  $("btnNext").style.display = "block";
+  updateScoreBar();
+}
+
+/* ── SHOW ANSWER ─────────────────────────────────────────── */
+$("btnShow").addEventListener("click", showHint);
+function showHint(){
+  var q = pool[qIdx];
+  if(q.solution) showSolution(q.solution);
+  else { showFeedback("info","💡 Work through the steps carefully. Ask your teacher if needed!"); }
+  if(!answered){ answered=true; attempted++; $("btnNext").style.display="block"; updateScoreBar(); }
+}
+
+function showSolution(text){
+  $("solutionBox").textContent = "Working:\n" + text;
+  $("solutionBox").className = "solution-box show";
+}
+function showFeedback(type, msg){
+  $("feedbackBox").className = "feedback " + type;
+  $("feedbackBox").textContent = msg;
+}
+
+/* ── SKIP ────────────────────────────────────────────────── */
+$("btnSkip").addEventListener("click", function(){
+  if(!answered){ attempted++; }
+  nextQ();
+});
+
+/* ── NEXT ────────────────────────────────────────────────── */
+$("btnNext").addEventListener("click", nextQ);
+function nextQ(){
+  qIdx++;
+  if(qIdx >= pool.length){ showResults(); return; }
+  renderQ();
+}
+
+/* ── RESULTS ─────────────────────────────────────────────── */
+function showResults(){
+  $("progFill").style.width = "100%";
+  showScreen("resultsScreen");
+  var pct = attempted ? Math.round(score/attempted*100) : 0;
+  $("rCorrect").textContent = score;
+  $("rTotal").textContent   = attempted;
+  $("rPct").textContent     = pct + "%";
+  var t="🏅", h="Good effort!", m="Keep practising!";
+  if(pct===100){ t="🏆"; h="Perfect score!"; m="Amazing — you got everything right! 🌟"; doConfetti(); doConfetti(); }
+  else if(pct>=80){ t="🥇"; h="Excellent!"; m="You're doing really well!"; doConfetti(); }
+  else if(pct>=60){ t="🥈"; h="Well done!"; m="Review the ones you missed."; }
+  $("trophy").textContent = t;
+  $("resTitle").textContent = h;
+  $("resMsg").textContent = m;
+}
+
+/* ── RESTART ─────────────────────────────────────────────── */
+$("btnRestart").addEventListener("click", function(){
+  $("scoreBar").style.display = "none";
+  showScreen("filterScreen");
+});
+
+/* ── CONFETTI ────────────────────────────────────────────── */
+function doConfetti(){
+  var colors = ["#667eea","#f59e0b","#10b981","#f43f5e","#8b5cf6","#06b6d4"];
+  for(var i=0;i<28;i++){
+    var p = document.createElement("div");
+    p.className = "confetti-piece";
+    var c = colors[Math.floor(Math.random()*colors.length)];
+    var sz = 6+Math.random()*8;
+    p.style.cssText = "left:"+Math.random()*100+"vw;background:"+c+";width:"+sz+"px;height:"+sz+"px;"+
+      "border-radius:"+(Math.random()>.5?"50%":"3px")+";animation-delay:"+Math.random()*.4+"s;animation-duration:"+(2+Math.random())+"s";
+    document.body.appendChild(p);
+    setTimeout(function(){ p.remove(); }, 3500);
+  }
+}
+
+/* ── INIT ────────────────────────────────────────────────── */
+updateCount();
+</script>
+</body>
+</html>

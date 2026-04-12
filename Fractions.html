@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractions - P5 Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8F0;--card:#FFFFFF;--primary:#FF6B35;--primary-light:#FFF0E8;--secondary:#2EC4B6;--secondary-light:#E8FAF8;--accent:#7B2D8E;--accent-light:#F3E8F7;--text:#2D2A32;--text-light:#6B6577;--success:#4CAF50;--error:#E53935;--shadow:0 4px 20px rgba(45,42,50,0.08);--shadow-hover:0 8px 30px rgba(45,42,50,0.14);--radius:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.hero{background:linear-gradient(135deg,#7B2D8E 0%,#9B59B6 40%,#2EC4B6 100%);padding:40px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:40px;background:var(--bg);border-radius:50% 50% 0 0}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2.4rem;color:#fff;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hero p{color:rgba(255,255,255,.92);font-size:1.1rem;margin-top:8px;font-weight:600;position:relative;z-index:1}
+.hero .name{color:#FFE066}
+.nav-wrap{display:flex;justify-content:center;margin:-28px auto 24px;position:relative;z-index:2;padding:0 12px}
+.nav-tabs{display:flex;gap:4px;background:var(--card);border-radius:16px;padding:5px;box-shadow:var(--shadow);overflow-x:auto;max-width:100%}
+.nav-tab{padding:9px 14px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;background:transparent;color:var(--text-light);white-space:nowrap;transition:.25s}
+.nav-tab.active{background:var(--accent);color:#fff}
+.nav-tab:hover:not(.active){background:var(--accent-light);color:var(--accent)}
+.container{max-width:820px;margin:0 auto;padding:0 18px 60px}
+.section{display:none;animation:fadeUp .4s ease}.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;margin-bottom:20px;box-shadow:var(--shadow);transition:box-shadow .3s}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h2{font-family:'Fredoka',sans-serif;font-size:1.35rem;margin-bottom:12px;color:var(--accent)}
+.card h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;margin-bottom:8px}
+.card p,.card li{line-height:1.7;font-size:.96rem}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:10px}
+.badge-orange{background:var(--primary-light);color:var(--primary)}
+.badge-teal{background:var(--secondary-light);color:var(--secondary)}
+.badge-purple{background:var(--accent-light);color:var(--accent)}
+.key-fact{background:linear-gradient(135deg,#FFF6E0,#FFF0E8);border-left:5px solid var(--primary);border-radius:0 14px 14px 0;padding:18px 20px;margin:16px 0;font-weight:600}
+.key-fact .emoji{font-size:1.3rem;margin-right:6px}
+.tip-box{background:#E3F2FD;border-left:5px solid #2196F3;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.warn-box{background:#FFF3E0;border-left:5px solid #FF9800;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.step-box{padding:14px 18px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:.95rem;line-height:1.9;margin-top:10px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1.1}
+.frac .nu{border-bottom:2px solid var(--text);padding:0 5px 2px;font-weight:700}
+.frac .de{padding:2px 5px 0;font-weight:700}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.subtab{padding:8px 14px;border-radius:10px;border:2px solid #E0DCE8;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;background:#fff;color:var(--text-light);transition:.2s}
+.subtab.active{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.subtab:hover:not(.active){border-color:var(--accent)}
+.subsection{display:none;animation:fadeUp .3s ease}.subsection.active{display:block}
+.mult-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px}
+.mult{font-size:.9rem;padding:5px 12px;border-radius:12px;background:#F7F7FB;color:var(--text-light);font-weight:700}
+.mult.hl{background:var(--secondary-light);color:var(--secondary)}
+.mult.match{background:var(--accent-light);color:var(--accent)}
+.bar-wrap{margin:12px 0 16px}
+.bar-label{font-size:.85rem;color:var(--text-light);margin-bottom:6px;font-weight:600}
+.bar-row{display:flex;height:34px;border-radius:8px;overflow:hidden;border:2px solid #E0DCE8;margin-bottom:4px}
+.bar-seg{display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;border-right:1px solid rgba(0,0,0,.08)}
+.bar-seg:last-child{border:none}
+.inter-box{background:#F7F7FB;border-radius:14px;padding:20px;margin:16px 0}
+.inter-label{font-size:.88rem;color:var(--text-light);margin-bottom:8px;font-weight:600}
+.inter-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.inter-num{padding:6px 14px;border-radius:10px;border:2px solid #E0DCE8;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;background:#fff;color:var(--text-light);transition:.2s}
+.inter-num:hover{border-color:var(--secondary)}
+.inter-num.picked{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.inter-result{font-weight:700;font-size:.95rem;min-height:24px;margin-top:6px;color:var(--accent)}
+.quiz-question{background:#F7F7FB;border-radius:14px;padding:22px;margin-bottom:18px}
+.quiz-question p.q-text{font-weight:700;margin-bottom:14px;font-size:1.02rem}
+.quiz-question .q-num{display:inline-block;background:var(--accent);color:#fff;width:28px;height:28px;line-height:28px;border-radius:50%;text-align:center;font-size:.82rem;font-weight:800;margin-right:8px;vertical-align:middle}
+.quiz-question .q-skill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;margin-left:4px;vertical-align:middle}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px 16px;border:2px solid #E0DCE8;border-radius:12px;cursor:pointer;font-weight:600;font-size:.95rem;transition:.2s;background:#fff;text-align:left}
+.quiz-opt:hover{border-color:var(--secondary);background:var(--secondary-light)}
+.quiz-opt.correct{border-color:var(--success);background:#E8F5E9}
+.quiz-opt.wrong{border-color:var(--error);background:#FFEBEE}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.9rem;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#E8F5E9;color:#2E7D32}
+.quiz-feedback.wrong{background:#FFEBEE;color:#C62828}
+.score-box{text-align:center;padding:24px;border-radius:14px;background:linear-gradient(135deg,var(--secondary-light),var(--accent-light));margin-top:20px;display:none}
+.score-box h2{font-family:'Fredoka',sans-serif;font-size:2rem;color:var(--accent)}
+.score-box p{font-weight:600;margin-top:6px}
+.score-breakdown{text-align:left;margin-top:16px}
+.sk-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,.06);font-size:.9rem}
+.sk-row:last-child{border:none}
+.sk-bar-bg{width:100px;height:8px;background:#E0DCE8;border-radius:4px;margin:0 10px}
+.sk-bar-fg{height:100%;border-radius:4px}
+.sk-pill{padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:700}
+.sk-good{background:#E8F5E9;color:#2E7D32}.sk-ok{background:#FFF3E0;color:#E65100}.sk-bad{background:#FFEBEE;color:#C62828}
+.btn-primary{padding:12px 28px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:.2s;margin:6px 4px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(123,45,142,.3)}
+.btn-secondary{padding:10px 22px;background:#fff;color:var(--accent);border:2px solid var(--accent);border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s;margin:6px 4px}
+.btn-secondary:hover{background:var(--accent-light)}
+.review-card{background:#fff;border:2px solid #E0DCE8;border-radius:14px;padding:16px 18px;margin-bottom:10px}
+.review-card .rv-q{font-weight:700;font-size:.92rem;margin-bottom:4px}
+.review-card .rv-correct{color:#2E7D32;font-size:.85rem}
+.review-card .rv-wrong{color:#C62828;font-size:.85rem}
+.review-card .rv-exp{color:var(--text-light);font-size:.85rem;margin-top:4px}
+.streak-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.82rem;font-weight:700;background:linear-gradient(135deg,#FFF6E0,#FFF0E8);color:var(--primary);margin-bottom:10px}
+.hint-btn{background:none;border:none;color:#2196F3;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;padding:0;margin-bottom:10px;text-decoration:underline}
+.hint-box{background:#E3F2FD;border-radius:10px;padding:12px 16px;font-size:.88rem;font-weight:600;color:#1565C0;margin-bottom:12px;display:none}
+.hint-box.show{display:block}
+@media(max-width:520px){.hero h1{font-size:1.7rem}.nav-tab{padding:8px 10px;font-size:.76rem}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+<div class="hero"><h1>&#x1F4D0; Fractions</h1><p>Primary 5 Maths &middot; Chapter 4 &middot; Hello, <span class="name">Saina</span>!</p></div>
+<div class="nav-wrap"><div class="nav-tabs">
+<button class="nav-tab active" onclick="showS('lcm',this)">&#x1F9F1; LCM &amp; LCD</button>
+<button class="nav-tab" onclick="showS('ops',this)">&#x1F4D6; Operations</button>
+<button class="nav-tab" onclick="showS('quiz',this)">&#x270F;&#xFE0F; Full Quiz</button>
+<button class="nav-tab" onclick="showS('practice',this)">&#x1F3AF; Practice</button>
+</div></div>
+<div class="container">
+
+<!-- ═══════════════ SECTION 1: LCM & LCD FUNDAMENTALS ═══════════════ -->
+<div class="section active" id="sec-lcm">
+<div class="subtabs">
+<button class="subtab active" onclick="showSub('lcm1',this)">&#x1F522; Multiples</button>
+<button class="subtab" onclick="showSub('lcm2',this)">&#x1F50D; Finding LCM</button>
+<button class="subtab" onclick="showSub('lcm3',this)">&#x1F517; What is LCD?</button>
+<button class="subtab" onclick="showSub('lcm4',this)">&#x1F504; Converting</button>
+<button class="subtab" onclick="showSub('lcm5',this)">&#x2795; Add &amp; Subtract</button>
+<button class="subtab" onclick="showSub('lcm6',this)">&#x1F3C6; LCM Practice</button>
+</div>
+
+<!-- Step 1: Multiples -->
+<div class="subsection active" id="sub-lcm1">
+<div class="card"><span class="badge badge-teal">Step 1</span><h2>What are Multiples?</h2>
+<p>Multiples are numbers you get when you <strong>multiply a number by 1, 2, 3, 4, 5...</strong> Think of it like <strong>skip-counting</strong>!</p>
+<div class="key-fact"><span class="emoji">&#x1F4A1;</span> Multiples of 3 = 3, 6, 9, 12, 15, 18, 21, 24 ...</div>
+<div class="mult-row"><span class="mult hl">3</span><span class="mult hl">6</span><span class="mult hl">9</span><span class="mult hl">12</span><span class="mult hl">15</span><span class="mult hl">18</span><span class="mult hl">21</span><span class="mult hl">24</span></div>
+<p style="font-size:.88rem;color:var(--text-light)">3&times;1=3, &ensp;3&times;2=6, &ensp;3&times;3=9, &ensp;3&times;4=12 ...</p>
+<div class="key-fact"><span class="emoji">&#x1F4A1;</span> Multiples of 4 = 4, 8, 12, 16, 20, 24, 28, 32 ...</div>
+<div class="mult-row"><span class="mult hl">4</span><span class="mult hl">8</span><span class="mult hl">12</span><span class="mult hl">16</span><span class="mult hl">20</span><span class="mult hl">24</span><span class="mult hl">28</span><span class="mult hl">32</span></div>
+<div class="tip-box">&#x1F4A1; Multiples go on <strong>forever</strong>! Every number has an infinite list of multiples.</div>
+</div>
+<div class="card"><span class="badge badge-orange">Try It!</span><h2>Tap the Multiples of 5</h2>
+<div class="inter-box"><div class="inter-label">Tap only the numbers that are multiples of 5:</div><div class="inter-row" id="mult-build"></div><div class="inter-result" id="mult-result"></div></div>
+</div>
+<div class="card" id="lcm1-quiz"></div>
+</div>
+
+<!-- Step 2: LCM -->
+<div class="subsection" id="sub-lcm2">
+<div class="card"><span class="badge badge-purple">Step 2</span><h2>Finding the LCM</h2>
+<p>The <strong>LCM (Lowest Common Multiple)</strong> is the <strong>smallest number</strong> that appears in <strong>both</strong> lists of multiples.</p>
+<h3 style="margin-top:16px">Example: LCM of 3 and 4</h3>
+<p style="font-size:.88rem;color:var(--text-light);margin-top:8px">Multiples of 3:</p>
+<div class="mult-row"><span class="mult">3</span><span class="mult">6</span><span class="mult">9</span><span class="mult match">12</span><span class="mult">15</span><span class="mult">18</span><span class="mult">21</span><span class="mult match">24</span></div>
+<p style="font-size:.88rem;color:var(--text-light)">Multiples of 4:</p>
+<div class="mult-row"><span class="mult">4</span><span class="mult">8</span><span class="mult match">12</span><span class="mult">16</span><span class="mult">20</span><span class="mult match">24</span><span class="mult">28</span><span class="mult">32</span></div>
+<div class="step-box">Common multiples: 12, 24, 36 ...<br>LCM = <strong>12</strong> (the smallest!)</div>
+<h3 style="margin-top:18px">Example: LCM of 6 and 8</h3>
+<p style="font-size:.88rem;color:var(--text-light);margin-top:8px">Multiples of 6:</p>
+<div class="mult-row"><span class="mult">6</span><span class="mult">12</span><span class="mult">18</span><span class="mult match">24</span><span class="mult">30</span><span class="mult">36</span><span class="mult">42</span><span class="mult match">48</span></div>
+<p style="font-size:.88rem;color:var(--text-light)">Multiples of 8:</p>
+<div class="mult-row"><span class="mult">8</span><span class="mult">16</span><span class="mult match">24</span><span class="mult">32</span><span class="mult">40</span><span class="mult match">48</span><span class="mult">56</span><span class="mult">64</span></div>
+<div class="step-box">LCM = <strong>24</strong></div>
+<div class="tip-box">&#x1F4A1; <strong>Shortcut:</strong> If one number is a multiple of the other (like 3 and 6), the LCM is just the bigger number!</div>
+</div>
+<div class="card"><span class="badge badge-teal">Interactive</span><h2>Find Common Multiples of 4 &amp; 6</h2>
+<div class="inter-box">
+<div class="inter-label">Multiples of 4 &mdash; tap the common ones:</div><div class="inter-row" id="lcm-row1"></div>
+<div class="inter-label">Multiples of 6 &mdash; tap the common ones:</div><div class="inter-row" id="lcm-row2"></div>
+<div class="inter-result" id="lcm-result"></div>
+</div></div>
+<div class="card" id="lcm2-quiz"></div>
+</div>
+
+<!-- Step 3: LCD -->
+<div class="subsection" id="sub-lcm3">
+<div class="card"><span class="badge badge-orange">Step 3</span><h2>What is LCD?</h2>
+<p>The <strong>LCD (Lowest Common Denominator)</strong> is simply the <strong>LCM of the denominators</strong> of two fractions.</p>
+<div class="key-fact"><span class="emoji">&#x2B50;</span> <strong>LCD = LCM of the denominators.</strong> That's it!</div>
+<h3 style="margin-top:16px">Example 1</h3>
+<p>LCD of <span class="frac"><span class="nu">1</span><span class="de">3</span></span> and <span class="frac"><span class="nu">2</span><span class="de">5</span></span>: Denominators are 3 and 5. LCM of 3 and 5 = <strong>15</strong>. So LCD = <strong>15</strong></p>
+<h3 style="margin-top:14px">Example 2</h3>
+<p>LCD of <span class="frac"><span class="nu">3</span><span class="de">4</span></span> and <span class="frac"><span class="nu">5</span><span class="de">6</span></span>: Multiples of 4: 4, 8, <strong>12</strong>... Multiples of 6: 6, <strong>12</strong>... LCD = <strong>12</strong></p>
+<h3 style="margin-top:14px">Example 3 &mdash; Shortcut!</h3>
+<p>LCD of <span class="frac"><span class="nu">1</span><span class="de">4</span></span> and <span class="frac"><span class="nu">3</span><span class="de">8</span></span>: Is 8 a multiple of 4? Yes! So LCD = <strong>8</strong></p>
+</div>
+<div class="card" id="lcm3-quiz"></div>
+</div>
+
+<!-- Step 4: Converting -->
+<div class="subsection" id="sub-lcm4">
+<div class="card"><span class="badge badge-purple">Step 4</span><h2>Converting Fractions to the LCD</h2>
+<p>Once you know the LCD, convert each fraction. The rule: <strong>whatever you multiply the bottom by, multiply the top by the same number!</strong></p>
+<div class="key-fact"><span class="emoji">&#x1F511;</span> The fraction's value doesn't change &mdash; you're just cutting pieces into smaller equal slices.</div>
+<h3 style="margin-top:16px">Example: Convert <span class="frac"><span class="nu">2</span><span class="de">3</span></span> and <span class="frac"><span class="nu">1</span><span class="de">4</span></span> to LCD = 12</h3>
+<div class="step-box"><span class="frac"><span class="nu">2</span><span class="de">3</span></span>: 3 &rarr; 12 (×4), so top ×4 too: <span class="frac"><span class="nu">2×4</span><span class="de">3×4</span></span> = <span class="frac"><span class="nu">8</span><span class="de">12</span></span><br><br><span class="frac"><span class="nu">1</span><span class="de">4</span></span>: 4 &rarr; 12 (×3), so top ×3 too: <span class="frac"><span class="nu">1×3</span><span class="de">4×3</span></span> = <span class="frac"><span class="nu">3</span><span class="de">12</span></span></div>
+<div class="bar-wrap">
+<div class="bar-label"><span class="frac"><span class="nu">2</span><span class="de">3</span></span> = <span class="frac"><span class="nu">8</span><span class="de">12</span></span> &mdash; same amount, smaller pieces:</div>
+<div class="bar-row"><div class="bar-seg" style="flex:2;background:#AFA9EC;color:#26215C"><span class="frac"><span class="nu">2</span><span class="de">3</span></span></div><div class="bar-seg" style="flex:1;background:#F7F7FB;color:var(--text-light)"></div></div>
+<div class="bar-row"><div class="bar-seg" style="flex:8;background:#CECBF6;color:#3C3489"><span class="frac"><span class="nu">8</span><span class="de">12</span></span></div><div class="bar-seg" style="flex:4;background:#F7F7FB;color:var(--text-light)"></div></div>
+</div>
+</div>
+<div class="card" id="lcm4-quiz"></div>
+</div>
+
+<!-- Step 5: Add & Subtract -->
+<div class="subsection" id="sub-lcm5">
+<div class="card"><span class="badge badge-teal">Step 5</span><h2>Putting It All Together</h2>
+<p>The full process: <strong>1) Find LCD &rarr; 2) Convert &rarr; 3) Add or subtract &rarr; 4) Simplify</strong></p>
+<h3 style="margin-top:16px">Example: <span class="frac"><span class="nu">2</span><span class="de">3</span></span> + <span class="frac"><span class="nu">1</span><span class="de">4</span></span></h3>
+<div class="step-box">Step 1: LCD = LCM of 3,4 = <strong>12</strong><br>Step 2: <span class="frac"><span class="nu">2</span><span class="de">3</span></span> = <span class="frac"><span class="nu">8</span><span class="de">12</span></span> and <span class="frac"><span class="nu">1</span><span class="de">4</span></span> = <span class="frac"><span class="nu">3</span><span class="de">12</span></span><br>Step 3: <span class="frac"><span class="nu">8</span><span class="de">12</span></span> + <span class="frac"><span class="nu">3</span><span class="de">12</span></span> = <span class="frac"><span class="nu">11</span><span class="de">12</span></span><br>Answer: <strong><span class="frac"><span class="nu">11</span><span class="de">12</span></span></strong></div>
+<div class="bar-wrap">
+<div class="bar-label">Visualising <span class="frac"><span class="nu">8</span><span class="de">12</span></span> + <span class="frac"><span class="nu">3</span><span class="de">12</span></span> = <span class="frac"><span class="nu">11</span><span class="de">12</span></span></div>
+<div class="bar-row"><div class="bar-seg" style="flex:8;background:#AFA9EC;color:#26215C"><span class="frac"><span class="nu">8</span><span class="de">12</span></span></div><div class="bar-seg" style="flex:3;background:#9FE1CB;color:#04342C"><span class="frac"><span class="nu">3</span><span class="de">12</span></span></div><div class="bar-seg" style="flex:1;background:#F7F7FB"></div></div>
+</div>
+<h3 style="margin-top:16px">Example: <span class="frac"><span class="nu">5</span><span class="de">6</span></span> &minus; <span class="frac"><span class="nu">1</span><span class="de">4</span></span></h3>
+<div class="step-box">LCD = 12. <span class="frac"><span class="nu">5</span><span class="de">6</span></span> = <span class="frac"><span class="nu">10</span><span class="de">12</span></span>, <span class="frac"><span class="nu">1</span><span class="de">4</span></span> = <span class="frac"><span class="nu">3</span><span class="de">12</span></span><br><span class="frac"><span class="nu">10</span><span class="de">12</span></span> &minus; <span class="frac"><span class="nu">3</span><span class="de">12</span></span> = <strong><span class="frac"><span class="nu">7</span><span class="de">12</span></span></strong></div>
+<h3 style="margin-top:16px">With mixed numbers: 2<span class="frac"><span class="nu">1</span><span class="de">3</span></span> + 1<span class="frac"><span class="nu">5</span><span class="de">6</span></span></h3>
+<div class="step-box">LCD = 6. Convert: <span class="frac"><span class="nu">1</span><span class="de">3</span></span> = <span class="frac"><span class="nu">2</span><span class="de">6</span></span><br>Wholes: 2+1=3. Fracs: <span class="frac"><span class="nu">2</span><span class="de">6</span></span>+<span class="frac"><span class="nu">5</span><span class="de">6</span></span>=<span class="frac"><span class="nu">7</span><span class="de">6</span></span>=1<span class="frac"><span class="nu">1</span><span class="de">6</span></span><br>3 + 1<span class="frac"><span class="nu">1</span><span class="de">6</span></span> = <strong>4<span class="frac"><span class="nu">1</span><span class="de">6</span></span></strong></div>
+</div>
+<div class="card" id="lcm5-quiz"></div>
+</div>
+
+<!-- Step 6: LCM Practice -->
+<div class="subsection" id="sub-lcm6">
+<div class="card"><span class="badge badge-orange">Practice</span><h2>&#x1F3C6; LCM &amp; LCD Practice Round</h2>
+<p>6 questions testing everything you've learnt!</p></div>
+<div id="lcm6-quiz"></div>
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 2: FOUR OPERATIONS LESSONS ═══════════════ -->
+<div class="section" id="sec-ops">
+<div class="subtabs">
+<button class="subtab active" onclick="showSub('op1',this)">&#x2795; Adding</button>
+<button class="subtab" onclick="showSub('op2',this)">&#x2796; Subtracting</button>
+<button class="subtab" onclick="showSub('op3',this)">&#x2716; Frac × Whole</button>
+<button class="subtab" onclick="showSub('op4',this)">&#x2716; Frac × Frac</button>
+<button class="subtab" onclick="showSub('op5',this)">&#x2716; Mixed × Whole</button>
+<button class="subtab" onclick="showSub('op6',this)">&#x1F4DD; Word Problems</button>
+</div>
+
+<div class="subsection active" id="sub-op1">
+<div class="card"><span class="badge badge-teal">Lesson 1</span><h2>Adding Mixed Numbers</h2>
+<p>Add the whole numbers, then add the fractions. Find a <strong>common denominator</strong> first if needed. If the fraction part is improper, convert it.</p>
+<h3 style="margin-top:14px">Example 1 &mdash; Same denominator</h3>
+<div class="step-box">2<span class="frac"><span class="nu">1</span><span class="de">4</span></span> + 1<span class="frac"><span class="nu">3</span><span class="de">4</span></span><br>Wholes: 2+1=3. Fracs: <span class="frac"><span class="nu">1</span><span class="de">4</span></span>+<span class="frac"><span class="nu">3</span><span class="de">4</span></span>=<span class="frac"><span class="nu">4</span><span class="de">4</span></span>=1<br>3+1 = <strong>4</strong></div>
+<h3 style="margin-top:14px">Example 2 &mdash; Different denominators</h3>
+<div class="step-box">3<span class="frac"><span class="nu">1</span><span class="de">3</span></span> + 2<span class="frac"><span class="nu">5</span><span class="de">6</span></span><br>LCD = 6. Convert: <span class="frac"><span class="nu">1</span><span class="de">3</span></span>=<span class="frac"><span class="nu">2</span><span class="de">6</span></span><br>Wholes: 3+2=5. Fracs: <span class="frac"><span class="nu">2</span><span class="de">6</span></span>+<span class="frac"><span class="nu">5</span><span class="de">6</span></span>=<span class="frac"><span class="nu">7</span><span class="de">6</span></span>=1<span class="frac"><span class="nu">1</span><span class="de">6</span></span><br>5+1<span class="frac"><span class="nu">1</span><span class="de">6</span></span> = <strong>6<span class="frac"><span class="nu">1</span><span class="de">6</span></span></strong></div>
+</div><div class="card" id="op1-quiz"></div>
+</div>
+
+<div class="subsection" id="sub-op2">
+<div class="card"><span class="badge badge-purple">Lesson 2</span><h2>Subtracting Mixed Numbers</h2>
+<p>Subtract whole numbers, then fractions. If the fraction being subtracted is larger, <strong>regroup</strong> (borrow 1).</p>
+<div class="tip-box">&#x1F4A1; <strong>Regrouping trick:</strong> Borrow 1 from the whole number and add it as the denominator over itself. E.g. 5<span class="frac"><span class="nu">1</span><span class="de">6</span></span> = 4<span class="frac"><span class="nu">7</span><span class="de">6</span></span></div>
+<h3 style="margin-top:14px">Example &mdash; Regrouping needed</h3>
+<div class="step-box">5<span class="frac"><span class="nu">1</span><span class="de">3</span></span> &minus; 2<span class="frac"><span class="nu">2</span><span class="de">3</span></span><br>Can't do <span class="frac"><span class="nu">1</span><span class="de">3</span></span>&minus;<span class="frac"><span class="nu">2</span><span class="de">3</span></span>. Regroup!<br>5<span class="frac"><span class="nu">1</span><span class="de">3</span></span> = 4<span class="frac"><span class="nu">4</span><span class="de">3</span></span><br>4<span class="frac"><span class="nu">4</span><span class="de">3</span></span> &minus; 2<span class="frac"><span class="nu">2</span><span class="de">3</span></span> = <strong>2<span class="frac"><span class="nu">2</span><span class="de">3</span></span></strong></div>
+</div><div class="card" id="op2-quiz"></div>
+</div>
+
+<div class="subsection" id="sub-op3">
+<div class="card"><span class="badge badge-orange">Lesson 3</span><h2>Fraction &times; Whole Number</h2>
+<p>Multiply the <strong>numerator</strong> by the whole number, keep the <strong>denominator</strong> the same.</p>
+<div class="step-box"><span class="frac"><span class="nu">3</span><span class="de">4</span></span> &times; 8<br>Top: 3×8 = 24. Bottom stays 4.<br><span class="frac"><span class="nu">24</span><span class="de">4</span></span> = <strong>6</strong></div>
+<div class="tip-box">&#x1F4A1; Think of it as repeated addition: <span class="frac"><span class="nu">2</span><span class="de">5</span></span>×3 = <span class="frac"><span class="nu">2</span><span class="de">5</span></span>+<span class="frac"><span class="nu">2</span><span class="de">5</span></span>+<span class="frac"><span class="nu">2</span><span class="de">5</span></span></div>
+</div><div class="card" id="op3-quiz"></div>
+</div>
+
+<div class="subsection" id="sub-op4">
+<div class="card"><span class="badge badge-teal">Lesson 4</span><h2>Fraction &times; Fraction</h2>
+<p>Multiply <strong>numerators together</strong> and <strong>denominators together</strong>. Simplify the result.</p>
+<div class="tip-box">&#x1F4A1; <strong>Cross-cancel</strong> before multiplying to make it easier!</div>
+<h3 style="margin-top:14px">Example with cross-cancelling</h3>
+<div class="step-box"><span class="frac"><span class="nu">3</span><span class="de">8</span></span> &times; <span class="frac"><span class="nu">4</span><span class="de">9</span></span><br>Cross-cancel: 3 &amp; 9 ÷3 &rarr; 1 &amp; 3. &ensp;4 &amp; 8 ÷4 &rarr; 1 &amp; 2<br><span class="frac"><span class="nu">1</span><span class="de">2</span></span> &times; <span class="frac"><span class="nu">1</span><span class="de">3</span></span> = <strong><span class="frac"><span class="nu">1</span><span class="de">6</span></span></strong></div>
+</div><div class="card" id="op4-quiz"></div>
+</div>
+
+<div class="subsection" id="sub-op5">
+<div class="card"><span class="badge badge-purple">Lesson 5</span><h2>Mixed Number &times; Whole Number</h2>
+<p>Two methods: <strong>Split</strong> (multiply whole part and fraction part separately) or <strong>Convert</strong> to improper fraction first.</p>
+<h3 style="margin-top:14px">Method 1: Split and multiply</h3>
+<div class="step-box">2<span class="frac"><span class="nu">3</span><span class="de">4</span></span> &times; 6<br>Whole: 2×6 = 12<br>Fraction: <span class="frac"><span class="nu">3</span><span class="de">4</span></span>×6 = <span class="frac"><span class="nu">18</span><span class="de">4</span></span> = 4<span class="frac"><span class="nu">1</span><span class="de">2</span></span><br>12 + 4<span class="frac"><span class="nu">1</span><span class="de">2</span></span> = <strong>16<span class="frac"><span class="nu">1</span><span class="de">2</span></span></strong></div>
+</div><div class="card" id="op5-quiz"></div>
+</div>
+
+<div class="subsection" id="sub-op6">
+<div class="card"><span class="badge badge-orange">Lesson 6</span><h2>&#x1F4DD; Word Problems</h2>
+<p>Look for <strong>clue words</strong>: "total" / "altogether" = add. "Left" / "how much more" = subtract. "Of" = multiply.</p>
+<h3 style="margin-top:14px">Worked example</h3>
+<div class="step-box">Sarah used 2<span class="frac"><span class="nu">1</span><span class="de">4</span></span> kg of flour for cookies and 1<span class="frac"><span class="nu">3</span><span class="de">8</span></span> kg for a cake. How much flour did she use <strong>altogether</strong>?<br><br>"Altogether" &rarr; add. LCD = 8.<br>2<span class="frac"><span class="nu">2</span><span class="de">8</span></span> + 1<span class="frac"><span class="nu">3</span><span class="de">8</span></span> = 3<span class="frac"><span class="nu">5</span><span class="de">8</span></span><br>Answer: <strong>3<span class="frac"><span class="nu">5</span><span class="de">8</span></span> kg</strong></div>
+</div><div class="card" id="op6-quiz"></div>
+</div>
+</div>
+
+<!-- ═══════════════ SECTION 3: FULL QUIZ ═══════════════ -->
+<div class="section" id="sec-quiz">
+<div class="card"><span class="badge badge-purple">Chapter 4 Quiz</span><h2>&#x270F;&#xFE0F; Full Quiz, Saina!</h2>
+<p>15 questions covering all fraction skills with step-by-step explanations!</p></div>
+<div id="fullQuizContainer"></div>
+<div class="score-box" id="fullScoreBox"><h2 id="fullScoreText"></h2><p id="fullScoreMsg"></p><div class="score-breakdown" id="fullBreakdown"></div><div id="fullReview"></div><div style="margin-top:14px"><button class="btn-primary" onclick="resetFullQuiz()">Try Again</button></div></div>
+</div>
+
+<!-- ═══════════════ SECTION 4: TARGETED PRACTICE ═══════════════ -->
+<div class="section" id="sec-practice">
+<div class="card"><span class="badge badge-orange">Targeted Practice</span><h2>&#x1F3AF; Addition, Subtraction &amp; Word Problems</h2>
+<p>15 focused questions on the tricky skills. Hints available!</p></div>
+<div id="practiceContainer"></div>
+<div class="score-box" id="practiceScoreBox"><h2 id="practiceScoreText"></h2><p id="practiceScoreMsg"></p><div class="score-breakdown" id="practiceBreakdown"></div><div id="practiceReview"></div><div style="margin-top:14px"><button class="btn-primary" onclick="resetPractice()">Try Again</button><button class="btn-secondary" onclick="showS('lcm',document.querySelectorAll('.nav-tab')[0])">Review LCM Lesson</button></div></div>
+</div>
+
+</div>
+
+<script>
+/* ═══ UTILITY ═══ */
+function F(n,d){return '<span class="frac"><span class="nu">'+n+'</span><span class="de">'+d+'</span></span>'}
+function showS(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function showSub(id,el){var p=el.parentElement;p.querySelectorAll('.subtab').forEach(t=>t.classList.remove('active'));el.classList.add('active');var sec=p.nextElementSibling;while(sec){if(sec.classList.contains('subsection')){sec.classList.remove('active');if(sec.id==='sub-'+id)sec.classList.add('active')}sec=sec.nextElementSibling}}
+
+/* ═══ GENERIC QUIZ BUILDER ═══ */
+function buildMiniQuiz(containerId,questions){
+var c=document.getElementById(containerId);if(!c)return;
+c.innerHTML='<span class="badge badge-teal">Your Turn!</span>';
+questions.forEach(function(q,i){
+var d=document.createElement('div');d.className='quiz-question';d.style.marginTop='12px';
+d.innerHTML='<p class="q-text">'+q.q+'</p>'+(q.hint?'<button class="hint-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">Show hint</button><div class="hint-box">'+q.hint+'</div>':'')+'<div class="quiz-options" id="'+containerId+'-o'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="miniChk(\''+containerId+'\','+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="'+containerId+'-f'+i+'"></div>';
+c.appendChild(d)});
+}
+function miniChk(cid,i,j){
+var el=document.getElementById(cid);
+var qs=el._qs||(el._qs=window['_qs_'+cid]);
+var q=qs[i];var opts=document.querySelectorAll('#'+cid+'-o'+i+' .quiz-opt');
+if(opts[0].classList.contains('disabled'))return;
+opts.forEach(function(x){x.classList.add('disabled')});
+var f=document.getElementById(cid+'-f'+i);
+if(j===q.a){opts[j].classList.add('correct');f.className='quiz-feedback show correct';f.innerHTML='\u2705 Correct! '+q.e}
+else{opts[j].classList.add('wrong');opts[q.a].classList.add('correct');f.className='quiz-feedback show wrong';f.innerHTML='\u274C Not quite. '+q.e}}
+
+/* ═══ LCM SECTION QUIZZES ═══ */
+window._qs_lcm1q=[
+{q:'Which of these is a multiple of 6?',o:['15','20','18','22'],a:2,e:'6×3 = 18.'},
+{q:'Which is NOT a multiple of 8?',o:['16','20','24','32'],a:1,e:'20÷8 = 2.5 — not a whole number.'}
+];
+window._qs_lcm2q=[
+{q:'What is the LCM of 5 and 10?',o:['10','50','15','20'],a:0,e:'10 is already a multiple of 5. LCM = 10.'},
+{q:'What is the LCM of 4 and 5?',o:['10','8','20','40'],a:2,e:'4: 4,8,12,16,20. 5: 5,10,15,20. First match = 20.'},
+{q:'What is the LCM of 6 and 9?',o:['36','18','54','12'],a:1,e:'6: 6,12,18. 9: 9,18. LCM = 18.'}
+];
+window._qs_lcm3q=[
+{q:'What is the LCD of '+F(2,3)+' and '+F(1,4)+'?',o:['7','12','24','3'],a:1,e:'LCM of 3 and 4 = 12.'},
+{q:'What is the LCD of '+F(5,6)+' and '+F(7,9)+'?',o:['54','15','18','36'],a:2,e:'6: 6,12,18. 9: 9,18. LCM = 18.'},
+{q:'What is the LCD of '+F(3,5)+' and '+F(1,10)+'?',o:['10','50','15','20'],a:0,e:'10 is a multiple of 5. LCD = 10.'}
+];
+window._qs_lcm4q=[
+{q:'Convert '+F(1,3)+' to denominator 12. New numerator?',o:['3','6','4','12'],a:2,e:'3→12 (×4). Top: 1×4 = 4.'},
+{q:'Convert '+F(3,5)+' to denominator 20:',o:[F(6,20),F(12,20),F(15,20),F(9,20)],a:1,e:'5→20 (×4). Top: 3×4 = 12.'},
+{q:'Convert '+F(5,6)+' to denominator 18:',o:[F(10,18),F(5,18),F(12,18),F(15,18)],a:3,e:'6→18 (×3). Top: 5×3 = 15.'}
+];
+window._qs_lcm5q=[
+{q:F(1,4)+' + '+F(2,3)+' = ?',o:[F(3,7),F(3,12),F(11,12),F(8,12)],a:2,e:'LCD=12. 3/12+8/12=11/12.'},
+{q:F(7,8)+' − '+F(1,3)+' = ?',o:[F(13,24),F(6,5),F(6,24),F(1,2)],a:0,e:'LCD=24. 21/24−8/24=13/24.'}
+];
+window._qs_lcm6q=[
+{q:'What is the LCM of 8 and 12?',o:['48','24','96','12'],a:1,e:'8: 8,16,24. 12: 12,24. LCM = 24.'},
+{q:'Convert '+F(3,8)+' to denominator 24:',o:[F(6,24),F(3,24),F(9,24),F(12,24)],a:2,e:'8→24 (×3). Top: 3×3 = 9.'},
+{q:F(2,5)+' + '+F(3,10)+' = ?',o:[F(5,15),F(7,10),F(5,10),F(1,2)],a:1,e:'LCD=10. 4/10+3/10=7/10.'},
+{q:F(5,6)+' − '+F(3,8)+' = ?',o:[F(11,24),F(2,14),F(1,3),F(8,24)],a:0,e:'LCD=24. 20/24−9/24=11/24.'},
+{q:'3'+F(1,4)+' + 2'+F(2,3)+' = ?',o:['5'+F(3,7),'5'+F(3,12),'5'+F(11,12),'6'+F(1,12)],a:2,e:'LCD=12. 3/12+8/12=11/12. Wholes: 5. Answer: 5 and 11/12.'},
+{q:'5'+F(1,6)+' − 2'+F(3,4)+' = ?',o:['3'+F(1,12),'2'+F(5,12),'2'+F(1,3),'3'+F(5,12)],a:1,e:'LCD=12. Regroup: 4 and 14/12−2 and 9/12=2 and 5/12.'}
+];
+
+/* ═══ OPERATIONS QUIZZES ═══ */
+window._qs_op1q=[
+{q:'1'+F(2,5)+' + 3'+F(4,5)+' = ?',o:['4'+F(6,5),'5'+F(1,5),'4'+F(2,5),'5'+F(6,10)],a:1,e:'Fracs: 2/5+4/5=6/5=1 and 1/5. Wholes: 1+3+1=5.'},
+{q:'2'+F(3,4)+' + 1'+F(1,2)+' = ?',o:['3'+F(4,6),'3'+F(1,2),'4'+F(1,4),'4'+F(3,4)],a:2,e:'LCD=4. 3/4+2/4=5/4=1 and 1/4. Wholes: 2+1+1=4.'}
+];
+window._qs_op2q=[
+{q:'6'+F(1,4)+' − 3'+F(3,4)+' = ?',o:['3'+F(2,4),'2'+F(1,2),'3','2'+F(3,4)],a:1,e:'Regroup: 5 and 5/4−3 and 3/4=2 and 2/4=2 and 1/2.'},
+{q:'7'+F(1,6)+' − 4'+F(5,6)+' = ?',o:['2'+F(1,3),'3'+F(2,6),'2'+F(2,6),'3'+F(1,3)],a:0,e:'Regroup: 6 and 7/6−4 and 5/6=2 and 2/6=2 and 1/3.'}
+];
+window._qs_op3q=[
+{q:F(2,3)+' × 9 = ?',o:['3','5','6','18'],a:2,e:'2×9=18. 18/3=6.'},
+{q:F(5,6)+' × 4 = ?',o:['3','3'+F(1,3),'4'+F(1,6),'2'+F(5,6)],a:1,e:'5×4=20. 20/6=3 and 2/6=3 and 1/3.'}
+];
+window._qs_op4q=[
+{q:F(3,5)+' × '+F(5,9)+' = ?',o:[F(1,3),F(15,45),F(8,14),F(2,5)],a:0,e:'Cross-cancel the 5s, then 3/9=1/3.'},
+{q:F(4,7)+' × '+F(3,8)+' = ?',o:[F(12,15),F(7,56),F(3,14),F(1,2)],a:2,e:'12/56. Simplify by 4: 3/14.'}
+];
+window._qs_op5q=[
+{q:'3'+F(1,3)+' × 9 = ?',o:['27'+F(1,3),'28','30','29'+F(1,3)],a:2,e:'3×9=27. 1/3×9=3. Total: 30.'},
+{q:'1'+F(2,5)+' × 10 = ?',o:['12','14','10'+F(2,5),'15'],a:1,e:'1×10=10. 2/5×10=4. Total: 14.'}
+];
+window._qs_op6q=[
+{q:'A ribbon is 5'+F(1,2)+' m. Mei uses 2'+F(3,4)+' m. How much is left?',o:['1'+F(3,4)+' m','2'+F(1,4)+' m','2'+F(3,4)+' m','3'+F(3,4)+' m'],a:2,e:'"Left"→subtract. LCD=4. 5 and 2/4−2 and 3/4. Regroup: 4 and 6/4−2 and 3/4=2 and 3/4.'},
+{q:'A jug holds '+F(3,4)+' litre. How much in 6 jugs?',o:['3 litres','6'+F(3,4)+' litres','3'+F(3,4)+' litres','4'+F(1,2)+' litres'],a:3,e:'"Of"→multiply. 3/4×6=18/4=4 and 1/2.'}
+];
+
+/* ═══ FULL QUIZ DATA ═══ */
+var fullQ=[
+{q:'What is the LCM of 6 and 8?',o:['48','24','12','16'],a:1,sk:'LCM',e:'6:6,12,18,24. 8:8,16,24. LCM=24.'},
+{q:'1'+F(3,5)+' + 2'+F(1,5)+' = ?',o:['3'+F(4,5),'4'+F(1,5),'3'+F(2,5),'4'+F(4,5)],a:0,sk:'Addition',e:'Same denom. 1+2=3. 3/5+1/5=4/5.'},
+{q:'3'+F(2,3)+' + 2'+F(3,4)+' = ?',o:['5'+F(5,7),'6'+F(5,12),'5'+F(5,12),'6'+F(1,12)],a:1,sk:'Addition',e:'LCD=12. 8/12+9/12=17/12=1 and 5/12. 3+2+1=6.'},
+{q:'5'+F(7,9)+' − 2'+F(4,9)+' = ?',o:['3'+F(3,9),'3'+F(1,3),'3'+F(11,9),'2'+F(1,3)],a:1,sk:'Subtraction',e:'Same denom. 7/9−4/9=3/9=1/3. 5−2=3.'},
+{q:'6'+F(1,4)+' − 2'+F(3,4)+' = ?',o:['4'+F(1,2),'3'+F(1,2),'3'+F(1,4),'4'+F(1,4)],a:1,sk:'Subtraction',e:'Regroup: 5 and 5/4−2 and 3/4=3 and 2/4=3 and 1/2.'},
+{q:'9'+F(1,4)+' − 5'+F(7,12)+' = ?',o:['3'+F(2,3),'4'+F(1,3),'3'+F(1,3),'4'+F(2,3)],a:0,sk:'Subtraction',e:'LCD=12. 3/12 < 7/12, regroup: 8 and 15/12−5 and 7/12=3 and 8/12=3 and 2/3.'},
+{q:F(3,7)+' × 7 = ?',o:['3','7','21',F(21,7)],a:0,sk:'Frac×Whole',e:'3×7=21. 21/7=3.'},
+{q:F(5,8)+' × 12 = ?',o:['6'+F(1,2),'7'+F(1,2),'8'+F(1,4),'7'+F(1,4)],a:1,sk:'Frac×Whole',e:'5×12=60. 60/8=7 and 4/8=7 and 1/2.'},
+{q:F(1,3)+' × '+F(3,5)+' = ?',o:[F(3,15),F(1,5),F(4,8),F(2,5)],a:1,sk:'Frac×Frac',e:'Cross-cancel the 3s. 1/1×1/5=1/5.'},
+{q:F(4,9)+' × '+F(3,8)+' = ?',o:[F(12,72),F(1,6),F(7,17),F(2,9)],a:1,sk:'Frac×Frac',e:'Cross-cancel: 4&8→1&2, 3&9→1&3. 1/3×1/2=1/6.'},
+{q:'2'+F(1,4)+' × 8 = ?',o:['16','17','18','19'],a:2,sk:'Mixed×Whole',e:'2×8=16. 1/4×8=2. Total: 18.'},
+{q:'3'+F(2,5)+' × 15 = ?',o:['45','48','51','54'],a:2,sk:'Mixed×Whole',e:'3×15=45. 2/5×15=6. Total: 51.'},
+{q:'Priya had 3'+F(1,2)+' m ribbon. Used 1'+F(3,4)+' m. How much left?',o:['1'+F(3,4)+' m','2'+F(1,4)+' m','1'+F(1,2)+' m','2'+F(3,4)+' m'],a:0,sk:'Word problem',e:'"Left"→subtract. LCD=4. Regroup: 2 and 6/4−1 and 3/4=1 and 3/4.'},
+{q:'Ravi drank 1'+F(1,3)+' l morning, 2'+F(5,6)+' l afternoon. Total?',o:['3'+F(1,2)+' l','4'+F(1,6)+' l','3'+F(2,3)+' l','4'+F(1,3)+' l'],a:1,sk:'Word problem',e:'"Altogether"→add. LCD=6. 2/6+5/6=7/6=1 and 1/6. 1+2+1=4.'},
+{q:'Flour bag 5'+F(1,4)+' kg, sugar 2'+F(2,3)+' kg. How much heavier?',o:['2'+F(7,12)+' kg','3'+F(1,12)+' kg','2'+F(1,2)+' kg','3'+F(7,12)+' kg'],a:0,sk:'Word problem',e:'"How much heavier"→subtract. LCD=12. Regroup: 4 and 15/12−2 and 8/12=2 and 7/12.'}
+];
+
+/* ═══ TARGETED PRACTICE DATA ═══ */
+var practQ=[
+{q:'2'+F(1,6)+' + 3'+F(5,6)+' = ?',o:['6','5'+F(1,6),'5'+F(6,6),'5'],a:0,sk:'Addition',e:'1/6+5/6=6/6=1. 2+3+1=6.',h:'Same denominator. What happens when the fraction equals 1?'},
+{q:'4'+F(2,5)+' + 1'+F(3,10)+' = ?',o:['5'+F(5,15),'5'+F(7,10),'5'+F(1,2),'6'+F(1,10)],a:1,sk:'Addition',e:'LCD=10. 4/10+3/10=7/10.',h:'Convert fifths to tenths.'},
+{q:'5'+F(3,4)+' + 2'+F(5,6)+' = ?',o:['8'+F(7,12),'7'+F(8,10),'7'+F(7,12),'8'+F(1,12)],a:0,sk:'Addition',e:'LCD=12. 9/12+10/12=19/12=1 and 7/12. 5+2+1=8.',h:'LCD of 4 and 6 is 12. The fracs will be improper!'},
+{q:'6'+F(7,8)+' + 4'+F(3,4)+' = ?',o:['11'+F(5,8),'10'+F(10,12),'10'+F(5,8),'11'+F(3,8)],a:0,sk:'Addition',e:'LCD=8. 7/8+6/8=13/8=1 and 5/8. 6+4+1=11.',h:'Convert 3/4 to eighths. Regroup the result!'},
+{q:'7'+F(5,8)+' − 3'+F(1,8)+' = ?',o:['4'+F(1,2),'4'+F(4,8),'4'+F(3,8),'5'+F(1,2)],a:0,sk:'Subtraction',e:'5/8−1/8=4/8=1/2. 7−3=4.',h:'Same denominator. Don\'t forget to simplify!'},
+{q:'5'+F(1,3)+' − 1'+F(2,3)+' = ?',o:['4'+F(1,3),'3'+F(2,3),'3'+F(1,3),'4'+F(2,3)],a:1,sk:'Subtraction',e:'Regroup: 4 and 4/3−1 and 2/3=3 and 2/3.',h:'1/3 < 2/3. You need to regroup (borrow 1).'},
+{q:'9'+F(1,4)+' − 5'+F(7,12)+' = ?',o:['3'+F(2,3),'4'+F(1,3),'3'+F(1,3),'4'+F(2,3)],a:0,sk:'Subtraction',e:'LCD=12. 3/12<7/12. Regroup: 8 and 15/12−5 and 7/12=3 and 8/12=3 and 2/3.',h:'Convert to LCD=12 first, then regroup.'},
+{q:'10'+F(1,6)+' − 4'+F(3,4)+' = ?',o:['5'+F(5,12),'6'+F(1,12),'5'+F(1,12),'6'+F(5,12)],a:0,sk:'Subtraction',e:'LCD=12. 2/12<9/12. Regroup: 9 and 14/12−4 and 9/12=5 and 5/12.',h:'LCD of 6 and 4 is 12. You will need to regroup.'},
+{q:'8'+F(2,9)+' − 3'+F(5,6)+' = ?',o:['4'+F(7,18),'5'+F(1,18),'4'+F(1,3),'5'+F(7,18)],a:0,sk:'Subtraction',e:'LCD=18. 4/18<15/18. Regroup: 7 and 22/18−3 and 15/18=4 and 7/18.',h:'LCD of 9 and 6 is 18. Definitely regroup!'},
+{q:'Priya had 3'+F(1,2)+' m ribbon. Used 1'+F(3,4)+' m. Left?',o:['1'+F(3,4)+' m','2'+F(1,4)+' m','1'+F(1,2)+' m','2'+F(3,4)+' m'],a:0,sk:'Word problem',e:'"Left"→subtract. LCD=4. Regroup: 2 and 6/4−1 and 3/4=1 and 3/4.',h:'"Left" = subtract. Find the LCD of 2 and 4.'},
+{q:'Ravi drank 1'+F(1,3)+' l morning + 2'+F(5,6)+' l afternoon. Total?',o:['3'+F(1,2)+' l','4'+F(1,6)+' l','3'+F(2,3)+' l','4'+F(1,3)+' l'],a:1,sk:'Word problem',e:'LCD=6. 2/6+5/6=7/6=1 and 1/6. 1+2+1=4 and 1/6.',h:'"Altogether" = add. LCD of 3 and 6?'},
+{q:'Flour 5'+F(1,4)+' kg. Sugar 2'+F(2,3)+' kg. How much heavier?',o:['2'+F(7,12)+' kg','3'+F(1,12)+' kg','2'+F(1,2)+' kg','3'+F(7,12)+' kg'],a:0,sk:'Word problem',e:'LCD=12. Regroup: 4 and 15/12−2 and 8/12=2 and 7/12.',h:'"How much heavier" = subtract. LCD of 4 and 3?'},
+{q:'Mrs Tan baked 2'+F(1,2)+' trays Mon + 3'+F(3,8)+' trays Tue. Gave away 4'+F(1,4)+'. Left?',o:['1'+F(5,8),'1'+F(3,8),'2'+F(1,8),'1'+F(1,8)],a:0,sk:'Word problem',e:'Add: LCD=8. 4/8+3/8=7/8. 2+3=5 and 7/8. Subtract: 5 and 7/8−4 and 2/8=1 and 5/8.',h:'Two steps! Add first, then subtract what she gave away.'},
+{q:F(7,8)+' tank full. '+F(1,3)+' of tank used. Fraction left?',o:[F(7,24),F(13,24),F(1,2),F(17,24)],a:1,sk:'Word problem',e:'7/8−1/3. LCD=24. 21/24−8/24=13/24.',h:'Subtract the fraction used from the fraction full. LCD of 8 and 3?'},
+{q:'Ali had 4'+F(1,2)+' kg rice. Used '+F(2,3)+' of it. How much used?',o:['2 kg','3 kg','2'+F(1,2)+' kg','3'+F(1,2)+' kg'],a:1,sk:'Word problem',e:'"Of"→multiply. 2/3×9/2=18/6=3 kg.',h:'"Of" = multiply. Convert 4 and 1/2 to improper fraction first.'}
+];
+
+/* ═══ INIT LCM INTERACTIVE ACTIVITIES ═══ */
+function initMultBuild(){
+var c=document.getElementById('mult-build');if(!c)return;
+var nums=[5,10,15,20,25,30,35,40,12,18,22,50];
+var correct=[5,10,15,20,25,30,35,40];var picked=[];
+c.innerHTML=nums.sort(function(){return Math.random()-.5}).map(function(n){return '<button class="inter-num" onclick="pickMult(this,'+n+')">'+n+'</button>'}).join('');
+window.pickMult=function(btn,n){
+if(correct.indexOf(n)>=0){btn.classList.add('picked');if(picked.indexOf(n)<0)picked.push(n);
+picked.sort(function(a,b){return a-b});
+document.getElementById('mult-result').innerHTML='Multiples of 5: '+picked.join(', ')+(picked.length===correct.length?' \u2014 All found! \u2705':'');}
+else{btn.style.background='var(--primary-light)';btn.style.color='var(--error)';setTimeout(function(){btn.style.background='';btn.style.color=''},600)}}
+}
+
+function initLcmActivity(){
+var m4=[4,8,12,16,20,24,28,32,36],m6=[6,12,18,24,30,36,42,48,54],common=[12,24,36],found=[];
+var r1=document.getElementById('lcm-row1'),r2=document.getElementById('lcm-row2');if(!r1)return;
+r1.innerHTML=m4.map(function(n){return '<button class="inter-num" onclick="pickLcm(this,'+n+')">'+n+'</button>'}).join('');
+r2.innerHTML=m6.map(function(n){return '<button class="inter-num" onclick="pickLcm(this,'+n+')">'+n+'</button>'}).join('');
+window.pickLcm=function(btn,n){
+if(common.indexOf(n)>=0){btn.classList.add('picked');
+document.querySelectorAll('.inter-num').forEach(function(b){if(parseInt(b.textContent)===n)b.classList.add('picked')});
+if(found.indexOf(n)<0)found.push(n);found.sort(function(a,b){return a-b});
+var r='Common multiples: '+found.join(', ');if(found.indexOf(12)>=0)r+='. LCM = 12 (the smallest!) \u2705';
+document.getElementById('lcm-result').innerHTML=r;}
+else{btn.style.background='var(--primary-light)';btn.style.color='var(--error)';setTimeout(function(){btn.style.background='';btn.style.color=''},600)}}
+}
+
+/* ═══ FULL QUIZ ENGINE ═══ */
+var fqAns=[],fqScore=0,fqCount=0;
+function buildFullQuiz(){
+var c=document.getElementById('fullQuizContainer');c.innerHTML='';fqAns=[];fqScore=0;fqCount=0;
+document.getElementById('fullScoreBox').style.display='none';
+fullQ.forEach(function(q,i){
+var d=document.createElement('div');d.className='quiz-question';
+d.innerHTML='<p class="q-text"><span class="q-num">'+(i+1)+'</span>'+q.q+'<span class="q-skill badge badge-teal" style="font-size:.68rem">'+q.sk+'</span></p><div class="quiz-options" id="fq-o'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="fqChk('+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="fq-f'+i+'"></div>';
+c.appendChild(d)})}
+function fqChk(i,j){
+var opts=document.querySelectorAll('#fq-o'+i+' .quiz-opt');if(opts[0].classList.contains('disabled'))return;
+opts.forEach(function(x){x.classList.add('disabled')});var f=document.getElementById('fq-f'+i);
+if(j===fullQ[i].a){opts[j].classList.add('correct');f.className='quiz-feedback show correct';f.innerHTML='\u2705 Correct! '+fullQ[i].e;fqScore++;fqAns.push({sk:fullQ[i].sk,correct:true,idx:i})}
+else{opts[j].classList.add('wrong');opts[fullQ[i].a].classList.add('correct');f.className='quiz-feedback show wrong';f.innerHTML='\u274C '+fullQ[i].e;fqAns.push({sk:fullQ[i].sk,correct:false,idx:i,picked:j})}
+fqCount++;if(fqCount===fullQ.length)showFullScore()}
+function showFullScore(){
+var b=document.getElementById('fullScoreBox');b.style.display='block';
+var pct=Math.round(fqScore/fullQ.length*100);
+document.getElementById('fullScoreText').textContent=fqScore+' / '+fullQ.length;
+var m;if(pct===100)m="Perfect, Saina! Fraction master! \uD83C\uDFC6";else if(pct>=80)m="Excellent! Almost perfect! \uD83C\uDF89";else if(pct>=60)m="Good effort! Review & retry! \uD83C\uDF1F";else m="Keep practising! You'll get there! \uD83D\uDCAA";
+document.getElementById('fullScoreMsg').textContent=m;
+var skills=['LCM','Addition','Subtraction','Frac\u00d7Whole','Frac\u00d7Frac','Mixed\u00d7Whole','Word problem'];
+var bd=document.getElementById('fullBreakdown');var h='';
+skills.forEach(function(s){
+var sa=fqAns.filter(function(a){return a.sk===s});if(!sa.length)return;
+var sc=sa.filter(function(a){return a.correct}).length,st=sa.length,sp=Math.round(sc/st*100);
+var cls=sp>=80?'sk-good':sp>=50?'sk-ok':'sk-bad',col=sp>=80?'var(--success)':sp>=50?'#FF9800':'var(--error)';
+h+='<div class="sk-row"><span style="font-weight:700;flex:1">'+s+'</span><div style="display:flex;align-items:center"><div class="sk-bar-bg"><div class="sk-bar-fg" style="width:'+sp+'%;background:'+col+'"></div></div><span class="sk-pill '+cls+'">'+sc+'/'+st+'</span></div></div>'});
+bd.innerHTML=h;
+var wrong=fqAns.filter(function(a){return !a.correct});
+var rv=document.getElementById('fullReview');
+if(wrong.length){rv.innerHTML='<h3 style="font-family:Fredoka;margin:16px 0 8px;color:var(--error)">Review Mistakes</h3>'+wrong.map(function(w){var q=fullQ[w.idx];return '<div class="review-card"><div class="rv-q">Q'+(w.idx+1)+': '+q.q+'</div><div class="rv-wrong">\u274C Your answer: '+q.o[w.picked]+'</div><div class="rv-correct">\u2705 Correct: '+q.o[q.a]+'</div><div class="rv-exp">'+q.e+'</div></div>'}).join('')}else rv.innerHTML='';
+b.scrollIntoView({behavior:'smooth'})}
+function resetFullQuiz(){buildFullQuiz();window.scrollTo({top:document.getElementById('sec-quiz').offsetTop-60,behavior:'smooth'})}
+
+/* ═══ TARGETED PRACTICE ENGINE ═══ */
+var prAns=[],prScore=0,prCount=0,prStreak=0;
+function buildPractice(){
+var c=document.getElementById('practiceContainer');c.innerHTML='';prAns=[];prScore=0;prCount=0;prStreak=0;
+document.getElementById('practiceScoreBox').style.display='none';
+practQ.forEach(function(q,i){
+var d=document.createElement('div');d.className='quiz-question';
+var skCls=q.sk==='Addition'?'badge-teal':q.sk==='Subtraction'?'badge-purple':'badge-orange';
+d.innerHTML=(prStreak>=3?'<span class="streak-badge">\uD83D\uDD25 '+prStreak+' in a row!</span>':'')+'<p class="q-text"><span class="q-num">'+(i+1)+'</span>'+q.q+'<span class="q-skill badge '+skCls+'" style="font-size:.68rem">'+q.sk+'</span></p>'+(q.h?'<button class="hint-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">Show hint</button><div class="hint-box">'+q.h+'</div>':'')+'<div class="quiz-options" id="pr-o'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="prChk('+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="pr-f'+i+'"></div>';
+c.appendChild(d)})}
+function prChk(i,j){
+var opts=document.querySelectorAll('#pr-o'+i+' .quiz-opt');if(opts[0].classList.contains('disabled'))return;
+opts.forEach(function(x){x.classList.add('disabled')});var f=document.getElementById('pr-f'+i);
+if(j===practQ[i].a){opts[j].classList.add('correct');f.className='quiz-feedback show correct';f.innerHTML='\u2705 Correct! '+practQ[i].e;prScore++;prStreak++;prAns.push({sk:practQ[i].sk,correct:true,idx:i})}
+else{opts[j].classList.add('wrong');opts[practQ[i].a].classList.add('correct');f.className='quiz-feedback show wrong';f.innerHTML='\u274C '+practQ[i].e;prStreak=0;prAns.push({sk:practQ[i].sk,correct:false,idx:i,picked:j})}
+prCount++;if(prCount===practQ.length)showPracticeScore()}
+function showPracticeScore(){
+var b=document.getElementById('practiceScoreBox');b.style.display='block';
+var pct=Math.round(prScore/practQ.length*100);
+document.getElementById('practiceScoreText').textContent=prScore+' / '+practQ.length;
+document.getElementById('practiceScoreMsg').textContent=pct>=80?"Great improvement, Saina! \uD83C\uDF89":"Keep going, Saina! Practice makes perfect! \uD83D\uDCAA";
+var skills=['Addition','Subtraction','Word problem'];
+var bd=document.getElementById('practiceBreakdown');var h='';
+skills.forEach(function(s){
+var sa=prAns.filter(function(a){return a.sk===s});if(!sa.length)return;
+var sc=sa.filter(function(a){return a.correct}).length,st=sa.length,sp=Math.round(sc/st*100);
+var cls=sp>=80?'sk-good':sp>=50?'sk-ok':'sk-bad',col=sp>=80?'var(--success)':sp>=50?'#FF9800':'var(--error)';
+h+='<div class="sk-row"><span style="font-weight:700;flex:1">'+s+'</span><div style="display:flex;align-items:center"><div class="sk-bar-bg"><div class="sk-bar-fg" style="width:'+sp+'%;background:'+col+'"></div></div><span class="sk-pill '+cls+'">'+sc+'/'+st+'</span></div></div>'});
+bd.innerHTML=h;
+var wrong=prAns.filter(function(a){return !a.correct});
+var rv=document.getElementById('practiceReview');
+if(wrong.length){rv.innerHTML='<h3 style="font-family:Fredoka;margin:16px 0 8px;color:var(--error)">Review Mistakes</h3>'+wrong.map(function(w){var q=practQ[w.idx];return '<div class="review-card"><div class="rv-q">Q'+(w.idx+1)+': '+q.q+'</div><div class="rv-wrong">\u274C Your answer: '+q.o[w.picked]+'</div><div class="rv-correct">\u2705 Correct: '+q.o[q.a]+'</div><div class="rv-exp">'+q.e+'</div></div>'}).join('')}else rv.innerHTML='';
+b.scrollIntoView({behavior:'smooth'})}
+function resetPractice(){buildPractice();window.scrollTo({top:document.getElementById('sec-practice').offsetTop-60,behavior:'smooth'})}
+
+/* ═══ INIT EVERYTHING ═══ */
+initMultBuild();
+initLcmActivity();
+['lcm1','lcm2','lcm3','lcm4','lcm5'].forEach(function(id){
+var qid=id+'-quiz';var qs=window['_qs_'+id+'q'];
+if(qs){var el=document.getElementById(qid);if(el){el._qs=qs;buildMiniQuiz(qid,qs)}}});
+// lcm6 as standalone questions
+(function(){
+var qs=window._qs_lcm6q;var c=document.getElementById('lcm6-quiz');if(!c||!qs)return;
+c._qs=qs;
+qs.forEach(function(q,i){
+var d=document.createElement('div');d.className='quiz-question';
+d.innerHTML='<p class="q-text"><span class="q-num">'+(i+1)+'</span>'+q.q+'</p><div class="quiz-options" id="lcm6-quiz-o'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="miniChk(\'lcm6-quiz\','+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="lcm6-quiz-f'+i+'"></div>';
+c.appendChild(d)})})();
+['op1','op2','op3','op4','op5','op6'].forEach(function(id){
+var qid=id+'-quiz';var qs=window['_qs_'+id+'q'];
+if(qs){var el=document.getElementById(qid);if(el){el._qs=qs;buildMiniQuiz(qid,qs)}}});
+buildFullQuiz();
+buildPractice();
+</script>
+</body>
+</html>
