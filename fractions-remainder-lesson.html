@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fraction of a Remainder - P5 Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8F0;--card:#FFFFFF;--primary:#FF6B35;--primary-light:#FFF0E8;--secondary:#2EC4B6;--secondary-light:#E8FAF8;--accent:#7B2D8E;--accent-light:#F3E8F7;--text:#2D2A32;--text-light:#6B6577;--success:#4CAF50;--error:#E53935;--shadow:0 4px 20px rgba(45,42,50,0.08);--shadow-hover:0 8px 30px rgba(45,42,50,0.14);--radius:18px;--yellow:#F5A623;--yellow-light:#FFF6E0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.hero{background:linear-gradient(135deg,#7B2D8E 0%,#A855C8 40%,#2EC4B6 100%);padding:40px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:40px;background:var(--bg);border-radius:50% 50% 0 0}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2.4rem;color:#fff;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.15)}
+.hero p{color:rgba(255,255,255,.92);font-size:1.1rem;margin-top:8px;font-weight:600;position:relative;z-index:1}
+.hero .name{color:#FFE066}
+.nav-wrap{display:flex;justify-content:center;margin:-28px auto 24px;position:relative;z-index:2;padding:0 12px}
+.nav-tabs{display:flex;gap:4px;background:var(--card);border-radius:16px;padding:5px;box-shadow:var(--shadow);overflow-x:auto;max-width:100%}
+.nav-tab{padding:9px 14px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;background:transparent;color:var(--text-light);white-space:nowrap;transition:.25s}
+.nav-tab.active{background:var(--accent);color:#fff}
+.nav-tab:hover:not(.active){background:var(--accent-light);color:var(--accent)}
+.container{max-width:820px;margin:0 auto;padding:0 18px 60px}
+.section{display:none;animation:fadeUp .4s ease}.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:28px 24px;margin-bottom:20px;box-shadow:var(--shadow);transition:box-shadow .3s}
+.card:hover{box-shadow:var(--shadow-hover)}
+.card h2{font-family:'Fredoka',sans-serif;font-size:1.35rem;margin-bottom:12px;color:var(--accent)}
+.card h3{font-family:'Fredoka',sans-serif;font-size:1.1rem;margin-bottom:8px}
+.card p,.card li{line-height:1.7;font-size:.96rem}
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:10px}
+.badge-orange{background:var(--primary-light);color:var(--primary)}
+.badge-teal{background:var(--secondary-light);color:var(--secondary)}
+.badge-purple{background:var(--accent-light);color:var(--accent)}
+.badge-yellow{background:var(--yellow-light);color:var(--yellow)}
+.key-fact{background:linear-gradient(135deg,#FFF6E0,#FFF0E8);border-left:5px solid var(--primary);border-radius:0 14px 14px 0;padding:18px 20px;margin:16px 0;font-weight:600}
+.key-fact .emoji{font-size:1.3rem;margin-right:6px}
+.warn-box{background:#FFF3E0;border-left:5px solid #FF9800;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.tip-box{background:#E3F2FD;border-left:5px solid #2196F3;border-radius:0 14px 14px 0;padding:16px 18px;margin:14px 0;font-weight:600;font-size:.92rem}
+.step-box{padding:14px 18px;background:#F7F7FB;border-radius:10px;font-family:monospace;font-size:.95rem;line-height:1.9;margin-top:10px}
+.formula-box{background:linear-gradient(135deg,#FFF6E0,#F3E8F7);border:3px dashed var(--accent);border-radius:16px;padding:24px;text-align:center;margin:18px 0}
+.formula-box .formula{font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--accent);margin:8px 0}
+.formula-frac{display:inline-block;text-align:center;vertical-align:middle}
+.formula-frac .num{display:block;border-bottom:3px solid var(--accent);padding-bottom:4px;font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--accent)}
+.formula-frac .den{display:block;padding-top:4px;font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--accent)}
+
+/* Bar Model */
+.bar-model-wrap{margin:20px 0;padding:20px;background:#F7F7FB;border-radius:14px;text-align:center}
+.bar-model-wrap canvas{border-radius:10px;background:#fff;box-shadow:inset 0 1px 4px rgba(0,0,0,.06);max-width:100%;cursor:default}
+
+/* Step-by-step walk */
+.walkthrough{margin:20px 0}
+.walk-step{background:#F7F7FB;border-radius:14px;padding:20px 22px;margin-bottom:14px;border-left:5px solid #E0DCE8;transition:.3s}
+.walk-step.active-step{border-left-color:var(--accent);background:var(--accent-light)}
+.walk-step .step-num{display:inline-block;background:var(--accent);color:#fff;width:30px;height:30px;line-height:30px;border-radius:50%;text-align:center;font-size:.85rem;font-weight:800;margin-right:10px;vertical-align:middle}
+.walk-step .step-title{font-family:'Fredoka',sans-serif;font-size:1rem;vertical-align:middle}
+.walk-step .step-detail{margin-top:10px;font-size:.94rem;line-height:1.7}
+.walk-step .step-math{font-family:monospace;font-size:1rem;background:#fff;padding:10px 16px;border-radius:8px;margin-top:8px;display:inline-block}
+.walk-btn-row{display:flex;gap:10px;justify-content:center;margin-top:16px}
+.walk-btn{padding:10px 22px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:.2s}
+.walk-btn-next{background:var(--accent);color:#fff}.walk-btn-next:hover{background:#6A2579}
+.walk-btn-reset{background:#E0DCE8;color:var(--text)}.walk-btn-reset:hover{background:#d0cad8}
+
+/* Interactive try */
+.try-section{background:#F7F7FB;border-radius:14px;padding:24px;margin-top:16px}
+.try-row{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.try-label{font-weight:700;font-size:.95rem}
+.try-input{width:60px;padding:8px;text-align:center;border:2px solid #E0DCE8;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;transition:.2s}
+.try-input:focus{outline:none;border-color:var(--accent)}
+.try-input.correct-input{border-color:var(--success);background:#E8F5E9}
+.try-input.wrong-input{border-color:var(--error);background:#FFEBEE}
+.try-btn{padding:10px 20px;border-radius:12px;border:none;background:var(--accent);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer}
+.try-btn:hover{background:#6A2579}
+.try-feedback{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.9rem;text-align:center;display:none}
+.try-feedback.show{display:block}
+
+/* Hamster vis */
+.hamster-grid{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin:16px 0;max-width:500px;margin-left:auto;margin-right:auto}
+.hamster{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:.3s}
+.hamster.white-h{background:#FFF0E8;border:2px solid #FF6B35}
+.hamster.black-h{background:#2D2A32;border:2px solid #2D2A32}
+.hamster.yellow-h{background:#FFE066;border:2px solid #F5A623}
+.hamster.grey-h{background:#E0DCE8;border:2px solid #ccc}
+
+/* Quiz */
+.quiz-question{background:#F7F7FB;border-radius:14px;padding:22px;margin-bottom:18px}
+.quiz-question p.q-text{font-weight:700;margin-bottom:14px;font-size:1.02rem}
+.quiz-question .q-num{display:inline-block;background:var(--accent);color:#fff;width:28px;height:28px;line-height:28px;border-radius:50%;text-align:center;font-size:.82rem;font-weight:800;margin-right:8px;vertical-align:middle}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:12px 16px;border:2px solid #E0DCE8;border-radius:12px;cursor:pointer;font-weight:600;font-size:.95rem;transition:.2s;background:#fff;text-align:left}
+.quiz-opt:hover{border-color:var(--accent);background:var(--accent-light)}
+.quiz-opt.correct{border-color:var(--success);background:#E8F5E9}
+.quiz-opt.wrong{border-color:var(--error);background:#FFEBEE}
+.quiz-opt.disabled{pointer-events:none}
+.quiz-feedback{margin-top:10px;padding:10px 14px;border-radius:10px;font-weight:700;font-size:.9rem;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#E8F5E9;color:#2E7D32}
+.quiz-feedback.wrong{background:#FFEBEE;color:#C62828}
+.score-box{text-align:center;padding:24px;border-radius:14px;background:linear-gradient(135deg,var(--secondary-light),var(--accent-light));margin-top:20px;display:none}
+.score-box h2{font-family:'Fredoka',sans-serif;font-size:2rem;color:var(--accent)}
+.score-box p{font-weight:600;margin-top:6px}
+.btn-retry{margin-top:14px;padding:12px 28px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
+
+.frac{display:inline-block;text-align:center;vertical-align:middle;margin:0 3px}
+.frac .n{display:block;border-bottom:2px solid currentColor;padding:0 4px 2px;font-weight:700;line-height:1.2}
+.frac .d{display:block;padding:2px 4px 0;font-weight:700;line-height:1.2}
+
+@media(max-width:520px){.hero h1{font-size:1.7rem}.nav-tab{padding:8px 10px;font-size:.76rem}.card{padding:20px 16px}.hamster{width:22px;height:22px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="hero"><h1>&#x1F439; Fraction of a Remainder</h1><p>Primary 5 Maths &middot; Hello, <span class="name">Saina</span>!</p></div>
+<div class="nav-wrap"><div class="nav-tabs">
+<button class="nav-tab active" onclick="showS('concept',this)">&#x1F4D6; Concept</button>
+<button class="nav-tab" onclick="showS('visual',this)">&#x1F3A8; Visual</button>
+<button class="nav-tab" onclick="showS('walkthrough',this)">&#x1F6B6; Walk-through</button>
+<button class="nav-tab" onclick="showS('practice',this)">&#x270D;&#xFE0F; Practice</button>
+<button class="nav-tab" onclick="showS('more',this)">&#x1F4DA; More Examples</button>
+<button class="nav-tab" onclick="showS('quiz',this)">&#x270F;&#xFE0F; Quiz</button>
+</div></div>
+<div class="container">
+
+<!-- ===== CONCEPT ===== -->
+<div class="section active" id="sec-concept">
+<div class="card"><span class="badge badge-purple">Key Idea</span>
+<h2>What Does "of the Remaining" Mean?</h2>
+<p>Some questions give you <strong>two fractions in a row</strong>. The trick? The second fraction is <strong>not</strong> of the whole &mdash; it&rsquo;s of the <strong>leftover</strong>!</p>
+<div class="key-fact"><span class="emoji">&#x26A0;&#xFE0F;</span> <strong>"of the remaining"</strong> = a fraction <strong>of a fraction</strong>. That means <strong>multiply</strong>!</div>
+</div>
+
+<div class="card"><span class="badge badge-orange">The Pattern</span>
+<h2>3-Step Method</h2>
+<div class="walk-step" style="border-left-color:var(--primary)">
+<span class="step-num" style="background:var(--primary)">1</span><span class="step-title">Find the Remainder</span>
+<div class="step-detail">Subtract the first fraction from 1 (the whole).</div>
+<div class="step-math">Remainder = 1 &minus; first fraction</div>
+</div>
+<div class="walk-step" style="border-left-color:var(--secondary)">
+<span class="step-num" style="background:var(--secondary)">2</span><span class="step-title">Multiply: Fraction OF Remainder</span>
+<div class="step-detail">"of" means <strong>&times;</strong>. Multiply the second fraction by the remainder.</div>
+<div class="step-math">Second part = second fraction &times; remainder</div>
+</div>
+<div class="walk-step" style="border-left-color:var(--accent)">
+<span class="step-num">3</span><span class="step-title">Find What's Left</span>
+<div class="step-detail">Subtract again to find the final portion.</div>
+<div class="step-math">Last part = remainder &minus; second part</div>
+</div>
+<div class="tip-box">&#x1F4A1; <strong>"of" = multiply.</strong> This is the #1 thing to remember!</div>
+</div>
+
+<div class="card"><span class="badge badge-teal">Why It's Tricky</span>
+<h2>Common Mistake</h2>
+<p>Many students see <span class="frac"><span class="n">5</span><span class="d">6</span></span> and <span class="frac"><span class="n">8</span><span class="d">9</span></span> and try to <strong>subtract</strong> both from 1.</p>
+<div class="warn-box">&#x274C; WRONG: 1 &minus; <span class="frac"><span class="n">5</span><span class="d">6</span></span> &minus; <span class="frac"><span class="n">8</span><span class="d">9</span></span> &larr; This treats <span class="frac"><span class="n">8</span><span class="d">9</span></span> as part of the whole!</div>
+<div class="key-fact"><span class="emoji">&#x2705;</span> CORRECT: The <span class="frac"><span class="n">8</span><span class="d">9</span></span> is of the <strong>remaining <span class="frac"><span class="n">1</span><span class="d">6</span></span></strong>, not of all the hamsters!</div>
+</div>
+</div>
+
+<!-- ===== VISUAL ===== -->
+<div class="section" id="sec-visual">
+<div class="card"><span class="badge badge-purple">See It!</span>
+<h2>&#x1F439; Kerry's Hamsters</h2>
+<p>Imagine Kerry has <strong>54 hamsters</strong> (we pick 54 because it works nicely with 6 and 9).</p>
+
+<div class="bar-model-wrap">
+<canvas id="barCanvas" width="600" height="320"></canvas>
+</div>
+
+<div class="walk-step" style="border-left-color:#FF6B35">
+<span class="step-num" style="background:#FF6B35">1</span><span class="step-title" style="color:#FF6B35">White: <span class="frac"><span class="n">5</span><span class="d">6</span></span> of 54 = 45 hamsters</span>
+<div class="step-detail">Remaining = 54 &minus; 45 = <strong>9 hamsters</strong></div>
+</div>
+<div class="walk-step" style="border-left-color:#2D2A32">
+<span class="step-num" style="background:#2D2A32">2</span><span class="step-title">Black: <span class="frac"><span class="n">8</span><span class="d">9</span></span> of the remaining 9 = 8 hamsters</span>
+<div class="step-detail"><span class="frac"><span class="n">8</span><span class="d">9</span></span> &times; 9 = 8. Only <strong>1 left!</strong></div>
+</div>
+<div class="walk-step" style="border-left-color:#F5A623">
+<span class="step-num" style="background:#F5A623">3</span><span class="step-title" style="color:#F5A623">Yellow: 1 hamster out of 54</span>
+<div class="step-detail">Fraction = <span class="frac"><span class="n">1</span><span class="d">54</span></span></div>
+</div>
+</div>
+
+<div class="card"><span class="badge badge-teal">Hamster Grid</span>
+<h2>All 54 Hamsters</h2>
+<p>&#x26AA; = White &nbsp; &#x26AB; = Black &nbsp; &#x1F7E1; = Yellow</p>
+<div class="hamster-grid" id="hamsterGrid"></div>
+<p style="margin-top:12px;font-weight:700;color:var(--accent)">Only 1 out of 54 is yellow &rarr; <span class="frac"><span class="n">1</span><span class="d">54</span></span></p>
+</div>
+</div>
+
+<!-- ===== WALKTHROUGH ===== -->
+<div class="section" id="sec-walkthrough">
+<div class="card"><span class="badge badge-orange">Step by Step</span>
+<h2>&#x1F6B6; Solving with Fractions (No Numbers!)</h2>
+<p>We don't need to know how many hamsters Kerry has. We work purely with fractions.</p>
+
+<div class="walkthrough" id="walkArea">
+<div class="walk-step active-step" id="ws-0">
+<span class="step-num">1</span><span class="step-title">Find the remainder after white</span>
+<div class="step-detail">
+<p>White = <span class="frac"><span class="n">5</span><span class="d">6</span></span> of all hamsters</p>
+<div class="step-math">Remaining = 1 &minus; <span class="frac"><span class="n">5</span><span class="d">6</span></span> = <span class="frac"><span class="n">1</span><span class="d">6</span></span></div>
+</div>
+</div>
+<div class="walk-step" id="ws-1" style="display:none">
+<span class="step-num">2</span><span class="step-title">Find the black fraction (of ALL hamsters)</span>
+<div class="step-detail">
+<p><span class="frac"><span class="n">8</span><span class="d">9</span></span> <strong>of the remaining</strong> are black.</p>
+<p>"of" means <strong>multiply</strong>!</p>
+<div class="step-math"><span class="frac"><span class="n">8</span><span class="d">9</span></span> &times; <span class="frac"><span class="n">1</span><span class="d">6</span></span> = <span class="frac"><span class="n">8</span><span class="d">54</span></span> = <span class="frac"><span class="n">4</span><span class="d">27</span></span></div>
+<p style="margin-top:8px;font-size:.88rem;color:var(--text-light)">Multiply numerators: 8 &times; 1 = 8. Multiply denominators: 9 &times; 6 = 54. Simplify: <span class="frac"><span class="n">8</span><span class="d">54</span></span> = <span class="frac"><span class="n">4</span><span class="d">27</span></span></p>
+</div>
+</div>
+<div class="walk-step" id="ws-2" style="display:none">
+<span class="step-num">3</span><span class="step-title">Find the yellow fraction</span>
+<div class="step-detail">
+<p>Yellow = Remainder &minus; Black</p>
+<div class="step-math"><span class="frac"><span class="n">1</span><span class="d">6</span></span> &minus; <span class="frac"><span class="n">4</span><span class="d">27</span></span></div>
+<p style="margin-top:8px">Common denominator of 6 and 27 = <strong>54</strong></p>
+<div class="step-math"><span class="frac"><span class="n">9</span><span class="d">54</span></span> &minus; <span class="frac"><span class="n">8</span><span class="d">54</span></span> = <span class="frac"><span class="n">1</span><span class="d">54</span></span></div>
+</div>
+</div>
+<div class="walk-step" id="ws-3" style="display:none;border-left-color:var(--success)">
+<span class="step-num" style="background:var(--success)">&#x2713;</span><span class="step-title" style="color:var(--success)">Answer</span>
+<div class="step-detail">
+<p style="font-size:1.2rem;font-family:'Fredoka',sans-serif;color:var(--accent)"><span class="frac" style="font-size:1.5rem"><span class="n">1</span><span class="d">54</span></span> of the hamsters are yellow.</p>
+</div>
+</div>
+</div>
+<div class="walk-btn-row">
+<button class="walk-btn walk-btn-reset" onclick="resetWalk()">&#x21BB; Reset</button>
+<button class="walk-btn walk-btn-next" id="walkBtn" onclick="nextWalk()">Next Step &#x2192;</button>
+</div>
+</div>
+
+<div class="card"><span class="badge badge-teal">Check Your Work</span>
+<h2>Do all parts add up to 1?</h2>
+<div class="step-box">
+White + Black + Yellow<br>
+= <span class="frac"><span class="n">5</span><span class="d">6</span></span> + <span class="frac"><span class="n">4</span><span class="d">27</span></span> + <span class="frac"><span class="n">1</span><span class="d">54</span></span><br><br>
+= <span class="frac"><span class="n">45</span><span class="d">54</span></span> + <span class="frac"><span class="n">8</span><span class="d">54</span></span> + <span class="frac"><span class="n">1</span><span class="d">54</span></span> = <span class="frac"><span class="n">54</span><span class="d">54</span></span> = <strong>1 &#x2705;</strong>
+</div>
+<div class="key-fact"><span class="emoji">&#x2B50;</span> <strong>Always verify!</strong> All fractions must add back to 1 whole.</div>
+</div>
+</div>
+
+<!-- ===== PRACTICE ===== -->
+<div class="section" id="sec-practice">
+<div class="card"><span class="badge badge-orange">Your Turn!</span>
+<h2>&#x270D;&#xFE0F; Try the Hamster Problem Yourself</h2>
+<p><strong>Kerry has some hamsters. <span class="frac"><span class="n">5</span><span class="d">6</span></span> are white. <span class="frac"><span class="n">8</span><span class="d">9</span></span> of the remaining are black. What fraction are yellow?</strong></p>
+
+<div class="try-section">
+<div class="try-row">
+<span class="try-label">Step 1: Remainder = 1 &minus; <span class="frac"><span class="n">5</span><span class="d">6</span></span> = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="t1n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="t1d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div class="try-row">
+<span class="try-label">Step 2: Black = <span class="frac"><span class="n">8</span><span class="d">9</span></span> &times; your answer = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="t2n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="t2d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div class="try-row">
+<span class="try-label">Step 3: Yellow = Remainder &minus; Black = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="t3n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="t3d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div style="text-align:center;margin-top:16px">
+<button class="try-btn" onclick="checkTry()">Check My Answers</button>
+</div>
+<div class="try-feedback" id="tryFeedback"></div>
+</div>
+</div>
+
+<div class="card"><span class="badge badge-teal">Practice 2</span>
+<h2>Different Numbers</h2>
+<p><strong>Ali has some beads. <span class="frac"><span class="n">2</span><span class="d">5</span></span> are red. <span class="frac"><span class="n">3</span><span class="d">4</span></span> of the remaining are blue. What fraction are green?</strong></p>
+<div class="try-section">
+<div class="try-row">
+<span class="try-label">Step 1: Remainder = 1 &minus; <span class="frac"><span class="n">2</span><span class="d">5</span></span> = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="p2t1n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="p2t1d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div class="try-row">
+<span class="try-label">Step 2: Blue = <span class="frac"><span class="n">3</span><span class="d">4</span></span> &times; your answer = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="p2t2n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="p2t2d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div class="try-row">
+<span class="try-label">Step 3: Green = Remainder &minus; Blue = </span>
+<span class="frac" style="font-size:1.1rem"><span class="n"><input class="try-input" id="p2t3n" placeholder="?" style="width:45px"></span><span class="d"><input class="try-input" id="p2t3d" placeholder="?" style="width:45px"></span></span>
+</div>
+<div style="text-align:center;margin-top:16px">
+<button class="try-btn" onclick="checkTry2()">Check My Answers</button>
+</div>
+<div class="try-feedback" id="tryFeedback2"></div>
+</div>
+</div>
+</div>
+
+<!-- ===== MORE EXAMPLES ===== -->
+<div class="section" id="sec-more">
+<div class="card"><span class="badge badge-purple">Example 1</span>
+<h3>A farm has chickens. <span class="frac"><span class="n">3</span><span class="d">4</span></span> are brown. <span class="frac"><span class="n">2</span><span class="d">3</span></span> of the remaining are spotted. The rest are white.</h3>
+<div class="step-box">
+Step 1: Remaining = 1 &minus; <span class="frac"><span class="n">3</span><span class="d">4</span></span> = <strong><span class="frac"><span class="n">1</span><span class="d">4</span></span></strong><br>
+Step 2: Spotted = <span class="frac"><span class="n">2</span><span class="d">3</span></span> &times; <span class="frac"><span class="n">1</span><span class="d">4</span></span> = <strong><span class="frac"><span class="n">2</span><span class="d">12</span></span> = <span class="frac"><span class="n">1</span><span class="d">6</span></span></strong><br>
+Step 3: White = <span class="frac"><span class="n">1</span><span class="d">4</span></span> &minus; <span class="frac"><span class="n">1</span><span class="d">6</span></span> = <span class="frac"><span class="n">3</span><span class="d">12</span></span> &minus; <span class="frac"><span class="n">2</span><span class="d">12</span></span> = <strong><span class="frac"><span class="n">1</span><span class="d">12</span></span></strong>
+</div>
+<div class="key-fact"><span class="emoji">&#x2705;</span> Check: <span class="frac"><span class="n">3</span><span class="d">4</span></span> + <span class="frac"><span class="n">1</span><span class="d">6</span></span> + <span class="frac"><span class="n">1</span><span class="d">12</span></span> = <span class="frac"><span class="n">9</span><span class="d">12</span></span> + <span class="frac"><span class="n">2</span><span class="d">12</span></span> + <span class="frac"><span class="n">1</span><span class="d">12</span></span> = <span class="frac"><span class="n">12</span><span class="d">12</span></span> = 1 &#x2705;</div>
+</div>
+
+<div class="card"><span class="badge badge-orange">Example 2</span>
+<h3>A box of marbles. <span class="frac"><span class="n">1</span><span class="d">3</span></span> are green. <span class="frac"><span class="n">5</span><span class="d">8</span></span> of the remaining are red. Rest are blue.</h3>
+<div class="step-box">
+Step 1: Remaining = 1 &minus; <span class="frac"><span class="n">1</span><span class="d">3</span></span> = <strong><span class="frac"><span class="n">2</span><span class="d">3</span></span></strong><br>
+Step 2: Red = <span class="frac"><span class="n">5</span><span class="d">8</span></span> &times; <span class="frac"><span class="n">2</span><span class="d">3</span></span> = <strong><span class="frac"><span class="n">10</span><span class="d">24</span></span> = <span class="frac"><span class="n">5</span><span class="d">12</span></span></strong><br>
+Step 3: Blue = <span class="frac"><span class="n">2</span><span class="d">3</span></span> &minus; <span class="frac"><span class="n">5</span><span class="d">12</span></span> = <span class="frac"><span class="n">8</span><span class="d">12</span></span> &minus; <span class="frac"><span class="n">5</span><span class="d">12</span></span> = <strong><span class="frac"><span class="n">3</span><span class="d">12</span></span> = <span class="frac"><span class="n">1</span><span class="d">4</span></span></strong>
+</div>
+</div>
+
+<div class="card"><span class="badge badge-teal">Example 3 &mdash; Three Groups!</span>
+<h3><span class="frac"><span class="n">1</span><span class="d">2</span></span> are cats, <span class="frac"><span class="n">1</span><span class="d">3</span></span> of remainder are dogs, <span class="frac"><span class="n">3</span><span class="d">4</span></span> of the new remainder are birds. Rest are fish.</h3>
+<div class="step-box">
+Remainder 1 = 1 &minus; <span class="frac"><span class="n">1</span><span class="d">2</span></span> = <span class="frac"><span class="n">1</span><span class="d">2</span></span><br>
+Dogs = <span class="frac"><span class="n">1</span><span class="d">3</span></span> &times; <span class="frac"><span class="n">1</span><span class="d">2</span></span> = <span class="frac"><span class="n">1</span><span class="d">6</span></span><br>
+Remainder 2 = <span class="frac"><span class="n">1</span><span class="d">2</span></span> &minus; <span class="frac"><span class="n">1</span><span class="d">6</span></span> = <span class="frac"><span class="n">2</span><span class="d">6</span></span> = <span class="frac"><span class="n">1</span><span class="d">3</span></span><br>
+Birds = <span class="frac"><span class="n">3</span><span class="d">4</span></span> &times; <span class="frac"><span class="n">1</span><span class="d">3</span></span> = <span class="frac"><span class="n">3</span><span class="d">12</span></span> = <span class="frac"><span class="n">1</span><span class="d">4</span></span><br>
+Fish = <span class="frac"><span class="n">1</span><span class="d">3</span></span> &minus; <span class="frac"><span class="n">1</span><span class="d">4</span></span> = <span class="frac"><span class="n">4</span><span class="d">12</span></span> &minus; <span class="frac"><span class="n">3</span><span class="d">12</span></span> = <strong><span class="frac"><span class="n">1</span><span class="d">12</span></span></strong>
+</div>
+<div class="tip-box">&#x1F4A1; When there are <strong>3 layers of "remaining"</strong>, just keep repeating the same method!</div>
+</div>
+
+<div class="card">
+<div class="formula-box">
+<p style="font-weight:700;margin-bottom:6px">Remember the Magic Word</p>
+<div class="formula" style="font-size:1.6rem">"of" = &times;</div>
+<p style="font-size:.9rem;color:var(--text-light);margin-top:6px"><span class="frac"><span class="n">8</span><span class="d">9</span></span> <strong>of</strong> the remaining &rarr; <span class="frac"><span class="n">8</span><span class="d">9</span></span> <strong>&times;</strong> the remaining</p>
+</div>
+</div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="sec-quiz">
+<div class="card"><span class="badge badge-orange">Test Yourself</span><h2>&#x270F;&#xFE0F; Quiz Time, Saina!</h2><p>8 questions on "fraction of a remainder" problems!</p></div>
+<div id="quizContainer"></div>
+<div class="score-box" id="scoreBox"><h2 id="scoreText"></h2><p id="scoreMsg"></p><button class="btn-retry" onclick="resetQuiz()">Try Again</button></div>
+</div>
+
+</div>
+
+<script>
+/* Nav */
+function showS(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('sec-'+id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+
+/* Walkthrough stepper */
+var walkIdx=0;
+function nextWalk(){walkIdx++;if(walkIdx>3)return;document.getElementById('ws-'+walkIdx).style.display='block';document.getElementById('ws-'+walkIdx).classList.add('active-step');if(walkIdx>0)document.getElementById('ws-'+(walkIdx-1)).classList.remove('active-step');if(walkIdx===3)document.getElementById('walkBtn').textContent='Done!';setTimeout(()=>{document.getElementById('ws-'+walkIdx).scrollIntoView({behavior:'smooth',block:'center'})},100)}
+function resetWalk(){walkIdx=0;for(var i=1;i<=3;i++){document.getElementById('ws-'+i).style.display='none';document.getElementById('ws-'+i).classList.remove('active-step')}document.getElementById('ws-0').classList.add('active-step');document.getElementById('walkBtn').textContent='Next Step \u2192'}
+
+/* Bar model canvas */
+function drawBar(){
+var cv=document.getElementById('barCanvas'),c=cv.getContext('2d');
+var W=cv.width,H=cv.height;
+c.clearRect(0,0,W,H);
+var bx=40,by=60,bw=520,bh=50;
+
+// Title
+c.font='700 16px Nunito';c.fillStyle='#2D2A32';c.textAlign='center';
+c.fillText('54 hamsters total',W/2,35);
+
+// Full bar outline
+c.strokeStyle='#999';c.lineWidth=1;c.strokeRect(bx,by,bw,bh);
+
+// 5/6 white
+var whiteW=bw*(5/6);
+c.fillStyle='#FFF0E8';c.fillRect(bx,by,whiteW,bh);
+c.strokeStyle='#FF6B35';c.lineWidth=2;c.strokeRect(bx,by,whiteW,bh);
+c.font='700 14px Nunito';c.fillStyle='#FF6B35';c.textAlign='center';
+c.fillText('5/6 = White (45)',bx+whiteW/2,by+bh/2+5);
+
+// 1/6 remaining
+var remX=bx+whiteW,remW=bw-whiteW;
+c.fillStyle='#E0DCE8';c.fillRect(remX,by,remW,bh);
+c.strokeStyle='#999';c.lineWidth=2;c.strokeRect(remX,by,remW,bh);
+c.fillStyle='#6B6577';c.font='700 11px Nunito';
+c.fillText('1/6 (9)',remX+remW/2,by+bh/2+4);
+
+// Arrow down to zoomed remainder
+var zy=by+bh+50,zh=50;
+c.setLineDash([4,3]);c.strokeStyle='#7B2D8E';c.lineWidth=1.5;
+c.beginPath();c.moveTo(remX+remW/2,by+bh);c.lineTo(remX+remW/2,zy-10);c.stroke();
+c.setLineDash([]);
+// arrow head
+c.beginPath();c.moveTo(remX+remW/2-6,zy-16);c.lineTo(remX+remW/2,zy-6);c.lineTo(remX+remW/2+6,zy-16);c.fillStyle='#7B2D8E';c.fill();
+
+// Zoomed remainder bar (full width)
+c.font='700 13px Nunito';c.fillStyle='#7B2D8E';c.textAlign='center';
+c.fillText('Zooming into the remaining 1/6 (9 hamsters):',W/2,zy-14);
+
+var zx=80,zw=440;
+// 8/9 black
+var blackW=zw*(8/9);
+c.fillStyle='#2D2A32';c.fillRect(zx,zy,blackW,zh);
+c.strokeStyle='#2D2A32';c.lineWidth=2;c.strokeRect(zx,zy,blackW,zh);
+c.fillStyle='#fff';c.font='700 13px Nunito';
+c.fillText('8/9 of remaining = Black (8)',zx+blackW/2,zy+zh/2+5);
+
+// 1/9 yellow
+var yelX=zx+blackW,yelW=zw-blackW;
+c.fillStyle='#FFE066';c.fillRect(yelX,zy,yelW,zh);
+c.strokeStyle='#F5A623';c.lineWidth=2;c.strokeRect(yelX,zy,yelW,zh);
+c.fillStyle='#8B6914';c.font='700 10px Nunito';
+c.fillText('1(Y)',yelX+yelW/2,zy+zh/2+4);
+
+// Final answer
+c.font='700 16px Fredoka';c.fillStyle='#7B2D8E';c.textAlign='center';
+c.fillText('Yellow = 1 out of 54 = 1/54',W/2,zy+zh+40);
+}
+drawBar();
+
+/* Hamster grid */
+function buildHamsters(){
+var g=document.getElementById('hamsterGrid');g.innerHTML='';
+for(var i=0;i<54;i++){
+var h=document.createElement('div');h.className='hamster ';
+if(i<45){h.className+='white-h';h.title='White'}
+else if(i<53){h.className+='black-h';h.title='Black'}
+else{h.className+='yellow-h';h.title='Yellow';h.textContent='\u2B50'}
+g.appendChild(h);
+}}
+buildHamsters();
+
+/* Practice checker */
+function checkFrac(nId,dId,expN,expD){
+var n=parseInt(document.getElementById(nId).value),d=parseInt(document.getElementById(dId).value);
+if(isNaN(n)||isNaN(d)||d===0)return false;
+// Check equivalent fraction
+return n*expD===expN*d;
+}
+function markInput(id,ok){
+var el=document.getElementById(id);
+el.classList.remove('correct-input','wrong-input');
+el.classList.add(ok?'correct-input':'wrong-input');
+}
+
+function checkTry(){
+var s1=checkFrac('t1n','t1d',1,6),s2=checkFrac('t2n','t2d',8,54),s3=checkFrac('t3n','t3d',1,54);
+markInput('t1n',s1);markInput('t1d',s1);
+markInput('t2n',s2);markInput('t2d',s2);
+markInput('t3n',s3);markInput('t3d',s3);
+var fb=document.getElementById('tryFeedback');
+fb.classList.add('show');
+if(s1&&s2&&s3){fb.className='try-feedback show';fb.style.background='#E8F5E9';fb.style.color='#2E7D32';fb.textContent='\u2705 Perfect, Saina! All steps correct!'}
+else{
+var hints=[];
+if(!s1)hints.push('Step 1: 1 \u2212 5/6 = 1/6');
+if(!s2)hints.push('Step 2: 8/9 \u00D7 1/6 = 8/54 (or 4/27)');
+if(!s3)hints.push('Step 3: 1/6 \u2212 8/54 = 9/54 \u2212 8/54 = 1/54');
+fb.className='try-feedback show';fb.style.background='#FFEBEE';fb.style.color='#C62828';
+fb.textContent='\u274C Not quite. Hints: '+hints.join(' | ')}
+}
+
+function checkTry2(){
+// 2/5 red, 3/4 of rem blue, rest green
+// rem=3/5, blue=3/4*3/5=9/20, green=3/5-9/20=12/20-9/20=3/20
+var s1=checkFrac('p2t1n','p2t1d',3,5),s2=checkFrac('p2t2n','p2t2d',9,20),s3=checkFrac('p2t3n','p2t3d',3,20);
+markInput('p2t1n',s1);markInput('p2t1d',s1);
+markInput('p2t2n',s2);markInput('p2t2d',s2);
+markInput('p2t3n',s3);markInput('p2t3d',s3);
+var fb=document.getElementById('tryFeedback2');
+fb.classList.add('show');
+if(s1&&s2&&s3){fb.className='try-feedback show';fb.style.background='#E8F5E9';fb.style.color='#2E7D32';fb.textContent='\u2705 Excellent! All correct!'}
+else{
+var hints=[];
+if(!s1)hints.push('Step 1: 1 \u2212 2/5 = 3/5');
+if(!s2)hints.push('Step 2: 3/4 \u00D7 3/5 = 9/20');
+if(!s3)hints.push('Step 3: 3/5 \u2212 9/20 = 12/20 \u2212 9/20 = 3/20');
+fb.className='try-feedback show';fb.style.background='#FFEBEE';fb.style.color='#C62828';
+fb.textContent='\u274C Not quite. Hints: '+hints.join(' | ')}
+}
+
+/* Quiz */
+var Q=[
+{q:'"of the remaining" means we should ___.',o:['Subtract','Add','Multiply','Divide'],a:2,e:'"of" always means multiply in fractions!'},
+{q:'\u00BE are red. What fraction is the remainder?',o:['3/4','1/2','1/4','1/3'],a:2,e:'Remainder = 1 \u2212 3/4 = 1/4'},
+{q:'2/3 are apples. 1/4 of the remaining are oranges. What fraction are oranges?',o:['1/4','1/12','1/3','1/6'],a:1,e:'Remainder = 1/3. Oranges = 1/4 \u00D7 1/3 = 1/12'},
+{q:'5/6 are white. 8/9 of remaining are black. Fraction that are yellow?',o:['1/27','1/54','1/18','1/9'],a:1,e:'Rem = 1/6. Black = 8/9 \u00D7 1/6 = 8/54. Yellow = 9/54 \u2212 8/54 = 1/54'},
+{q:'1/2 are cats. 2/5 of remaining are dogs. What fraction are dogs (of all)?',o:['2/5','1/5','2/10','1/10'],a:1,e:'Rem = 1/2. Dogs = 2/5 \u00D7 1/2 = 2/10 = 1/5'},
+{q:'3/8 are blue. 2/5 of remaining are green. What is the remainder after green?',o:['3/8','1/8','3/16','3/20'],a:0,e:'Rem = 5/8. Green = 2/5 \u00D7 5/8 = 10/40 = 1/4. After green = 5/8 \u2212 1/4 = 5/8 \u2212 2/8 = 3/8'},
+{q:'1/3 are red. 5/8 of remaining are blue. Rest are green. What fraction green?',o:['1/3','1/4','5/12','1/6'],a:1,e:'Rem=2/3. Blue=5/8\u00D72/3=10/24=5/12. Green=2/3\u22125/12=8/12\u22125/12=3/12=1/4'},
+{q:'After solving, how do you check your answer?',o:['Multiply all fractions','Add all fractions \u2014 must equal 1','Subtract from 2','Divide by the denominator'],a:1,e:'All parts must add back to 1 (the whole)!'}
+];
+var ans=0,sc=0;
+function buildQuiz(){var c=document.getElementById('quizContainer');c.innerHTML='';ans=0;sc=0;document.getElementById('scoreBox').style.display='none';Q.forEach(function(q,i){var d=document.createElement('div');d.className='quiz-question';d.innerHTML='<p class="q-text"><span class="q-num">'+(i+1)+'</span>'+q.q+'</p><div class="quiz-options" id="qo-'+i+'">'+q.o.map(function(o,j){return '<button class="quiz-opt" onclick="chk('+i+','+j+')">'+o+'</button>'}).join('')+'</div><div class="quiz-feedback" id="qf-'+i+'"></div>';c.appendChild(d)})}
+function chk(i,j){var o=document.querySelectorAll('#qo-'+i+' .quiz-opt');if(o[0].classList.contains('disabled'))return;o.forEach(function(x){x.classList.add('disabled')});var f=document.getElementById('qf-'+i);if(j===Q[i].a){o[j].classList.add('correct');f.className='quiz-feedback show correct';f.textContent='\u2705 Correct! '+Q[i].e;sc++}else{o[j].classList.add('wrong');o[Q[i].a].classList.add('correct');f.className='quiz-feedback show wrong';f.textContent='\u274C Not quite. '+Q[i].e}ans++;if(ans===Q.length)showSc()}
+function showSc(){var b=document.getElementById('scoreBox');b.style.display='block';document.getElementById('scoreText').textContent=sc+' / '+Q.length;var p=sc/Q.length,m;if(p===1)m="Perfect, Saina! Fraction master! \uD83C\uDFC6";else if(p>=.75)m="Excellent, Saina! Almost there! \uD83C\uDF89";else if(p>=.5)m="Good effort, Saina! Review & retry! \uD83C\uDF1F";else m="Let\u2019s review together, Saina! \uD83D\uDCD6";document.getElementById('scoreMsg').textContent=m;b.scrollIntoView({behavior:'smooth'})}
+function resetQuiz(){buildQuiz();window.scrollTo({top:document.getElementById('sec-quiz').offsetTop-60,behavior:'smooth'})}
+buildQuiz();
+</script>
+</body>
+</html>
