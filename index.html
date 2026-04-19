@@ -1,12 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P5 Math Learning Hub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      background: linear-gradient(180deg, #87ceeb 0%, #dff6ff 45%, #fff8dc 100%);
+      min-height: 100vh;
+      color: #2d3748;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #6ec6ff, #8ee3f5, #b8f2e6);
+      border-radius: 30px;
+      padding: 40px 24px 32px;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      margin-bottom: 28px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .hero::before {
+      width: 180px;
+      height: 180px;
+      top: -50px;
+      left: -40px;
+    }
+
+    .hero::after {
+      width: 220px;
+      height: 220px;
+      bottom: -80px;
+      right: -50px;
+    }
+
+    .stars {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .subtitle {
+      margin: 12px auto 0;
+      max-width: 700px;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: #083344;
+      background: rgba(255, 255, 255, 0.72);
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 18px;
+    }
+
+    .mascots {
+      margin-top: 18px;
+      font-size: 2rem;
+      letter-spacing: 8px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.6rem;
+      margin: 18px 0 20px;
+      color: #1e3a8a;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      text-decoration: none;
+      color: inherit;
+      border-radius: 24px;
+      padding: 22px 18px;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 210px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 3px solid rgba(255, 255, 255, 0.65);
+    }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.16);
+    }
+
+    .card .icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 1.4rem;
+    }
+
+    .card p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .tag {
+      margin-top: 16px;
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .adventure {
+      background: linear-gradient(135deg, #ffe66d, #ffd43b);
+    }
+
+    .practice {
+      background: linear-gradient(135deg, #a0e7e5, #81ecec);
+    }
+
+    .triangles {
+      background: linear-gradient(135deg, #b4f8c8, #7bed9f);
+    }
+
+    .fractions1 {
+      background: linear-gradient(135deg, #ffb5e8, #ff9ff3);
+    }
+
+    .fractions2 {
+      background: linear-gradient(135deg, #cdb4db, #b39ddb);
+    }
+
+    .bottom-banner {
+      margin-top: 30px;
+      background: #ffffffcc;
+      border-radius: 22px;
+      padding: 18px 20px;
+      text-align: center;
+      font-size: 1.05rem;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .bottom-banner strong {
+      color: #d97706;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding: 28px 18px 24px;
+      }
+
+      h1 {
+        font-size: 2.1rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .card {
+        min-height: 190px;
+      }
+    }
+  </style>
+</head>
 <body>
-  <a href="p5math_app.html">P5 Math Adventure</a>
-  <br/>
-  <a href="P5_Math_Practice.html">P5 Math QB</a>
-  <br/>
-  <a href="triangles-lesson.html">Triangles</a>
-  <br/>
-  <a href="fractions-part1.html">Fractions Foundations</a>
-  <br/>
-  <a href="fractions-remainder-lesson.html">Fractions Remainder Lesson</a>
-  
+  <div class="page">
+    <section class="hero">
+      <div class="stars">⭐ 🌈 ⭐</div>
+      <h1>P5 Math Learning Hub</h1>
+      <p class="subtitle">
+        Welcome, young mathematician! Pick a lesson, practise your skills,
+        and enjoy your math journey.
+      </p>
+      <div class="mascots">🚀 📘 ➕ 🍕 🔺</div>
+    </section>
+
+    <h2 class="section-title">Choose Your Math Adventure</h2>
+
+    <section class="menu">
+      <a href="p5math_app.html" class="card adventure">
+        <div>
+          <div class="icon">🚀</div>
+          <h2>P5 Math Adventure</h2>
+          <p>Explore fun challenges and build confidence step by step.</p>
+        </div>
+        <span class="tag">Start Playing</span>
+      </a>
+
+      <a href="P5_Math_Practice.html" class="card practice">
+        <div>
+          <div class="icon">📝</div>
+          <h2>P5 Math QB</h2>
+          <p>Practise more questions and sharpen your problem-solving skills.</p>
+        </div>
+        <span class="tag">Practise Now</span>
+      </a>
+
+      <a href="triangles-lesson.html" class="card triangles">
+        <div>
+          <div class="icon">🔺</div>
+          <h2>Triangles</h2>
+          <p>Learn all about triangles in a simple and exciting way.</p>
+        </div>
+        <span class="tag">Learn Shapes</span>
+      </a>
+
+      <a href="fractions-part1.html" class="card fractions1">
+        <div>
+          <div class="icon">🍕</div>
+          <h2>Fractions Foundations</h2>
+          <p>Understand the basics of fractions with easy examples.</p>
+        </div>
+        <span class="tag">Learn Fractions</span>
+      </a>
+
+      <a href="fractions-remainder-lesson.html" class="card fractions2">
+        <div>
+          <div class="icon">➗</div>
+          <h2>Fractions Remainder Lesson</h2>
+          <p>Discover how to solve fraction questions with remainders.</p>
+        </div>
+        <span class="tag">Try Lesson</span>
+      </a>
+    </section>
+
+    <div class="bottom-banner">
+      🌟 <strong>Tip:</strong> Try one lesson every day and become a math star.
+    </div>
+  </div>
 </body>
+</html>
