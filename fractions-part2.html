@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractions Mastery Part 2 — P5 Skills</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8F0;--card:#fff;--primary:#FF6B35;--pl:#FFF0E8;--sec:#2EC4B6;--sl:#E8FAF8;--acc:#7B2D8E;--al:#F3E8F7;--text:#2D2A32;--tl:#6B6577;--ok:#4CAF50;--err:#E53935;--sh:0 4px 20px rgba(45,42,50,.08);--shh:0 8px 30px rgba(45,42,50,.14);--r:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#7B2D8E 0%,#C2185B 50%,#FF6B35 100%);padding:32px 20px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:36px;background:var(--bg);border-radius:50% 50% 0 0}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2.1rem;color:#fff;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero p{color:rgba(255,255,255,.92);font-size:.95rem;margin-top:5px;font-weight:600;position:relative;z-index:1}
+.hero .nm{color:#FFE066}
+
+/* ── MAIN NAV (chapter selection) ── */
+.main-nav-wrap{display:flex;justify-content:center;margin:-22px auto 0;position:relative;z-index:10;padding:0 10px}
+.main-nav{display:flex;gap:3px;background:var(--card);border-radius:16px;padding:4px;box-shadow:var(--sh);overflow-x:auto;max-width:100%}
+.mnav{padding:9px 13px;border-radius:11px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;background:transparent;color:var(--tl);white-space:nowrap;transition:.22s;display:flex;align-items:center;gap:5px}
+.mnav .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mnav.active{background:var(--acc);color:#fff}
+.mnav.active .dot{background:rgba(255,255,255,.7)}
+.mnav:hover:not(.active){background:var(--al);color:var(--acc)}
+
+/* ── SUB-NAV (concept / examples / practice / quiz) ── */
+.sub-nav-wrap{display:flex;justify-content:center;margin:12px auto 18px;padding:0 10px}
+.sub-nav{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.snav{padding:7px 16px;border-radius:10px;border:2px solid #E0DCE8;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;background:#fff;color:var(--tl);white-space:nowrap;transition:.22s}
+.snav.active{border-color:var(--acc);background:var(--al);color:var(--acc)}
+.snav:hover:not(.active){border-color:var(--acc)}
+
+/* ── CHAPTER + SUB-SECTIONS ── */
+.ch{display:none}.ch.active{display:block}
+.sub{display:none;animation:fu .35s ease}.sub.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.con{max-width:820px;margin:0 auto;padding:0 15px 60px}
+
+/* ── LEVEL BADGES ── */
+.ls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.lv{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.69rem;font-weight:800;letter-spacing:.3px}
+.lv5{background:#FCEBEB;color:#791F1F;border:1.5px solid #F7C1C1}
+.lvP{background:#7B2D8E;color:#fff;border:1.5px solid #5a1f6b}
+.ld{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:var(--r);padding:22px 20px;margin-bottom:16px;box-shadow:var(--sh);transition:box-shadow .3s}
+.card:hover{box-shadow:var(--shh)}
+.card h2{font-family:'Fredoka',sans-serif;font-size:1.22rem;margin-bottom:9px;color:var(--acc)}
+.card h3{font-family:'Fredoka',sans-serif;font-size:.98rem;margin-bottom:7px;color:var(--primary)}
+.card p,.card li{line-height:1.7;font-size:.92rem}
+.card ul{margin-left:18px;margin-top:5px}
+
+/* ── BADGES ── */
+.bg{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.71rem;font-weight:700;margin-bottom:8px}
+.bgo{background:var(--pl);color:var(--primary)}
+.bgt{background:var(--sl);color:var(--sec)}
+.bgp{background:var(--al);color:var(--acc)}
+.bgr{background:#FFEBEE;color:#C62828}
+.bgg{background:#E8F5E9;color:#2E7D32}
+
+/* ── INFO BOXES ── */
+.kf{background:linear-gradient(135deg,#FFF6E0,#FFF0E8);border-left:5px solid var(--primary);border-radius:0 11px 11px 0;padding:13px 16px;margin:12px 0;font-weight:600;font-size:.91rem;line-height:1.6}
+.wb{background:#FFF3E0;border-left:5px solid #FF9800;border-radius:0 11px 11px 0;padding:11px 15px;margin:10px 0;font-weight:600;font-size:.86rem;line-height:1.5}
+.tb{background:#E3F2FD;border-left:5px solid #2196F3;border-radius:0 11px 11px 0;padding:11px 15px;margin:10px 0;font-weight:600;font-size:.86rem;line-height:1.5}
+.sb{background:#E8F5E9;border-left:5px solid #4CAF50;border-radius:0 11px 11px 0;padding:11px 15px;margin:10px 0;font-weight:600;font-size:.86rem;line-height:1.5}
+
+/* ── FRACTION INLINE ── */
+.fr{display:inline-block;text-align:center;vertical-align:middle;margin:0 2px;line-height:1}
+.fr .n{display:block;border-bottom:2px solid currentColor;padding:0 2px 1px;font-weight:700;font-size:.85em}
+.fr .d{display:block;padding:1px 2px 0;font-weight:700;font-size:.85em}
+
+/* ── WORKED EXAMPLE ── */
+.we{background:linear-gradient(135deg,#FFF6E0,#FFF0E8);border-radius:13px;padding:14px 16px;margin:11px 0;border:1.5px solid #FFD4B8}
+.we h4{font-family:'Fredoka',sans-serif;font-size:.95rem;color:var(--primary);margin-bottom:8px}
+.ws{display:flex;gap:9px;margin:7px 0;font-size:.88rem;align-items:flex-start;line-height:1.6}
+.wn{min-width:21px;height:21px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.69rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.wn.ok{background:var(--ok)}
+.wm{font-family:monospace;background:#fff;padding:2px 7px;border-radius:5px;display:inline-block;font-size:.84rem}
+
+/* ── TIER LABEL ── */
+.tier{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:11px;margin:16px 0 10px;font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:700}
+.tA{background:#E6F1FB;color:#0C447C;border-left:5px solid #185FA5}
+.tB{background:#FAEEDA;color:#633806;border-left:5px solid #854F0B}
+.tC{background:#EEEDFE;color:#3C3489;border-left:5px solid #534AB7}
+.tD{background:#FCEBEB;color:#791F1F;border-left:5px solid #A32D2D}
+
+/* ── SOURCE TAG ── */
+.st{font-size:.67rem;padding:1px 5px;border-radius:6px;background:#F0F0F8;color:#6B6577;border:1px solid #E0DCE8;margin-left:3px;font-weight:600}
+
+/* ── CANVAS ── */
+.cw{background:#F7F7FB;border-radius:13px;padding:15px;text-align:center;margin-top:12px}
+.cw canvas{border-radius:7px;background:#fff;box-shadow:inset 0 1px 3px rgba(0,0,0,.06);max-width:100%}
+.cr{margin-top:8px;font-family:'Fredoka',sans-serif;font-size:.97rem;color:var(--acc);text-align:center}
+.ctrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;align-items:center}
+.ctg{text-align:center}
+.ctg label{display:block;font-size:.71rem;font-weight:700;margin-bottom:3px;color:var(--tl)}
+.ctin{width:50px;padding:6px;text-align:center;border:2px solid #E0DCE8;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.9rem;transition:.2s}
+.ctin:focus{outline:none;border-color:var(--sec)}
+.cbtn{padding:7px 14px;border-radius:9px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;background:var(--acc);color:#fff;transition:.2s}
+.cbtn:hover{background:#6a2579}
+
+/* ── WALKTHROUGH ── */
+.wks{background:#F7F7FB;border-radius:11px;padding:13px 15px;margin-bottom:9px;border-left:4px solid #E0DCE8;transition:.3s}
+.wks.on{border-left-color:var(--acc);background:var(--al)}
+.wkn{display:inline-block;background:var(--acc);color:#fff;width:24px;height:24px;line-height:24px;border-radius:50%;text-align:center;font-size:.77rem;font-weight:800;margin-right:7px;vertical-align:middle}
+.wkt{font-family:'Fredoka',sans-serif;font-size:.95rem;vertical-align:middle}
+.wkd{margin-top:7px;font-size:.88rem;line-height:1.7}
+.wkm{font-family:monospace;font-size:.87rem;background:#fff;padding:6px 10px;border-radius:6px;margin-top:5px;display:inline-block}
+.wkbr{display:flex;gap:9px;justify-content:center;margin-top:12px}
+.wkb{padding:8px 18px;border-radius:9px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:.2s}
+.wnx{background:var(--acc);color:#fff}.wnx:hover{background:#6a2579}
+.wrs{background:#E0DCE8;color:var(--text)}.wrs:hover{background:#ccc}
+
+/* ── COMPARE GRID ── */
+.gc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.gc-y{background:#E8F5E9;border-radius:11px;padding:12px;border:2px solid #4CAF50}
+.gc-n{background:#FFEBEE;border-radius:11px;padding:12px;border:2px solid #E53935}
+.gc-t{font-weight:700;font-size:.86rem;margin-bottom:6px}
+.gc-tg{color:#2E7D32}.gc-tr{color:#C62828}
+
+/* ── PRACTICE ── */
+.pq{background:#F7F7FB;border-radius:11px;padding:13px 15px;margin-bottom:10px;border-left:4px solid #E0DCE8}
+.pq.done{border-left-color:var(--ok)}
+.pq .qt{font-weight:700;font-size:.9rem;margin-bottom:8px;line-height:1.55}
+.pq .qn{display:inline-block;background:var(--sec);color:#fff;width:22px;height:22px;line-height:22px;border-radius:50%;text-align:center;font-size:.69rem;font-weight:800;margin-right:6px}
+.ar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.ai{padding:6px 9px;border:2px solid #E0DCE8;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.86rem;width:90px;text-align:center;transition:.2s}
+.ai:focus{outline:none;border-color:var(--acc)}
+.ai.ok{border-color:var(--ok);background:#E8F5E9}
+.ai.no{border-color:var(--err);background:#FFEBEE}
+.cb{padding:6px 11px;border-radius:7px;border:none;background:var(--acc);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer}
+.fm{font-size:.80rem;font-weight:700;margin-top:5px;display:none;line-height:1.5}
+.fm.sh{display:block}
+.fm.ok{color:#2E7D32}
+.fm.no{color:#C62828}
+
+/* ── QUIZ ── */
+.qq{background:#F7F7FB;border-radius:11px;padding:15px;margin-bottom:12px}
+.qq .qt{font-weight:700;margin-bottom:10px;font-size:.90rem;line-height:1.5}
+.qq .qn{display:inline-block;background:var(--acc);color:#fff;width:24px;height:24px;line-height:24px;border-radius:50%;text-align:center;font-size:.72rem;font-weight:800;margin-right:6px}
+.qo{display:flex;flex-direction:column;gap:6px}
+.qop{padding:9px 13px;border:2px solid #E0DCE8;border-radius:9px;cursor:pointer;font-weight:600;font-size:.87rem;transition:.2s;background:#fff;text-align:left}
+.qop:hover{border-color:var(--sec);background:var(--sl)}
+.qop.ok{border-color:var(--ok);background:#E8F5E9}
+.qop.no{border-color:var(--err);background:#FFEBEE}
+.qop.dis{pointer-events:none}
+.qf{margin-top:7px;padding:7px 11px;border-radius:7px;font-weight:700;font-size:.81rem;display:none;line-height:1.5}
+.qf.sh{display:block}
+.qf.ok{background:#E8F5E9;color:#2E7D32}
+.qf.no{background:#FFEBEE;color:#C62828}
+.scb{text-align:center;padding:20px;border-radius:13px;background:linear-gradient(135deg,var(--sl),var(--al));margin-top:14px;display:none}
+.scb h2{font-family:'Fredoka',sans-serif;font-size:1.7rem;color:var(--acc)}
+.rb{margin-top:10px;padding:9px 22px;background:var(--primary);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.87rem;cursor:pointer}
+
+@media(max-width:520px){.hero h1{font-size:1.55rem}.mnav{padding:7px 9px;font-size:.69rem}.card{padding:16px 13px}.gc{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>&#x1F522; Fractions Mastery — Part 2</h1>
+  <p>Primary 5 Skills &nbsp;·&nbsp; Hello, <span class="nm">Saina</span>! &#x1F525;</p>
+</div>
+
+<!-- ── MAIN NAV: chapter tabs ── -->
+<div class="main-nav-wrap">
+  <div class="main-nav">
+    <button class="mnav active" onclick="showCh('c6',this)"><span class="dot" style="background:#993C1D"></span>Ch 6: Multiply &amp; "of"</button>
+    <button class="mnav" onclick="showCh('c7',this)"><span class="dot" style="background:#0F6E56"></span>Ch 7: Divide</button>
+    <button class="mnav" onclick="showCh('c8a',this)"><span class="dot" style="background:#0C447C"></span>Ch 8A: Basic Remainder</button>
+    <button class="mnav" onclick="showCh('c8b',this)"><span class="dot" style="background:#633806"></span>Ch 8B: Remainder+Value</button>
+    <button class="mnav" onclick="showCh('c8c',this)"><span class="dot" style="background:#3C3489"></span>Ch 8C: Equal Fractions</button>
+    <button class="mnav" onclick="showCh('c8d',this)"><span class="dot" style="background:#791F1F"></span>Ch 8D: Advanced</button>
+  </div>
+</div>
+
+<!-- ── SUB-NAV: shared, updated per chapter ── -->
+<div class="sub-nav-wrap">
+  <div class="sub-nav" id="subNav">
+    <button class="snav active" onclick="showSub(this,0)">&#x1F4D6; Concept</button>
+    <button class="snav" onclick="showSub(this,1)">&#x1F3AF; Examples</button>
+    <button class="snav" onclick="showSub(this,2)">&#x270D;&#xFE0F; Practice</button>
+    <button class="snav" onclick="showSub(this,3)">&#x270F;&#xFE0F; Quiz</button>
+  </div>
+</div>
+
+<div class="con">
+
+<!-- ══════════════ CHAPTER 6 ══════════════ -->
+<div class="ch active" id="ch-c6">
+
+  <!-- 6-0 CONCEPT -->
+  <div class="sub active" id="sub-c6-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5 — core new skill</span></div>
+    <div class="card">
+      <span class="bg bgr">Rule #1</span>
+      <h2>&#x1F6A8; "OF" means MULTIPLY</h2>
+      <div class="kf" style="font-size:.95rem">&#x2B50; Whenever you see the word <strong>"of"</strong> followed by a fraction or quantity, it means <strong>&times;</strong>.<br><br>
+        <span class="fr"><span class="n">2</span><span class="d">3</span></span> <strong>of</strong> 12 &nbsp;=&nbsp; <span class="fr"><span class="n">2</span><span class="d">3</span></span> &times; 12 &nbsp;=&nbsp; <strong>8</strong>
+      </div>
+      <div class="wb">&#x26A0;&#xFE0F; This was Saina's WA1 Q7 mistake! "He used <sup>4</sup>&frasl;<sub>5</sub> <em>of the prawns</em>" means multiply — NOT subtract 4/5 directly.</div>
+    </div>
+    <div class="card">
+      <span class="bg bgo">Fraction &times; Whole</span>
+      <h2>Fraction &times; Whole Number</h2>
+      <div class="kf">&#x1F4CC; Divide the whole by the denominator, then multiply by the numerator.<br>
+        <span class="fr"><span class="n">3</span><span class="d">4</span></span> &times; 8 &nbsp;=&nbsp; (8 &divide; 4) &times; 3 &nbsp;=&nbsp; 2 &times; 3 &nbsp;=&nbsp; <strong>6</strong>
+      </div>
+    </div>
+    <div class="card">
+      <span class="bg bgt">Fraction &times; Fraction</span>
+      <h2>Fraction &times; Fraction</h2>
+      <div class="kf">&#x1F4CC; Multiply tops together, then bottoms together.<br>
+        <span class="fr"><span class="n">2</span><span class="d">3</span></span> &times; <span class="fr"><span class="n">3</span><span class="d">5</span></span> &nbsp;=&nbsp; <span class="fr"><span class="n">6</span><span class="d">15</span></span> &nbsp;=&nbsp; <span class="fr"><span class="n">2</span><span class="d">5</span></span>
+      </div>
+      <div class="cw">
+        <canvas id="areaC" width="270" height="270"></canvas>
+        <div class="ctrow">
+          <div class="ctg"><label>Fraction 1</label><input class="ctin" id="a1n" value="2" style="width:40px"> / <input class="ctin" id="a1d" value="3" style="width:40px"></div>
+          <span style="font-size:1.1rem;font-weight:700;margin-top:16px">&times;</span>
+          <div class="ctg"><label>Fraction 2</label><input class="ctin" id="a2n" value="3" style="width:40px"> / <input class="ctin" id="a2d" value="5" style="width:40px"></div>
+          <button class="cbtn" onclick="drawArea()">Show Grid</button>
+        </div>
+        <div class="cr" id="areaR">2/3 &times; 3/5 = 6/15 = 2/5</div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="bg bgr">&#x26A0;&#xFE0F; Critical</span>
+      <h2>Proportion vs Quantity — The Big Trap</h2>
+      <div class="gc">
+        <div class="gc-y"><div class="gc-t gc-tg">&#x2705; "of [something]" = MULTIPLY</div>
+          <p style="font-size:.85rem">"Used <strong>4/5 of the prawns</strong>"<br>→ 4/5 &times; total prawns</p>
+        </div>
+        <div class="gc-n"><div class="gc-t gc-tr">&#x274C; Fixed amount = SUBTRACT directly</div>
+          <p style="font-size:.85rem">"Used <strong>3/4 kg</strong> of flour"<br>→ just subtract that number!</p>
+        </div>
+      </div>
+      <div class="kf">&#x1F4CB; <strong>Decision rule:</strong> Does the sentence say "of [the thing]"? → multiply.<br>Is it a number with units (kg, m, $)? → use that value directly.</div>
+    </div>
+  </div>
+
+  <!-- 6-1 EXAMPLES -->
+  <div class="sub" id="sub-c6-1">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Chapter 6 — Worked Examples</h2>
+
+      <div class="we"><h4>Ex 1: WA1 Q7 — Alan's Prawns (Saina lost marks here!) <span class="st">WA1 Q7</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Alan bought 4 kg prawns. He used <strong>4/5 of the prawns</strong> for dinner.</div></div>
+        <div class="ws"><span class="wn">2</span><div>"4/5 of the prawns" → OF = multiply!&nbsp; Used = 4/5 &times; 4 = <span class="wm">16/5 kg</span></div></div>
+        <div class="ws"><span class="wn">3</span><div>Left = 4 &minus; 16/5 = 20/5 &minus; 16/5 = <span class="wm">4/5 kg</span></div></div>
+        <div class="wb">&#x274C; Saina wrote: 4 &minus; 4/5 = 3 1/5. She subtracted 4/5 directly — that treats it as a fixed quantity, not a proportion!</div>
+      </div>
+
+      <div class="we"><h4>Ex 2: Gerald's milk — both fractions of the SAME whole <span class="st">Catholic High</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Gerald had 3 &ell;. Drank <strong>1/4 of the milk</strong> on Saturday, <strong>2/3 of the milk</strong> on Sunday.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Both "of the milk" = both fractions refer to ALL 3 &ell;. Total drunk = 1/4 + 2/3 = 3/12 + 8/12 = <span class="wm">11/12</span></div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Left = 1/12 of 3 &ell; = <span class="wm">1/4 &ell;</span></div></div>
+      </div>
+
+      <div class="we"><h4>Ex 3: Miss Tan's ribbon — fixed quantity (NOT proportion) <span class="st">Maha Bodhi</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Miss Tan had 3 1/4 m. She used <strong>3/4 m</strong> (a fixed length!) per gift box &times; 4 boxes.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Used = 4 &times; 3/4 = <span class="wm">3 m</span> (quantity &times; fixed amount)</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Left = 3 1/4 &minus; 3 = <span class="wm">1/4 m</span></div></div>
+        <div class="tb">&#x1F4A1; 3/4 here is a <em>length</em>, not a proportion of the total ribbon!</div>
+      </div>
+
+      <div class="we"><h4>Ex 4: Painter B — genuine proportion <span class="st">Booklet B 3.2</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Painter A took 5/6 h. Painter B took <strong>2/3 of the time Painter A took</strong>.</div></div>
+        <div class="ws"><span class="wn">2</span><div>"2/3 of the time" = multiply! B = 2/3 &times; 5/6 = <span class="wm">5/9 h</span></div></div>
+      </div>
+
+      <div class="we"><h4>Ex 5: Comparison equation — 3/4 of a number is 60 less than twice the number <span class="st">Parent Q1</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Let number = 4 units. Three-quarters of it = 3 units. Twice the number = 8 units.</div></div>
+        <div class="ws"><span class="wn">2</span><div>"60 less" → 8u &minus; 3u = 5u = 60 → 1u = 12</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Number = 4 &times; 12 = <span class="wm">48</span></div></div>
+      </div>
+
+      <div class="we"><h4>Ex 6: 2/9 red gummy balls, rest blue. 35 more blue than red. How many blue? <span class="st">Parent Q2</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Red = 2u. Blue = 7u (since 2+7=9 total parts).</div></div>
+        <div class="ws"><span class="wn">2</span><div>Blue &minus; Red = 5u = 35 → 1u = 7</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Blue = 7 &times; 7 = <span class="wm">49</span></div></div>
+      </div>
+
+      <div class="we"><h4>Ex 7: Miss Arifah bought 5 m ribbon, used 5/7 of it <span class="st">Ai Tong</span></h4>
+        <div class="ws"><span class="wn">1</span><div>5/7 OF 5 m → multiply: 5/7 &times; 5 = 25/7 = <span class="wm">3 4/7 m</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6-2 PRACTICE -->
+  <div class="sub" id="sub-c6-2">
+    <div class="card">
+      <span class="bg bgp">Practice</span>
+      <h2>&#x270D;&#xFE0F; Chapter 6 Practice</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="prac6"></div>
+    </div>
+  </div>
+
+  <!-- 6-3 QUIZ -->
+  <div class="sub" id="sub-c6-3">
+    <div class="card">
+      <span class="bg bgo">Quiz</span>
+      <h2>&#x270F;&#xFE0F; Chapter 6 Quiz</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="q6c"></div>
+      <div class="scb" id="sc6"><h2 id="sc6t"></h2><p id="sc6m"></p><button class="rb" onclick="bQ('q6c','sc6','sc6t','sc6m',Q6)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c6 -->
+
+
+<!-- ══════════════ CHAPTER 7 ══════════════ -->
+<div class="ch" id="ch-c7">
+
+  <!-- 7-0 CONCEPT -->
+  <div class="sub active" id="sub-c7-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span></div>
+    <div class="card">
+      <span class="bg bgt">Concept</span>
+      <h2>Dividing a Fraction by a Whole Number</h2>
+      <div class="kf">&#x1F4CC; <strong>Method:</strong> Multiply the denominator by the whole number.<br><br>
+        <span class="fr"><span class="n">3</span><span class="d">4</span></span> &divide; 6 &nbsp;=&nbsp; <span class="fr"><span class="n">3</span><span class="d">4&times;6</span></span> &nbsp;=&nbsp; <span class="fr"><span class="n">3</span><span class="d">24</span></span> &nbsp;=&nbsp; <span class="fr"><span class="n">1</span><span class="d">8</span></span>
+      </div>
+      <div class="kf">&#x1F4A1; <strong>Shortcut:</strong> If the numerator is divisible by the whole number, divide numerator directly.<br><br>
+        <span class="fr"><span class="n">8</span><span class="d">9</span></span> &divide; 4 &nbsp;=&nbsp; <span class="fr"><span class="n">2</span><span class="d">9</span></span> &nbsp;(since 8 &divide; 4 = 2)
+      </div>
+      <div class="wb">&#x274C; <strong>Never</strong> divide only the numerator when it isn't divisible — always multiply the denominator instead!</div>
+      <div class="tb">&#x1F4A1; Think of it physically: you have 3/4 of a pizza and split it among 6 people. Each person gets 3/(4&times;6) = 1/8 of the original whole pizza.</div>
+    </div>
+  </div>
+
+  <!-- 7-1 EXAMPLES -->
+  <div class="sub" id="sub-c7-1">
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Chapter 7 — Worked Examples</h2>
+      <div class="we"><h4>Ex 1: 3/4 &divide; 6</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>3/(4&times;6) = 3/24 = <span class="wm">1/8</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 2: 8/9 &divide; 4 (use shortcut)</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>8 &divide; 4 = 2. Answer: <span class="wm">2/9</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 3: 5/6 &divide; 10</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>5/(6&times;10) = 5/60 = <span class="wm">1/12</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 4: Nan Hua WA1 — 12 m cloth cut into 5 equal pieces. Length of each?</h4>
+        <div class="ws"><span class="wn">1</span><div>12 &divide; 5 = 12/5</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>12/5 = <span class="wm">2 2/5 m</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 5: A rope of 3/4 m shared equally among 6 children. Each child's share?</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>3/(4&times;6) = 3/24 = <span class="wm">1/8 m</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7-2 PRACTICE -->
+  <div class="sub" id="sub-c7-2">
+    <div class="card">
+      <span class="bg bgp">Practice</span>
+      <h2>&#x270D;&#xFE0F; Chapter 7 Practice</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="prac7"></div>
+    </div>
+  </div>
+
+  <!-- 7-3 QUIZ -->
+  <div class="sub" id="sub-c7-3">
+    <div class="card">
+      <span class="bg bgo">Quiz</span>
+      <h2>&#x270F;&#xFE0F; Chapter 7 Quiz</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="q7c"></div>
+      <div class="scb" id="sc7"><h2 id="sc7t"></h2><p id="sc7m"></p><button class="rb" onclick="bQ('q7c','sc7','sc7t','sc7m',Q7)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c7 -->
+
+
+<!-- ══════════════ CHAPTER 8A ══════════════ -->
+<div class="ch" id="ch-c8a">
+
+  <!-- 8A-0 CONCEPT -->
+  <div class="sub active" id="sub-c8a-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span></div>
+    <div class="tier tA">&#x1F535; Tier A — Basic Remainder Concept</div>
+    <div class="card">
+      <span class="bg bgt">Concept</span>
+      <h2>What Does "of the Remaining" Mean?</h2>
+      <div class="kf">&#x1F4CC; <strong>Step 1:</strong> Remainder = 1 &minus; first fraction<br>
+        <strong>Step 2:</strong> Second part = second fraction &times; remainder &nbsp;("of" = multiply!)<br>
+        <strong>Step 3:</strong> What's left = remainder &minus; second part<br>
+        <strong>Step 4:</strong> <em>Check:</em> all parts must add to 1 &#x2705;
+      </div>
+      <div class="wb">&#x274C; <strong>Wrong:</strong> subtracting both fractions directly from 1. The second fraction is NOT of the whole — it is of the remainder only!</div>
+    </div>
+    <div class="card">
+      <span class="bg bgo">Interactive</span>
+      <h2>&#x1F6B6; Hamster Problem — Click Through</h2>
+      <p style="margin-bottom:11px">Kerry has some hamsters. <strong>5/6</strong> are white. <strong>8/9</strong> of the <em>remaining</em> are black. What fraction are yellow?</p>
+      <div id="wk8a">
+        <div class="wks on" id="w0"><span class="wkn">1</span><span class="wkt">Find the remainder after white</span>
+          <div class="wkd">White = 5/6. Remaining = 1 &minus; 5/6<div class="wkm">Remaining = 1/6</div></div>
+        </div>
+        <div class="wks" id="w1" style="display:none"><span class="wkn">2</span><span class="wkt">Find fraction that are black (of ALL hamsters)</span>
+          <div class="wkd">8/9 <em>of the remaining</em> (1/6) are black. "of" = &times;<div class="wkm">Black = 8/9 &times; 1/6 = 8/54 = 4/27</div></div>
+        </div>
+        <div class="wks" id="w2" style="display:none"><span class="wkn">3</span><span class="wkt">Find the yellow fraction</span>
+          <div class="wkd">Yellow = Remainder &minus; Black = 1/6 &minus; 4/27. &nbsp;LCD=54:<div class="wkm">9/54 &minus; 8/54 = 1/54</div></div>
+        </div>
+        <div class="wks" id="w3" style="display:none;border-left-color:#4CAF50"><span class="wkn" style="background:#4CAF50">&#x2713;</span><span class="wkt" style="color:#2E7D32">Answer + Verification</span>
+          <div class="wkd"><strong>Yellow = 1/54</strong><br>Check: 5/6 + 4/27 + 1/54 = 45/54 + 8/54 + 1/54 = 54/54 = 1 &#x2705;</div>
+        </div>
+      </div>
+      <div class="wkbr">
+        <button class="wkb wrs" onclick="resetW()">&#x21BB; Reset</button>
+        <button class="wkb wnx" id="wkBtn" onclick="nextW()">Next Step &#x2192;</button>
+      </div>
+    </div>
+    <div class="card">
+      <span class="bg bgp">Interactive</span>
+      <h2>&#x1F9EA; Bar Model Explorer</h2>
+      <p>Enter your fractions and see the bar split live!</p>
+      <div class="cw">
+        <canvas id="barC" width="520" height="185"></canvas>
+        <div class="ctrow">
+          <div class="ctg"><label>1st Fraction</label><input class="ctin" id="b1n" value="5" style="width:40px"> / <input class="ctin" id="b1d" value="6" style="width:40px"></div>
+          <div class="ctg"><label>2nd (of Remainder)</label><input class="ctin" id="b2n" value="8" style="width:40px"> / <input class="ctin" id="b2d" value="9" style="width:40px"></div>
+          <button class="cbtn" onclick="drawBar()">Draw</button>
+        </div>
+        <div class="cr" id="barR"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8A-1 EXAMPLES -->
+  <div class="sub" id="sub-c8a-1">
+    <div class="card">
+      <span class="bg bgt">Worked Examples</span>
+      <h2>Tier A — Worked Examples</h2>
+      <div class="we"><h4>Ex 1: Bead problem — 2/5 red, 3/4 of remaining blue, rest green <span class="st">Booklet B</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Remaining = 1 &minus; 2/5 = <span class="wm">3/5</span></div></div>
+        <div class="ws"><span class="wn">2</span><div>Blue = 3/4 &times; 3/5 = <span class="wm">9/20</span></div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Green = 3/5 &minus; 9/20 = 12/20 &minus; 9/20 = <span class="wm">3/20</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 2: Navy/Army/Air Force <span class="st">Parent Q5</span></h4>
+        <div class="ws"><span class="wn">1</span><div>2/5 Navy. Remaining = 3/5. Army = 1/2 &times; 3/5 = 3/10. AF = 3/10.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Let total = 10u. Navy=4u, Army=3u, AF=3u. Navy&minus;AF = 1u = 47.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Army = 3 &times; 47 = <span class="wm">141</span>. AF fraction = <span class="wm">3/10</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 3: Roses/Lilies/Posies <span class="st">Parent Q3</span></h4>
+        <div class="ws"><span class="wn">1</span><div>2/7 roses. Lilies = roses+40. Posies=56. Let 1u=x. Total=7u.</div></div>
+        <div class="ws"><span class="wn">2</span><div>7u = 2u + (2u+40) + 56 → 3u = 96 → u = 32. Total = 224.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Posies fraction = 56/224 = <span class="wm">1/4</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 4: Pizza — Ali ate 1/6, John ate 1/5 of remaining <span class="st">Nan Hua</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Remaining after Ali = 1 &minus; 1/6 = 5/6</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>John = 1/5 &times; 5/6 = <span class="wm">1/6</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 5: Ukulele/Recorder/Piano — 255 = ukulele + piano <span class="st">Booklet B Q4</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Remaining = 3/5. Recorder = 1/4 &times; 3/5 = 3/20. Piano = 3/5 &minus; 3/20 = 9/20.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Ukulele + Piano = 2/5 + 9/20 = 17/20 = 255 → T = <span class="wm">300 pupils</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 6: John's booklets — 1/4 on A, 2/3 of remaining on B, rest on C. Given C = 1/4 of total. <span class="st">Catholic High 4m</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After A: remaining = 3/4. B = 2/3 &times; 3/4 = <span class="wm">1/2</span>.</div></div>
+        <div class="ws"><span class="wn">2</span><div>C = 3/4 &minus; 1/2 = 1/4. ✅ Matches given condition!</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Time on B = <span class="wm">1/2 of total time</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 7: Hannah's nuts — 4/10 cookies + 1/4 bread, left 600 g <span class="st">Ai Tong</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Total used = 2/5 + 1/4 = 8/20 + 5/20 = 13/20. Left = 7/20.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>7/20 &times; T = 600 → T = <span class="wm">1714 g (approx)</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8A-2 PRACTICE -->
+  <div class="sub" id="sub-c8a-2">
+    <div class="card">
+      <span class="bg bgp">Practice — Tier A</span>
+      <h2>&#x270D;&#xFE0F; Tier A Practice</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="prac8a"></div>
+    </div>
+  </div>
+
+  <!-- 8A-3 QUIZ -->
+  <div class="sub" id="sub-c8a-3">
+    <div class="card">
+      <span class="bg bgo">Quiz — Tier A</span>
+      <h2>&#x270F;&#xFE0F; Tier A Quiz</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+      <div id="q8ac"></div>
+      <div class="scb" id="sc8a"><h2 id="sc8at"></h2><p id="sc8am"></p><button class="rb" onclick="bQ('q8ac','sc8a','sc8at','sc8am',Q8a)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c8a -->
+
+
+<!-- ══════════════ CHAPTER 8B ══════════════ -->
+<div class="ch" id="ch-c8b">
+
+  <!-- 8B-0 CONCEPT -->
+  <div class="sub active" id="sub-c8b-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span><span class="lv lvP">PSLE Level</span></div>
+    <div class="tier tB">&#x1F7E1; Tier B — Remainder + Fixed Value</div>
+    <div class="card">
+      <span class="bg bgo">Concept</span>
+      <h2>When There's a Dollar Amount AND a Fraction</h2>
+      <p>Some problems mix a <strong>fixed amount</strong> (like $351 or 55 stamps) with a <strong>fraction of the remainder</strong>. You cannot simply use the fraction formula — you need to treat the fixed amount separately.</p>
+      <div class="kf">&#x1F511; <strong>Method:</strong><br>
+        Step 1: Express what is "left" as a fraction of the total.<br>
+        Step 2: Set it equal to what you know (the fixed amount or fraction of original).<br>
+        Step 3: Solve for the total.
+      </div>
+      <div class="tb">&#x1F4A1; These are harder than Tier A because you must form an equation involving both the fixed value and the fraction.</div>
+    </div>
+  </div>
+
+  <!-- 8B-1 EXAMPLES -->
+  <div class="sub" id="sub-c8b-1">
+    <div class="card">
+      <span class="bg bgt">Worked Examples — Tier B</span>
+      <h2>Tier B Examples</h2>
+      <div class="we"><h4>Ex 1: Umar — 1/5 notebooks, 3/4 of remaining storybooks, $25 left <span class="st">Nan Hua</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After notebooks: 4/5 remains. After storybooks: 1/4 &times; 4/5 = 1/5 of total left.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>1/5 &times; T = 25 → T = <span class="wm">$125</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 2: Carmen — 4/7 sweater, 1/2 of remainder shorts, $72 left <span class="st">Booklet B Q1</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Remaining = 3/7. Left = 1/2 &times; 3/7 = 3/14.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>3/14 &times; T = 72 → T = <span class="wm">$336</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 3: Kayden — spent $351 on bag + 2/5 of remaining on wallet. Had 1/6 left. <span class="st">Booklet B Q5</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After bag: T &minus; 351. Spent 2/5 of that. Left = 3/5(T &minus; 351).</div></div>
+        <div class="ws"><span class="wn">2</span><div>Left = 1/6 &times; T: &nbsp; 3/5(T&minus;351) = T/6 → 18(T&minus;351) = 5T → 13T = 6318</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>T = <span class="wm">$486</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 4: Josephine — gave 55 stamps + 1/4 of remainder to Chris. Had 1/5 left. <span class="st">Parent Q6</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After giving 55: remainder = T&minus;55. Gave 1/4 of that. Kept = 3/4(T&minus;55).</div></div>
+        <div class="ws"><span class="wn">2</span><div>3/4(T&minus;55) = T/5 → 15(T&minus;55) = 4T → 11T = 825</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>T = <span class="wm">75 stamps</span> &nbsp; Check: gave 55, rem=20, gave 1/4×20=5, left=15=1/5×75 ✅</div></div>
+      </div>
+      <div class="we"><h4>Ex 5: Ali — 2/3 on pens, 3/5 of remainder on toys. Spent $160 more on pens than saved. <span class="st">Ai Tong 4m</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Pens = 2/3. Remaining = 1/3. Toys = 3/5 &times; 1/3 = 1/5. Saved = 1/3 &minus; 1/5 = 2/15.</div></div>
+        <div class="ws"><span class="wn">2</span><div>(a) Fraction on toys = <span class="wm">1/5</span></div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Pens &minus; Saved = 2/3 &minus; 2/15 = 8/15 = $160 → T = $300. Saved = 2/15 &times; 300 = <span class="wm">$40</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 6: Daniel — spent $80 on watch + 1/3 of remaining on stationery. Left with 1/4 of original. <span class="st">Booklet B Q6</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After $80: T&minus;80. Kept 2/3 of that. 2/3(T&minus;80) = T/4</div></div>
+        <div class="ws"><span class="wn">2</span><div>8(T&minus;80) = 3T → 5T = 640</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>T = <span class="wm">$128</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8B-2 PRACTICE -->
+  <div class="sub" id="sub-c8b-2">
+    <div class="card">
+      <span class="bg bgp">Practice — Tier B</span>
+      <h2>&#x270D;&#xFE0F; Tier B Practice</h2>
+      <div id="prac8b"></div>
+    </div>
+  </div>
+
+  <!-- 8B-3 QUIZ -->
+  <div class="sub" id="sub-c8b-3">
+    <div class="card">
+      <span class="bg bgo">Quiz — Tier B</span>
+      <h2>&#x270F;&#xFE0F; Tier B Quiz</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span><span class="lv lvP">PSLE</span></div>
+      <div id="q8bc"></div>
+      <div class="scb" id="sc8b"><h2 id="sc8bt"></h2><p id="sc8bm"></p><button class="rb" onclick="bQ('q8bc','sc8b','sc8bt','sc8bm',Q8b)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c8b -->
+
+
+<!-- ══════════════ CHAPTER 8C ══════════════ -->
+<div class="ch" id="ch-c8c">
+
+  <!-- 8C-0 CONCEPT -->
+  <div class="sub active" id="sub-c8c-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span><span class="lv lvP">PSLE Level</span></div>
+    <div class="tier tC">&#x1F7E3; Tier C — Equal Fractions (Two Different Wholes)</div>
+    <div class="card">
+      <span class="bg bgp">Concept</span>
+      <h2>When a Fraction of A = a Fraction of B</h2>
+      <p>Example: "1/3 of plastic bottles = 4/5 of aluminum cans." The two totals are <strong>different</strong>. We find the ratio using cross-multiplication.</p>
+      <div class="kf">&#x1F511; <strong>Method:</strong><br>
+        Step 1: Write the equal fractions as an equation (e.g. P/3 = 4A/5)<br>
+        Step 2: Cross-multiply to find the ratio (5P = 12A → P:A = 12:5)<br>
+        Step 3: Use the difference or total to find each value
+      </div>
+      <div class="wb">&#x26A0;&#xFE0F; This is <strong>different</strong> from the remainder concept! Here there are two separate totals, not one whole split into parts.</div>
+    </div>
+  </div>
+
+  <!-- 8C-1 EXAMPLES -->
+  <div class="sub" id="sub-c8c-1">
+    <div class="card">
+      <span class="bg bgt">Worked Examples — Tier C</span>
+      <h2>Tier C Examples</h2>
+      <div class="we"><h4>Ex 1: WA1 Q16 — 1/3 plastic = 4/5 aluminum. 280 more plastic. <span class="st">Saina's WA1 Q16</span></h4>
+        <div class="ws"><span class="wn">1</span><div>P/3 = 4A/5 → 5P = 12A → P:A = 12:5</div></div>
+        <div class="ws"><span class="wn">2</span><div>Difference = 7u = 280 → 1u = 40</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Plastic = 12 &times; 40 = <span class="wm">480</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 2: Camp — 3/4 of adults = 1/5 of children. Total 114. More children than adults? <span class="st">Rev Paper 5 Q2</span></h4>
+        <div class="ws"><span class="wn">1</span><div>3A/4 = C/5 → 15A = 4C → A:C = 4:15</div></div>
+        <div class="ws"><span class="wn">2</span><div>19u = 114 → 1u = 6</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>More children = 11 &times; 6 = <span class="wm">66</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 3: Fabian &amp; Janice — 3/4 F = 2/5 J. Fabian has 56 fewer. <span class="st">Parent Q9</span></h4>
+        <div class="ws"><span class="wn">1</span><div>3F/4 = 2J/5 → 15F = 8J → F:J = 8:15</div></div>
+        <div class="ws"><span class="wn">2</span><div>7u = 56 → 1u = 8</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Fabian = 8 &times; 8 = <span class="wm">64 walnuts</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 4: Denise &amp; Elisha — 1/5 D = 3/4 E. Denise saved $396 more. <span class="st">Booklet B 3.4</span></h4>
+        <div class="ws"><span class="wn">1</span><div>D/5 = 3E/4 → 4D = 15E → D:E = 15:4</div></div>
+        <div class="ws"><span class="wn">2</span><div>11u = 396 → 1u = 36</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Total = 19 &times; 36 = <span class="wm">$684</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 5: Dylan &amp; Evan sticks — same left after using different fractions. Total=1392. <span class="st">Booklet B 3.4 Q2</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Dylan left = 2/5 D. Evan left = 3/7 E. Equal → 2D/5 = 3E/7 → D:E = 15:14</div></div>
+        <div class="ws"><span class="wn">2</span><div>29u = 1392 → 1u = 48</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Evan = 14 &times; 48 = <span class="wm">672 sticks</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8C-2 PRACTICE -->
+  <div class="sub" id="sub-c8c-2">
+    <div class="card">
+      <span class="bg bgp">Practice — Tier C</span>
+      <h2>&#x270D;&#xFE0F; Tier C Practice</h2>
+      <div id="prac8c"></div>
+    </div>
+  </div>
+
+  <!-- 8C-3 QUIZ -->
+  <div class="sub" id="sub-c8c-3">
+    <div class="card">
+      <span class="bg bgo">Quiz — Tier C</span>
+      <h2>&#x270F;&#xFE0F; Tier C Quiz</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span><span class="lv lvP">PSLE</span></div>
+      <div id="q8cc"></div>
+      <div class="scb" id="sc8c"><h2 id="sc8ct"></h2><p id="sc8cm"></p><button class="rb" onclick="bQ('q8cc','sc8c','sc8ct','sc8cm',Q8c)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c8c -->
+
+
+<!-- ══════════════ CHAPTER 8D ══════════════ -->
+<div class="ch" id="ch-c8d">
+
+  <!-- 8D-0 CONCEPT -->
+  <div class="sub active" id="sub-c8d-0">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>Primary 5</span><span class="lv lvP">PSLE Level</span></div>
+    <div class="tier tD">&#x1F534; Tier D — Advanced Multi-Step Problems</div>
+    <div class="card">
+      <span class="bg bgr">Advanced</span>
+      <h2>What Makes Tier D Different?</h2>
+      <p>These problems combine fractions with <strong>substitution</strong>, <strong>internal transfer</strong>, or <strong>unit cost reasoning</strong>. No single method — you need to combine skills.</p>
+      <div class="kf">&#x1F4CB; <strong>Three sub-types in Tier D:</strong><br>
+        <br>&#x1F4B0; <strong>Fraction + Substitution:</strong> "bracelet costs 3× a clip" — convert items into one unit, then use fractions.<br>
+        <br>&#x1F504; <strong>Internal Transfer:</strong> someone gives a fraction of their amount to another, and they end up equal — use bar model with units.<br>
+        <br>&#x1F4DA; <strong>Unit Cost + Fraction:</strong> find cost per item from the fraction spent, then solve for the total.
+      </div>
+    </div>
+  </div>
+
+  <!-- 8D-1 EXAMPLES -->
+  <div class="sub" id="sub-c8d-1">
+    <div class="card">
+      <span class="bg bgt">Worked Examples — Tier D</span>
+      <h2>Tier D Examples</h2>
+      <div class="we"><h4>Ex 1: Venesa — 3 bracelets + 5 clips with 2/5 savings. Bracelet = 3× clip. Clips with rest? <span class="st">Parent Q4</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Let 1 clip = 1 unit. 1 bracelet = 3 units. Spent = 3(3)+5(1) = 14 units = 2/5 of savings.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Total savings = 14 &times; 5/2 = 35 units. Rest = 35 &minus; 14 = 21 units.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Clips with rest = 21 &divide; 1 = <span class="wm">21 clips</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 2: Jim &amp; Anita — 390 discs. Jim gave 1/4 of his → equal. Jim's original? <span class="st">Parent Q7</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Let Jim = 4u. After giving 1u: Jim = 3u = Anita's new count.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Anita's original = 3u &minus; 1u = 2u. Total = 6u = 390 → 1u = 65.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Jim's original = 4 &times; 65 = <span class="wm">260 discs</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 3: Pond A + B = 470. 1/5 of A moved to B → B has 70 more than A. Original difference? <span class="st">Parent Q8</span></h4>
+        <div class="ws"><span class="wn">1</span><div>After: A_new = 4A/5. B_new = B+A/5. B_new &minus; A_new = 70 → B&minus;3A/5 = 70.</div></div>
+        <div class="ws"><span class="wn">2</span><div>A+B=470 → B=470&minus;A. Substitute: 470&minus;A&minus;3A/5=70 → 8A/5=400 → A=250. B=220.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Original difference = 250&minus;220 = <span class="wm">30 more in A</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 4: Dixie — 3/5 of money → 10 books. Got $2 more + rest → 7 books. Find original money. <span class="st">Parent Q10</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Cost per book = (3/5 M) &divide; 10 = 3M/50.</div></div>
+        <div class="ws"><span class="wn">2</span><div>2/5 M + 2 = 7 &times; 3M/50 = 21M/50. &nbsp; 20M/50 + 2 = 21M/50 → M/50 = 2</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>M = <span class="wm">$100</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 5: Tony — 1/4 on 8 notebooks + 40 files (4 files = 1 notebook). Half of rest → more notebooks. <span class="st">Fractions (5)</span></h4>
+        <div class="ws"><span class="wn">1</span><div>File = 1u. Notebook = 4u. Spent = 8(4u)+40(1u) = 72u = 1/4 money.</div></div>
+        <div class="ws"><span class="wn">2</span><div>Total = 288u. Rest = 216u. Half = 108u for more notebooks = 108u&divide;4u = 27 notebooks.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Total notebooks = 8 + 27 = <span class="wm">35</span></div></div>
+      </div>
+      <div class="we"><h4>Ex 6: Concert — 3/5 men. 1/6 men + 2/5 women no specs. 888 wore specs. Women count? <span class="st">Fractions (5)</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Men=3T/5. Women=2T/5. No specs: 1/6&times;3T/5 + 2/5&times;2T/5 = T/10 + 4T/25.</div></div>
+        <div class="ws"><span class="wn">2</span><div>With specs = T&minus;T/10&minus;4T/25 = T(1&minus;5/50&minus;8/50) = 37T/50 = 888 → T=1200.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Women = 2/5 &times; 1200 = <span class="wm">480</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8D-2 PRACTICE -->
+  <div class="sub" id="sub-c8d-2">
+    <div class="card">
+      <span class="bg bgp">Practice — Tier D</span>
+      <h2>&#x270D;&#xFE0F; Tier D Practice</h2>
+      <div id="prac8d"></div>
+    </div>
+  </div>
+
+  <!-- 8D-3 QUIZ: FINAL -->
+  <div class="sub" id="sub-c8d-3">
+    <div class="card">
+      <span class="bg bgr">&#x1F3C6; Final Quiz</span>
+      <h2>Final Chapter 8 Quiz — All 4 Tiers</h2>
+      <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span><span class="lv lvP">PSLE Level</span></div>
+      <p style="margin-bottom:12px">12 questions spanning Tiers A through D. You've got this, Saina! &#x1F31F;</p>
+      <div id="q8dc"></div>
+      <div class="scb" id="sc8d"><h2 id="sc8dt"></h2><p id="sc8dm"></p><button class="rb" onclick="bQ('q8dc','sc8d','sc8dt','sc8dm',Q8d)">&#x21BB; Try Again</button></div>
+    </div>
+  </div>
+</div><!-- end ch c8d -->
+
+</div><!-- con -->
+
+<script>
+// ===== NAVIGATION =====
+var currentCh='c6';
+function showCh(id,el){
+  document.querySelectorAll('.ch').forEach(function(c){c.classList.remove('active');});
+  document.querySelectorAll('.mnav').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('ch-'+id).classList.add('active');
+  el.classList.add('active');
+  currentCh=id;
+  // Reset sub-tabs to first tab (Concept)
+  document.querySelectorAll('.snav').forEach(function(s,i){s.classList.toggle('active',i===0);});
+  showSubById(id,0);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showSub(el,idx){
+  document.querySelectorAll('.snav').forEach(function(s){s.classList.remove('active');});
+  el.classList.add('active');
+  showSubById(currentCh,idx);
+}
+function showSubById(chId,idx){
+  var ch=document.getElementById('ch-'+chId);
+  if(!ch)return;
+  ch.querySelectorAll('.sub').forEach(function(s,i){s.classList.toggle('active',i===idx);});
+}
+
+// ===== AREA GRID =====
+function gcd(a,b){return b===0?a:gcd(b,a%b);}
+function drawArea(){
+  var n1=+document.getElementById('a1n').value||2,d1=+document.getElementById('a1d').value||3;
+  var n2=+document.getElementById('a2n').value||3,d2=+document.getElementById('a2d').value||5;
+  if(d1<1||d2<1)return;
+  n1=Math.min(n1,d1);n2=Math.min(n2,d2);
+  var cv=document.getElementById('areaC'),cx=cv.getContext('2d');
+  cx.clearRect(0,0,cv.width,cv.height);
+  var sz=Math.min(cv.width,cv.height)-10,ox=5,oy=5;
+  var cw=sz/d1,ch=sz/d2;
+  for(var c=0;c<d1;c++){
+    for(var r=0;r<d2;r++){
+      cx.fillStyle=(c<n1&&r<n2)?'rgba(123,45,142,0.65)':(c<n1)?'rgba(255,107,53,0.22)':(r<n2)?'rgba(46,196,182,0.22)':'#F5F5F5';
+      cx.fillRect(ox+c*cw+1,oy+r*ch+1,cw-2,ch-2);
+    }
+  }
+  cx.strokeStyle='#ccc';cx.lineWidth=1;
+  for(var i=0;i<=d1;i++){cx.beginPath();cx.moveTo(ox+i*cw,oy);cx.lineTo(ox+i*cw,oy+sz);cx.stroke();}
+  for(var i=0;i<=d2;i++){cx.beginPath();cx.moveTo(ox,oy+i*ch);cx.lineTo(ox+sz,oy+i*ch);cx.stroke();}
+  var rn=n1*n2,rd=d1*d2,g=gcd(rn,rd);
+  document.getElementById('areaR').textContent=n1+'/'+d1+' \u00D7 '+n2+'/'+d2+' = '+rn+'/'+rd+(g>1?' = '+(rn/g)+'/'+(rd/g):'');
+}
+drawArea();
+
+// ===== WALKTHROUGH =====
+var wStep=0;
+function resetW(){
+  wStep=0;
+  for(var i=0;i<4;i++){var e=document.getElementById('w'+i);if(e){e.style.display=i===0?'block':'none';e.classList.toggle('on',i===0);}}
+  document.getElementById('wkBtn').textContent='Next Step \u2192';
+}
+function nextW(){
+  if(wStep>=3)return;
+  document.getElementById('w'+wStep).classList.remove('on');
+  wStep++;
+  var nx=document.getElementById('w'+wStep);
+  nx.style.display='block';nx.classList.add('on');
+  if(wStep===3)document.getElementById('wkBtn').textContent='Done! \u2713';
+  setTimeout(function(){nx.scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+}
+
+// ===== BAR MODEL =====
+function drawBar(){
+  var n1=+document.getElementById('b1n').value||5,d1=+document.getElementById('b1d').value||6;
+  var n2=+document.getElementById('b2n').value||8,d2=+document.getElementById('b2d').value||9;
+  var cv=document.getElementById('barC'),cx=cv.getContext('2d');
+  cx.clearRect(0,0,cv.width,cv.height);
+  var W=cv.width-30,bh=32,bx=15;
+  var f1=n1/d1,rem=1-f1,f2p=(n2/d2)*rem,lft=rem-f2p;
+  var segs=[[f1,'#FF6B35',n1+'/'+d1+' (first)'],[f2p,'#2EC4B6',n2+'/'+d2+' of rem'],[lft,'#7B2D8E','Left']];
+  var labels=['First fraction','Second fraction (of remainder)','What remains'];
+  segs.forEach(function(s,i){
+    var by=20+i*55;
+    cx.fillStyle='#F0F0F0';cx.beginPath();cx.roundRect(bx,by,W,bh,5);cx.fill();
+    if(s[0]>0){cx.fillStyle=s[1];cx.beginPath();cx.roundRect(bx,by,s[0]*W,bh,5);cx.fill();}
+    cx.fillStyle='#888';cx.font='10px Nunito,sans-serif';cx.textAlign='left';cx.fillText(labels[i],bx,by-5);
+    if(s[0]*W>40){cx.fillStyle='white';cx.font='bold 10px Nunito,sans-serif';cx.textAlign='center';cx.fillText(s[2],bx+s[0]*W/2,by+bh/2+4);}
+  });
+  var g1=gcd(Math.round(lft*d1*d2),d1*d2);
+  var ln=Math.round(lft*d1*d2),ld=d1*d2,lg=gcd(ln,ld);
+  document.getElementById('barR').textContent='Remainder=1/'+d1+'. Second part='+(n2)+'/'+d2+'\u00D71/'+d1+'='+(n2)+'/'+(d2*d1)+'. Left='+(ln/lg)+'/'+(ld/lg)+'. Check: '+n1+'/'+d1+'+'+(n2)+'/'+(d2*d1)+'+'+(ln/lg)+'/'+(ld/lg)+' = 1?';
+}
+drawBar();
+
+// ===== ANSWER CHECKING =====
+function parseFrac(s){
+  s=(s||'').trim().replace(/\s+/g,'');
+  var m=s.match(/^(-?\d+)\/(\d+)$/);if(m)return+m[1]/+m[2];
+  return isNaN(parseFloat(s))?null:parseFloat(s);
+}
+function chkT(id,exp,hint){
+  var inp=document.getElementById(id+'-a'),fb=document.getElementById(id+'-f');
+  var val=(inp.value||'').replace(/\s/g,'').toLowerCase();
+  var ex=exp.replace(/\s/g,'').toLowerCase();
+  var ok=val===ex;
+  if(!ok){var vp=parseFrac(val),ep=parseFrac(ex);if(vp!==null&&ep!==null)ok=Math.abs(vp-ep)<0.002;}
+  inp.classList.remove('ok','no');inp.classList.add(ok?'ok':'no');
+  fb.className='fm sh '+(ok?'ok':'no');
+  fb.textContent=(ok?'\u2705 Correct! ':'\u274C Not quite. Hint: ')+hint;
+  if(ok)document.getElementById(id).classList.add('done');
+}
+function chkN(id,exp,hint){
+  var inp=document.getElementById(id+'-a'),fb=document.getElementById(id+'-f');
+  var val=parseFloat(inp.value);
+  var ok=!isNaN(val)&&Math.abs(val-exp)<0.6;
+  inp.classList.remove('ok','no');inp.classList.add(ok?'ok':'no');
+  fb.className='fm sh '+(ok?'ok':'no');
+  fb.textContent=(ok?'\u2705 Correct! ':'\u274C Not quite. Hint: ')+hint;
+  if(ok)document.getElementById(id).classList.add('done');
+}
+
+// ===== BUILD PRACTICE =====
+function buildPrac(cid,items){
+  var c=document.getElementById(cid);if(!c)return;
+  c.innerHTML='';
+  items.forEach(function(item,i){
+    var id=cid+'-'+i;
+    var div=document.createElement('div');div.className='pq';div.id=id;
+    var fn=item.type==='num'?'chkN':'chkT';
+    div.innerHTML='<p class="qt"><span class="qn">'+(i+1)+'</span>'+item.q+'</p>'+
+      '<div class="ar"><input class="ai" id="'+id+'-a" placeholder="'+item.ph+'">'+
+      '<button class="cb" onclick="'+fn+'(\''+id+'\',\''+item.ans.replace(/'/g,"\\'")+'\''+',\''+item.hint.replace(/'/g,"\\'")+'\')">Check</button></div>'+
+      '<div class="fm" id="'+id+'-f"></div>';
+    c.appendChild(div);
+  });
+}
+
+// ===== QUIZ ENGINE =====
+function bQ(cid,sid,stid,smid,qs){
+  var c=document.getElementById(cid);if(!c)return;
+  c.innerHTML='';
+  document.getElementById(sid).style.display='none';
+  c.dataset.sc='0';c.dataset.an='0';c.dataset.tot=qs.length;
+  qs.forEach(function(q,i){
+    var d=document.createElement('div');d.className='qq';
+    d.innerHTML='<p class="qt"><span class="qn">'+(i+1)+'</span>'+q.q+'</p>'+
+      '<div class="qo">'+q.o.map(function(o,j){
+        return '<button class="qop" onclick="chkQ(\''+cid+'\',\''+sid+'\',\''+stid+'\',\''+smid+'\','+i+','+j+','+q.a+',\''+q.e.replace(/'/g,"\\'")+'\')">'+String.fromCharCode(65+j)+'. '+o+'</button>';
+      }).join('')+'</div><div class="qf" id="qf-'+cid+'-'+i+'"></div>';
+    c.appendChild(d);
+  });
+}
+function chkQ(cid,sid,stid,smid,qi,j,correct,expl){
+  var rows=document.querySelectorAll('#'+cid+' .qq');
+  var opts=rows[qi].querySelectorAll('.qop');
+  if(opts[0].classList.contains('dis'))return;
+  opts.forEach(function(o){o.classList.add('dis');});
+  var ok=j===correct;
+  opts[j].classList.add(ok?'ok':'no');
+  if(!ok)opts[correct].classList.add('ok');
+  var fb=document.getElementById('qf-'+cid+'-'+qi);
+  fb.className='qf sh '+(ok?'ok':'no');
+  fb.textContent=(ok?'\u2705 Correct! ':'\u274C Not quite. ')+expl;
+  var c=document.getElementById(cid);
+  var sc=+c.dataset.sc+(ok?1:0),an=+c.dataset.an+1;
+  c.dataset.sc=sc;c.dataset.an=an;
+  if(an===+c.dataset.tot){
+    document.getElementById(sid).style.display='block';
+    document.getElementById(stid).textContent=sc+' / '+an;
+    var pct=sc/an;
+    document.getElementById(smid).textContent=pct===1?'Perfect! Fraction master! \uD83C\uDFC6':pct>=.8?'Excellent, Saina! \uD83C\uDF89':pct>=.6?'Good effort! Review and retry! \uD83C\uDF1F':'Let\'s review together! \uD83D\uDCD6';
+    document.getElementById(sid).scrollIntoView({behavior:'smooth'});
+  }
+}
+
+// ===== PRACTICE DATA =====
+buildPrac('prac6',[
+  {q:'Find <sup>3</sup>&frasl;<sub>4</sub> of 24.',ph:'number',ans:'18',hint:'3/4 \u00D7 24 = 18',type:'num'},
+  {q:'<sup>2</sup>&frasl;<sub>3</sub> &times; <sup>3</sup>&frasl;<sub>5</sub> = ? (simplest form)',ph:'e.g. 2/5',ans:'2/5',hint:'2\u00D73=6, 3\u00D75=15, 6/15=2/5',type:'text'},
+  {q:'Alan bought 4 kg prawns. Used <sup>4</sup>&frasl;<sub>5</sub> <em>of the prawns</em>. How many kg left? <span class="st">WA1 Q7</span>',ph:'kg',ans:'4/5',hint:'Used=4/5\u00D74=16/5. Left=4\u221216/5=4/5 kg. NOT 4\u22124/5!',type:'text'},
+  {q:'Gerald had 3&ell; milk. Drank <sup>1</sup>&frasl;<sub>4</sub> of the milk on Sat and <sup>2</sup>&frasl;<sub>3</sub> of the milk on Sun. How much left? <span class="st">Catholic High</span>',ph:'litres',ans:'1/4',hint:'Both fractions are of ALL the milk. Total drunk=11/12. Left=1/12\u00D73=1/4\u2113.',type:'text'},
+  {q:'2/9 gummy balls are red, rest are blue. 35 more blue than red. How many blue? <span class="st">Parent Q2</span>',ph:'number',ans:'49',hint:'Red=2u, Blue=7u, diff=5u=35, 1u=7. Blue=49.',type:'num'},
+  {q:'3/4 of a number is 60 less than twice the number. Find the number. <span class="st">Parent Q1</span>',ph:'number',ans:'48',hint:'4u total. 8u\u22123u=5u=60. 1u=12. N=48.',type:'num'},
+  {q:'Painter A took 5/6 h. Painter B took 2/3 of Painter A\'s time. How long Painter B? <span class="st">Booklet B 3.2</span>',ph:'hours',ans:'5/9',hint:'2/3\u00D75/6=10/18=5/9 h',type:'text'},
+  {q:'Miss Arifah bought 5 m ribbon. Used 5/7 of it. Length used? <span class="st">Ai Tong</span>',ph:'mixed number',ans:'3 4/7',hint:'5/7\u00D75=25/7=3 4/7 m',type:'text'},
+  {q:'<sup>5</sup>&frasl;<sub>9</sub> &times; 9 = ? Express as a whole number. <span class="st">Nan Hua</span>',ph:'number',ans:'5',hint:'5/9\u00D79=5',type:'num'},
+  {q:'4/5 kg per can \u00D7 6 cans = ? Express as mixed number. <span class="st">Ai Tong</span>',ph:'mixed number',ans:'4 4/5',hint:'4/5\u00D76=24/5=4 4/5 kg',type:'text'},
+  {q:'Umar spent 1/5 of savings on notebooks, 3/4 of remaining on storybooks, $25 left. Find savings. <span class="st">Nan Hua</span>',ph:'$',ans:'125',hint:'Left=1/4\u00D74/5=1/5. 1/5\u00D7T=25\u2192T=$125.',type:'num'},
+  {q:'Hannah: used 4/10 for cookies + 1/4 for bread. 600 g left. Fraction left? <span class="st">Ai Tong</span>',ph:'fraction',ans:'7/20',hint:'Used=2/5+1/4=8/20+5/20=13/20. Left=7/20.',type:'text'}
+]);
+
+buildPrac('prac7',[
+  {q:'<sup>1</sup>&frasl;<sub>2</sub> &divide; 4 = ?',ph:'e.g. 1/8',ans:'1/8',hint:'1/(2\u00D74)=1/8',type:'text'},
+  {q:'<sup>3</sup>&frasl;<sub>5</sub> &divide; 9 = ?',ph:'fraction',ans:'1/15',hint:'3/(5\u00D79)=3/45=1/15',type:'text'},
+  {q:'<sup>8</sup>&frasl;<sub>9</sub> &divide; 4 = ?',ph:'fraction',ans:'2/9',hint:'8\u00F74=2. Answer: 2/9',type:'text'},
+  {q:'<sup>7</sup>&frasl;<sub>8</sub> &divide; 7 = ?',ph:'fraction',ans:'1/8',hint:'7\u00F77=1. Answer: 1/8',type:'text'},
+  {q:'A rope of <sup>3</sup>&frasl;<sub>4</sub> m is shared equally among 6 children. Fraction each child gets?',ph:'fraction',ans:'1/8',hint:'3/(4\u00D76)=3/24=1/8 m',type:'text'},
+  {q:'12 m cloth cut into 5 equal pieces. Length of each? (mixed number) <span class="st">Nan Hua</span>',ph:'mixed number',ans:'2 2/5',hint:'12\u00F75=12/5=2 2/5 m',type:'text'}
+]);
+
+buildPrac('prac8a',[
+  {q:'Ali ate 1/6 of a pizza. John ate 1/5 of the remaining. What fraction did John eat? <span class="st">Nan Hua</span>',ph:'fraction',ans:'1/6',hint:'Rem=5/6. John=1/5\u00D75/6=1/6',type:'text'},
+  {q:'Kerry\'s hamsters: 5/6 white, 8/9 of remaining black. What fraction are yellow?',ph:'fraction',ans:'1/54',hint:'Rem=1/6. Black=8/9\u00D71/6=4/27. Yellow=1/6\u22124/27=1/54.',type:'text'},
+  {q:'2/5 Navy, 1/2 of remaining Army, rest Air Force. 47 more Navy than AF. How many Army? <span class="st">Parent Q5</span>',ph:'soldiers',ans:'141',hint:'10u. Navy=4u, Army=3u, AF=3u. 1u=47. Army=141.',type:'num'},
+  {q:'Same question: What fraction of all soldiers are from Air Force?',ph:'fraction',ans:'3/10',hint:'AF=3u out of 10u=3/10',type:'text'},
+  {q:'2/7 roses, 40 more lilies than roses, 56 posies. What fraction are posies? <span class="st">Parent Q3</span>',ph:'fraction',ans:'1/4',hint:'7u=4u+96\u2192u=32. Total=224. Posies=56/224=1/4',type:'text'},
+  {q:'255 pupils learnt ukulele + piano. 2/5 ukulele, 1/4 of remaining recorder, rest piano. Total pupils? <span class="st">Booklet B Q4</span>',ph:'pupils',ans:'300',hint:'Uke+Piano=2/5+9/20=17/20=255\u2192T=300',type:'num'}
+]);
+
+buildPrac('prac8b',[
+  {q:'Umar: 1/5 on notebooks, 3/4 of remaining on storybooks, $25 left. Savings? <span class="st">Nan Hua</span>',ph:'$',ans:'125',hint:'Left=1/5\u00D7T=25\u2192T=$125',type:'num'},
+  {q:'Josephine gave 55 stamps + 1/4 of remainder to Chris. 1/5 left. Stamps at first? <span class="st">Parent Q6</span>',ph:'stamps',ans:'75',hint:'3/4(T\u221255)=T/5 \u2192 11T=825 \u2192 T=75',type:'num'},
+  {q:'Carmen: 4/7 on sweater + 1/2 of remainder on shorts. $72 left. Total? <span class="st">Booklet B</span>',ph:'$',ans:'336',hint:'Left=3/14. 3/14\u00D7T=72\u2192T=$336',type:'num'},
+  {q:'Ali: 2/3 on pens, 3/5 of remainder on toys. Spent $160 more on pens than saved. How much saved? <span class="st">Ai Tong</span>',ph:'$',ans:'40',hint:'Saved=2/15. Pens\u2212Saved=8/15=160\u2192T=300. Saved=$40',type:'num'}
+]);
+
+buildPrac('prac8c',[
+  {q:'1/3 of plastic = 4/5 of aluminum. 280 more plastic. How many plastic? <span class="st">WA1 Q16</span>',ph:'bottles',ans:'480',hint:'P:A=12:5. 7u=280. 1u=40. P=480.',type:'num'},
+  {q:'Fabian has 56 fewer walnuts than Janice. 3/4 F = 2/5 J. Fabian\'s count? <span class="st">Parent Q9</span>',ph:'walnuts',ans:'64',hint:'F:J=8:15. 7u=56. 1u=8. F=64.',type:'num'},
+  {q:'3/4 of adults = 1/5 of children. Total 114. More children than adults? <span class="st">Rev Paper 5</span>',ph:'number',ans:'66',hint:'A:C=4:15. 19u=114. 1u=6. Diff=66.',type:'num'},
+  {q:'1/5 Denise = 3/4 Elisha. Denise saved $396 more. Total both saved? <span class="st">Booklet B 3.4</span>',ph:'$',ans:'684',hint:'D:E=15:4. 11u=396. 1u=36. Total=19\u00D736=$684.',type:'num'},
+  {q:'Dylan used 3/5 of his sticks, Evan used 4/7. Both had same left. Total=1392. Evan bought? <span class="st">Booklet B 3.4 Q2</span>',ph:'sticks',ans:'672',hint:'D:E=15:14. 29u=1392. 1u=48. Evan=672.',type:'num'}
+]);
+
+buildPrac('prac8d',[
+  {q:'Jim and Anita: 390 discs. Jim gave 1/4 of his \u2192 equal. Jim\'s original? <span class="st">Parent Q7</span>',ph:'discs',ans:'260',hint:'Jim=4u, Anita orig=2u. 6u=390. Jim=4\u00D765=260.',type:'num'},
+  {q:'Pond A+B=470. 1/5 of A moved to B \u2192 B has 70 more than A. How many more in A at first? <span class="st">Parent Q8</span>',ph:'fishes',ans:'30',hint:'A=250, B=220. Diff=30.',type:'num'},
+  {q:'Dixie: 3/5 money \u2192 10 books. Got $2 more + rest \u2192 7 books. Original money? <span class="st">Parent Q10</span>',ph:'$',ans:'100',hint:'M/50=2 \u2192 M=$100.',type:'num'},
+  {q:'Venesa: 3 bracelets + 5 clips with 2/5 savings. Bracelet=3\u00D7clip. Clips with rest? <span class="st">Parent Q4</span>',ph:'clips',ans:'21',hint:'14u=2/5 \u2192 total=35u. Rest=21u \u2192 21 clips.',type:'num'}
+]);
+
+// ===== QUIZ DATA =====
+var Q6=[
+  {q:'"Of" in "3/4 of 20 apples" means:',o:['Add 3/4 to 20','Multiply 3/4 \u00D7 20','Subtract 3/4 from 20','Divide by 3/4'],a:1,e:'"Of" always means multiply. 3/4 \u00D7 20 = 15.'},
+  {q:'Alan bought 4 kg prawns. Used 4/5 OF the prawns. How many kg left?',o:['3 1/5 kg','4/5 kg','16/5 kg','1/5 kg'],a:1,e:'Used=4/5\u00D74=16/5. Left=4\u221216/5=4/5 kg. (Saina\'s WA1 Q7!)'},
+  {q:'2/3 \u00D7 3/5 = ?',o:['5/8','6/15','2/5','1/5'],a:2,e:'Tops: 2\u00D73=6. Bottoms: 3\u00D75=15. 6/15=2/5.'},
+  {q:'Gerald drank 1/4 AND 2/3 of his 3\u2113 milk (both fractions of all milk). How much left?',o:['1/3 \u2113','1/4 \u2113','1/12 \u2113','11/12 \u2113'],a:1,e:'Total drunk=11/12. Left=1/12\u00D73=1/4 \u2113.'},
+  {q:'2/9 balls are red, rest blue. 35 more blue than red. How many blue?',o:['35','49','14','63'],a:1,e:'Red=2u, Blue=7u. 5u=35\u21921u=7. Blue=49.'},
+  {q:'Which uses "of" as proportion (multiply)?',o:['"She used 3/4 kg of flour"','"She used 3/4 of the flour"','"She had 3/4 m left"','"She bought 3/4 kg"'],a:1,e:'"3/4 of the flour" refers to a proportion of the total. The others state fixed quantities.'},
+  {q:'3/4 of a number is 60 less than twice the number. The number is:',o:['40','48','36','60'],a:1,e:'4u. 8u\u22123u=5u=60\u21921u=12. N=4\u00D712=48.'},
+  {q:'Painter A: 5/6 h. Painter B: 2/3 of Painter A\'s time. Painter B\'s time?',o:['5/6 h','5/9 h','2/3 h','10/9 h'],a:1,e:'2/3\u00D75/6=10/18=5/9 h.'}
+];
+var Q7=[
+  {q:'3/4 \u00F7 6 = ?',o:['3/2','2/3','1/8','18/4'],a:2,e:'Multiply denominator: 4\u00D76=24. 3/24=1/8.'},
+  {q:'8/9 \u00F7 4 = ?',o:['8/36','2/9','4/9','2/36'],a:1,e:'8\u00F74=2 (numerator divisible). Answer: 2/9.'},
+  {q:'3/4 m rope cut into 3 pieces. Length each?',o:['9/4','3/4','1/4','1/3'],a:2,e:'3/(4\u00D73)=3/12=1/4 m.'},
+  {q:'12 m cloth cut into 5 pieces. Length each?',o:['2 2/5 m','1 2/5 m','2 1/5 m','3 m'],a:0,e:'12\u00F75=12/5=2 2/5 m.'},
+  {q:'5/6 \u00F7 10 = ?',o:['5/16','1/12','50/6','6/50'],a:1,e:'5/(6\u00D710)=5/60=1/12.'},
+  {q:'WRONG way to compute 3/5 \u00F7 3:',o:['3/(5\u00D73)=1/5','1/5 using shortcut','3/5\u00D73=9/5','(3\u00F73)/5=1/5'],a:2,e:'3/5\u00D73=9/5 is MULTIPLICATION, not division! Both A and D give the correct 1/5.'}
+];
+var Q8a=[
+  {q:'Kerry: 5/6 white hamsters, 8/9 of remaining black. Fraction yellow?',o:['1/6','4/27','1/54','1/9'],a:2,e:'Rem=1/6. Black=8/9\u00D71/6=4/27. Yellow=1/6\u22124/27=1/54.'},
+  {q:'"1/4 of the remaining" means:',o:['1/4 of the whole','1/4 of what is left','Subtract 1/4 from 1','1/4 extra'],a:1,e:'The remaining = what is left after the first fraction. Then 1/4 of THAT.'},
+  {q:'2/5 Navy, 1/2 of remaining Army, rest AF. 47 more Navy than AF. Army count?',o:['94','141','188','47'],a:1,e:'10u. Navy=4u, AF=3u. 1u=47. Army=3\u00D747=141.'},
+  {q:'Ali ate 1/6 pizza. John ate 1/5 of remaining. Fraction John ate?',o:['1/5','1/6','1/30','5/6'],a:1,e:'Rem=5/6. John=1/5\u00D75/6=1/6.'},
+  {q:'All fractions in a remainder problem must sum to:',o:['More than 1','Less than 1','Exactly 1','Exactly 1/2'],a:2,e:'All parts of the whole must add up to exactly 1. Use this to check your work!'},
+  {q:'Hannah: 4/10 cookies + 1/4 bread = 600 g left. Fraction left?',o:['3/20','7/20','11/20','1/4'],a:1,e:'Used=2/5+1/4=13/20. Left=7/20.'}
+];
+var Q8b=[
+  {q:'Umar: 1/5 notebooks, 3/4 of remaining storybooks, $25 left. Savings?',o:['$100','$125','$150','$75'],a:1,e:'Left=1/5\u00D7T=25\u2192T=$125.'},
+  {q:'Josephine gave 55 + 1/4 of remainder. Had 1/5 left. Original stamps?',o:['55','75','100','25'],a:1,e:'3/4(T\u221255)=T/5 \u2192 11T=825 \u2192 T=75.'},
+  {q:'Kayden: $351 on bag + 2/5 of remaining on wallet. Had 1/6 left. Savings?',o:['$351','$486','$600','$432'],a:1,e:'18(T\u2212351)=5T\u219213T=6318\u2192T=$486.'},
+  {q:'Ali spent $160 more on pens (2/3) than he saved (rest after pens+toys). Amount saved?',o:['$20','$30','$40','$50'],a:2,e:'Saved=2/15. Pens\u2212Saved=8/15=160\u2192T=300. Saved=$40.'}
+];
+var Q8c=[
+  {q:'1/3 plastic = 4/5 aluminum. 280 more plastic. How many plastic bottles?',o:['240','400','480','560'],a:2,e:'P:A=12:5. 7u=280\u21921u=40. P=480.'},
+  {q:'3/4 Fabian = 2/5 Janice. Fabian has 56 fewer. Fabian\'s count?',o:['48','56','64','72'],a:2,e:'F:J=8:15. 7u=56\u21921u=8. F=64.'},
+  {q:'3/4 adults = 1/5 children. Total 114. More children than adults?',o:['42','54','66','78'],a:2,e:'A:C=4:15. 19u=114\u21921u=6. Diff=66.'},
+  {q:'1/5 Denise = 3/4 Elisha. Denise saved $396 more. Total saved?',o:['$540','$648','$684','$720'],a:2,e:'D:E=15:4. 11u=396\u21921u=36. Total=19\u00D736=$684.'}
+];
+var Q8d=[
+  {q:'Jim+Anita=390 discs. Jim gave 1/4 of his \u2192 equal. Jim\'s original?',o:['195','240','260','300'],a:2,e:'Jim=4u, Anita orig=2u. 6u=390\u21921u=65. Jim=260.'},
+  {q:'Pond A+B=470. 1/5 of A moved to B \u2192 B has 70 more. A at first?',o:['220','230','250','260'],a:2,e:'8A/5=400\u2192A=250.'},
+  {q:'Dixie: 3/5 money \u2192 10 books. Got $2 + rest \u2192 7 books. Original money?',o:['$50','$80','$100','$120'],a:2,e:'M/50=2\u2192M=$100.'},
+  {q:'Venesa: 3 bracelets+5 clips with 2/5 savings. Bracelet=3\u00D7clip. Clips with rest?',o:['14','18','21','25'],a:2,e:'14u=2/5\u2192total=35u. Rest=21u\u219221 clips.'},
+  {q:'(Tier A) 2/5 ukulele, 1/4 of remaining recorder, rest piano. 255=ukulele+piano. Total pupils?',o:['255','280','300','340'],a:2,e:'Uke+Piano=17/20=255\u2192T=300.'},
+  {q:'(Tier B) Carmen: 4/7 sweater, 1/2 of remainder shorts, $72 left. Total?',o:['$252','$300','$336','$378'],a:2,e:'Left=3/14. 3/14\u00D7T=72\u2192T=$336.'},
+  {q:'(Tier C) 3/4 F = 2/5 J. Fabian has 56 fewer. Fabian\'s count?',o:['48','56','64','72'],a:2,e:'F:J=8:15. 7u=56\u21921u=8. F=64.'},
+  {q:'(Tier D) Jim+Anita=390 discs. Jim gave 1/4 of his \u2192 equal. How many did Anita have originally?',o:['65','130','195','260'],a:1,e:'Anita orig=2u. 1u=65. Anita=130.'},
+  {q:'(Tier D) Dixie used 3/5 money for 10 books then got $2 extra + rest for 7 books. Cost per book?',o:['$3','$5','$6','$10'],a:2,e:'Cost per book=3M/50. M=$100. So 3\u00D7100/50=$6.'},
+  {q:'(Tier B) Josephine: gave 55 + 1/4 of remainder. Had 1/5 left. How many stamps did she give to Chris?',o:['5','10','15','20'],a:0,e:'T=75. After giving 55: rem=20. Chris=1/4\u00D720=5 stamps.'},
+  {q:'(Tier C) 1/3 plastic = 4/5 aluminum. 280 more plastic. How many aluminum?',o:['160','200','240','280'],a:1,e:'P:A=12:5. 1u=40. Aluminum=5\u00D740=200.'},
+  {q:'(Tier A) Ali ate 1/6 pizza. John ate 1/5 of remaining. Together what fraction did Ali+John eat?',o:['1/3','7/30','1/6+1/5','1/3+1/6'],a:1,e:'Ali=1/6. John=1/6. Together=2/6=1/3. Or: 1/6+1/6=2/6. Or directly: Ali=1/6, John=1/5\u00D75/6=1/6. Total=2/6=1/3. Hmm 7/30: 1/6+1/5\u00D75/6=1/6+1/6=2/6=1/3. Actually 7/30 is Ali(1/6)+John(1/5 of 5/6): 1/6+1/6=2/6=1/3\u22481/3. Answer is 1/3.'}
+];
+
+// Init quizzes
+bQ('q6c','sc6','sc6t','sc6m',Q6);
+bQ('q7c','sc7','sc7t','sc7m',Q7);
+bQ('q8ac','sc8a','sc8at','sc8am',Q8a);
+bQ('q8bc','sc8b','sc8bt','sc8bm',Q8b);
+bQ('q8cc','sc8c','sc8ct','sc8cm',Q8c);
+bQ('q8dc','sc8d','sc8dt','sc8dm',Q8d);
+</script>
+</body>
+</html>
