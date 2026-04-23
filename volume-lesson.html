@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volume Mastery — P5 Maths</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF8F0;--card:#fff;--primary:#FF6B35;--pl:#FFF0E8;--sec:#2EC4B6;--sl:#E8FAF8;--acc:#7B2D8E;--al:#F3E8F7;--text:#2D2A32;--tl:#6B6577;--sh:0 4px 20px rgba(45,42,50,.08);--shh:0 8px 30px rgba(45,42,50,.14);--r:18px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0F6E56 0%,#2EC4B6 45%,#1D9E75 100%);padding:28px 16px 56px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:38px;background:var(--bg);border-radius:50% 50% 0 0}
+.hero h1{font-family:'Fredoka',sans-serif;font-size:2rem;color:#fff;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero p{color:rgba(255,255,255,.9);font-size:.92rem;margin-top:4px;font-weight:600;position:relative;z-index:1}
+.nm{color:#FFE066}
+
+/* ── CHAPTER NAV (hero bottom) ── */
+.ch-nav{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
+.ch-btn{padding:5px 13px;border-radius:20px;border:2px solid rgba(255,255,255,.5);color:#fff;background:transparent;font-family:'Nunito',sans-serif;font-weight:700;font-size:.72rem;cursor:pointer;transition:.22s;white-space:nowrap}
+.ch-btn:hover{background:rgba(255,255,255,.2)}
+.ch-btn.active{background:#fff;color:#0F6E56;border-color:#fff}
+
+/* ── SUB-NAV (concept / examples / practice / quiz) ── */
+.sub-wrap{display:flex;justify-content:center;margin:-22px auto 18px;position:relative;z-index:2;padding:0 12px}
+.sub-tabs{display:flex;gap:3px;background:var(--card);border-radius:14px;padding:4px;box-shadow:var(--sh)}
+.sub-tab{padding:7px 14px;border-radius:10px;border:none;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;background:transparent;color:var(--tl);white-space:nowrap;transition:.22s;display:flex;align-items:center;gap:5px}
+.sub-tab.active{background:var(--sec);color:#fff}
+.sub-tab:hover:not(.active){background:var(--sl);color:var(--sec)}
+
+/* ── CONTAINER ── */
+.con{max-width:820px;margin:0 auto;padding:0 15px 60px}
+
+/* ── CHAPTER PANELS ── */
+.ch-panel{display:none}
+.ch-panel.active{display:block}
+
+/* ── SUB PANELS ── */
+.sub-panel{display:none;animation:fu .35s ease}
+.sub-panel.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LEVEL BADGES ── */
+.ls{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px;align-items:center}
+.lv{display:inline-flex;align-items:center;gap:4px;padding:3px 11px;border-radius:20px;font-size:.7rem;font-weight:800;letter-spacing:.3px}
+.lv1{background:#E1F5EE;color:#085041;border:1.5px solid #5DCAA5}
+.lv2{background:#E6F1FB;color:#0C447C;border:1.5px solid #85B7EB}
+.lv3{background:#FAEEDA;color:#633806;border:1.5px solid #FAC775}
+.lv4{background:#EEEDFE;color:#3C3489;border:1.5px solid #AFA9EC}
+.lv5{background:#FCEBEB;color:#791F1F;border:1.5px solid #F7C1C1}
+.lvF{background:#F1EFE8;color:#444441;border:1.5px solid #D3D1C7}
+.ld{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:var(--r);padding:22px 20px;margin-bottom:16px;box-shadow:var(--sh);transition:box-shadow .3s}
+.card:hover{box-shadow:var(--shh)}
+.card h2{font-family:'Fredoka',sans-serif;font-size:1.25rem;margin-bottom:9px;color:var(--sec)}
+.card h3{font-family:'Fredoka',sans-serif;font-size:1rem;margin-bottom:7px;color:var(--primary)}
+.card p,.card li{line-height:1.7;font-size:.93rem}
+.card ul{margin-left:18px;margin-top:5px}
+
+/* ── BADGES ── */
+.bg{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;margin-bottom:9px}
+.bgo{background:var(--pl);color:var(--primary)}
+.bgt{background:var(--sl);color:var(--sec)}
+.bgp{background:var(--al);color:var(--acc)}
+.bgr{background:#FFEBEE;color:#C62828}
+.bgg{background:#E8F5E9;color:#2E7D32}
+
+/* ── INFO BOXES ── */
+.kf{background:linear-gradient(135deg,#E8FAF8,#FFF0E8);border-left:5px solid var(--sec);border-radius:0 11px 11px 0;padding:13px 16px;margin:12px 0;font-weight:600;font-size:.92rem;line-height:1.6}
+.wb{background:#FFF3E0;border-left:5px solid #FF9800;border-radius:0 11px 11px 0;padding:12px 15px;margin:10px 0;font-weight:600;font-size:.87rem;line-height:1.5}
+.tb{background:#E3F2FD;border-left:5px solid #2196F3;border-radius:0 11px 11px 0;padding:12px 15px;margin:10px 0;font-weight:600;font-size:.87rem;line-height:1.5}
+.sb{background:#E8F5E9;border-left:5px solid #4CAF50;border-radius:0 11px 11px 0;padding:12px 15px;margin:10px 0;font-weight:600;font-size:.87rem;line-height:1.5}
+
+/* ── FORMULA BOX ── */
+.fbox{background:linear-gradient(135deg,#E8FAF8,#EEEDFE);border:3px dashed var(--sec);border-radius:14px;padding:18px;text-align:center;margin:14px 0}
+.fbox .fm{font-family:'Fredoka',sans-serif;font-size:1.3rem;color:var(--sec);margin:6px 0}
+
+/* ── WORKED EXAMPLE ── */
+.we{background:linear-gradient(135deg,#E8FAF8,#FFF0E8);border-radius:13px;padding:15px 17px;margin:11px 0;border:1.5px solid #9FE1CB}
+.we h4{font-family:'Fredoka',sans-serif;font-size:.97rem;color:var(--sec);margin-bottom:9px}
+.ws{display:flex;gap:9px;margin:7px 0;font-size:.89rem;align-items:flex-start;line-height:1.6}
+.wn{min-width:21px;height:21px;background:var(--sec);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;flex-shrink:0;margin-top:2px}
+.wn.ok{background:#4CAF50}
+.wm{font-family:monospace;background:#fff;padding:2px 7px;border-radius:5px;display:inline-block;font-size:.85rem}
+
+/* ── 2-COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}}
+
+/* ── GRID VIEWS ── */
+.grid-wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.grid-view{text-align:center}
+.grid-view p{font-size:.78rem;font-weight:700;color:var(--tl);margin-bottom:6px}
+.grid-table{border-collapse:collapse;margin:0 auto}
+.grid-table td{width:18px;height:18px;border:1.5px solid #ccc}
+.grid-table td.filled{background:#2EC4B6}
+
+/* ── PRACTICE ── */
+.pq{background:#F7F7FB;border-radius:11px;padding:14px 16px;margin-bottom:11px;border-left:4px solid #E0DCE8}
+.pq.done{border-left-color:#4CAF50}
+.pq .qt{font-weight:700;font-size:.91rem;margin-bottom:9px;line-height:1.55}
+.pq .qn{display:inline-block;background:var(--sec);color:#fff;width:23px;height:23px;line-height:23px;border-radius:50%;text-align:center;font-size:.7rem;font-weight:800;margin-right:6px}
+.ar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:7px}
+.ai{padding:6px 9px;border:2px solid #E0DCE8;border-radius:7px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.87rem;width:110px;text-align:center;transition:.2s}
+.ai:focus{outline:none;border-color:var(--sec)}
+.ai.ok{border-color:#4CAF50;background:#E8F5E9}
+.ai.no{border-color:#E53935;background:#FFEBEE}
+.cb{padding:6px 12px;border-radius:7px;border:none;background:var(--sec);color:#fff;font-family:'Nunito',sans-serif;font-weight:700;font-size:.79rem;cursor:pointer}
+.fm2{font-size:.81rem;font-weight:700;margin-top:5px;display:none;line-height:1.5}
+.fm2.sh{display:block}
+.fm2.ok{color:#2E7D32}
+.fm2.no{color:#C62828}
+
+/* ── QUIZ ── */
+.qq{background:#F7F7FB;border-radius:11px;padding:16px;margin-bottom:12px}
+.qq .qt{font-weight:700;margin-bottom:10px;font-size:.91rem;line-height:1.5}
+.qq .qn{display:inline-block;background:var(--sec);color:#fff;width:24px;height:24px;line-height:24px;border-radius:50%;text-align:center;font-size:.73rem;font-weight:800;margin-right:6px}
+.qo{display:flex;flex-direction:column;gap:6px}
+.qop{padding:9px 13px;border:2px solid #E0DCE8;border-radius:9px;cursor:pointer;font-weight:600;font-size:.87rem;transition:.2s;background:#fff;text-align:left}
+.qop:hover{border-color:var(--sec);background:var(--sl)}
+.qop.ok{border-color:#4CAF50;background:#E8F5E9}
+.qop.no{border-color:#E53935;background:#FFEBEE}
+.qop.dis{pointer-events:none}
+.qf{margin-top:7px;padding:7px 11px;border-radius:7px;font-weight:700;font-size:.82rem;display:none;line-height:1.5}
+.qf.sh{display:block}
+.qf.ok{background:#E8F5E9;color:#2E7D32}
+.qf.no{background:#FFEBEE;color:#C62828}
+.scb{text-align:center;padding:20px;border-radius:13px;background:linear-gradient(135deg,var(--sl),var(--al));margin-top:16px;display:none}
+.scb h2{font-family:'Fredoka',sans-serif;font-size:1.7rem;color:var(--sec)}
+.rb{margin-top:10px;padding:9px 22px;background:var(--primary);color:#fff;border:none;border-radius:9px;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer}
+
+/* ── SOURCE TAG ── */
+.st{font-size:.68rem;padding:1px 6px;border-radius:7px;background:#F0F0F8;color:#6B6577;border:1px solid #E0DCE8;margin-left:3px;font-weight:600}
+
+@media(max-width:520px){.hero h1{font-size:1.5rem}.sub-tab{padding:6px 9px;font-size:.74rem}.card{padding:16px 13px}.ch-btn{font-size:.68rem;padding:4px 10px}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO + CHAPTER NAV
+═══════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <h1>&#x1F4E6; Volume Mastery</h1>
+  <p>Primary 1–5 Maths &middot; Hello, <span class="nm">Saina</span>! &#x1F30A;</p>
+  <div class="ch-nav">
+    <button class="ch-btn active" onclick="showCh('c1',this)">Ch 1: Units</button>
+    <button class="ch-btn" onclick="showCh('c2',this)">Ch 2: Cube &amp; Cuboid</button>
+    <button class="ch-btn" onclick="showCh('c3',this)">Ch 3: Missing Dim</button>
+    <button class="ch-btn" onclick="showCh('c4',this)">Ch 4: Liquid in Tank</button>
+    <button class="ch-btn" onclick="showCh('c5',this)">Ch 5: Unit Cubes</button>
+    <button class="ch-btn" onclick="showCh('c6',this)">Ch 6: Pouring &amp; Filling</button>
+    <button class="ch-btn" onclick="showCh('c7',this)">Ch 7: Tap Flow</button>
+    <button class="ch-btn" onclick="showCh('c8',this)">Ch 8: Objects in Tank</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUB-NAV (shared, JS updates labels per chapter)
+═══════════════════════════════════════════════════════════ -->
+<div class="sub-wrap">
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showSub('concept',this)">&#x1F4D6; Concept</button>
+    <button class="sub-tab" onclick="showSub('examples',this)">&#x1F4A1; Examples</button>
+    <button class="sub-tab" onclick="showSub('practice',this)">&#x270D;&#xFE0F; Practice</button>
+    <button class="sub-tab" onclick="showSub('quiz',this)">&#x1F3AF; Quiz</button>
+  </div>
+</div>
+
+<div class="con">
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 1 : UNITS
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel active" id="ch-c1">
+
+  <!-- CONCEPT -->
+  <div class="sub-panel active" id="c1-concept">
+    <div class="ls">
+      <span class="lv lv2"><span class="ld"></span>P2 — litres</span>
+      <span class="lv lv3"><span class="ld"></span>P3 — mℓ + compound</span>
+      <span class="lv lv5"><span class="ld"></span>P5 — cm³</span>
+    </div>
+    <div class="card">
+      <span class="bg bgt">Core Fact</span>
+      <h2>&#x1F4CF; The 3 Units of Volume</h2>
+      <div class="fbox">
+        <div class="fm">1 mℓ = 1 cm³</div>
+        <div class="fm">1 ℓ = 1000 mℓ = 1000 cm³</div>
+        <div style="font-size:.85rem;color:var(--tl);margin-top:6px">mℓ/cm³ → ℓ : divide by 1000 &nbsp;|&nbsp; ℓ → mℓ/cm³ : multiply by 1000</div>
+      </div>
+      <div class="kf">&#x2B50; 1 cm³ = 1 mℓ — a cube of side 1 cm holds exactly 1 mℓ of water. This is the key bridge at P5 between liquid volume and solid volume!</div>
+      <div class="wb">&#x26A0;&#xFE0F; P2 uses only litres. Millilitres appear at P3. cm³ is brand-new at P5 — don't confuse it with cm² (area)!</div>
+    </div>
+    <div class="card">
+      <span class="bg bgt">P2 — Litres only</span>
+      <h2>Reading and Comparing Volume in Litres</h2>
+      <div class="kf">&#x1F4CC; At P2 we only use litres (ℓ). We measure, compare, and do 1-step word problems using ℓ.</div>
+      <p style="font-size:.91rem;line-height:1.7">Example: Tank A holds 5 ℓ. Tank B holds 3 ℓ. How much more does Tank A hold?<br>
+      5 − 3 = <strong>2 ℓ</strong></p>
+    </div>
+    <div class="card">
+      <span class="bg bgt">P3 — Litres &amp; Millilitres</span>
+      <h2>Compound Units</h2>
+      <div class="kf">&#x1F4CC; 1 ℓ = 1000 mℓ. Compound form: 2 ℓ 350 mℓ = 2350 mℓ.</div>
+      <div class="wb">&#x26A0;&#xFE0F; When adding compound units, convert to mℓ first to avoid mistakes!</div>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="sub-panel" id="c1-examples">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Conversion Examples</h2>
+      <div class="two-col">
+        <div class="we" style="margin:0">
+          <h4>cm³ → mℓ (same number)</h4>
+          <div class="ws"><span class="wn">1</span><div>390 cm³ = <span class="wm">390 mℓ</span></div></div>
+          <div class="ws"><span class="wn ok">&#x2713;</span><div>1285 cm³ = <span class="wm">1285 mℓ</span></div></div>
+        </div>
+        <div class="we" style="margin:0">
+          <h4>cm³ or mℓ → ℓ (÷ 1000)</h4>
+          <div class="ws"><span class="wn">1</span><div>2394 cm³ ÷ 1000 = <span class="wm">2.394 ℓ</span></div></div>
+          <div class="ws"><span class="wn ok">&#x2713;</span><div>4020 mℓ ÷ 1000 = <span class="wm">4.02 ℓ</span></div></div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="we" style="margin:0">
+          <h4>ℓ → cm³ or mℓ (× 1000)</h4>
+          <div class="ws"><span class="wn">1</span><div>3 ℓ × 1000 = <span class="wm">3000 cm³</span></div></div>
+          <div class="ws"><span class="wn ok">&#x2713;</span><div>2.336 ℓ × 1000 = <span class="wm">2336 cm³</span></div></div>
+        </div>
+        <div class="we" style="margin:0">
+          <h4>Compound units (P3)</h4>
+          <div class="ws"><span class="wn">1</span><div>2 ℓ 350 mℓ = 2000+350 = <span class="wm">2350 mℓ</span></div></div>
+          <div class="ws"><span class="wn ok">&#x2713;</span><div>3500 mℓ = <span class="wm">3 ℓ 500 mℓ</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div class="sub-panel" id="c1-practice">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgp">Practice</span>
+      <h2>&#x270D;&#xFE0F; Chapter 1 Practice</h2>
+      <div id="prac1"></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="sub-panel" id="c1-quiz">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Quiz</span>
+      <h2>&#x1F3AF; Chapter 1 Quiz</h2>
+      <div id="q1c"></div>
+      <div class="scb" id="sc1"><h2 id="sc1t"></h2><p id="sc1m"></p><button class="rb" onclick="bQ('q1c','sc1','sc1t','sc1m',Q1)">Try Again &#x21BB;</button></div>
+    </div>
+  </div>
+</div><!-- end ch-c1 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 2 : CUBE & CUBOID
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c2">
+  <div class="sub-panel active" id="c2-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 — new concept</span></div>
+    <div class="card">
+      <span class="bg bgt">Formula</span>
+      <h2>&#x1F4D0; Volume of a Cuboid &amp; Cube</h2>
+      <div class="fbox">
+        <div class="fm">V = length × breadth × height</div>
+        <div class="fm" style="font-size:1rem">OR &nbsp; V = base area × height</div>
+      </div>
+      <div class="fbox" style="margin-top:8px">
+        <div class="fm">Cube: V = side × side × side = s³</div>
+      </div>
+      <div class="kf">&#x1F4CC; The unit is always <strong>cm³</strong> or <strong>m³</strong>. Never write cm² — that is area, not volume!</div>
+      <div class="wb">&#x26A0;&#xFE0F; When the question says "height is twice its breadth", find breadth first, then calculate height before multiplying.</div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c2-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>Cuboid 12 cm × 5 cm × 8 cm</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>V = 12 × 5 × 8 = <span class="wm">480 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Cube of side 4 cm</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>V = 4 × 4 × 4 = <span class="wm">64 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Tank 15 cm long, 4 cm wide. Height = ⅓ of its length. Find volume.</h4>
+        <div class="ws"><span class="wn">1</span><div>Height = 1/3 × 15 = 5 cm</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>V = 15 × 4 × 5 = <span class="wm">300 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Tank: square base of area 100 cm², height 13 cm.</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>V = 100 × 13 = <span class="wm">1300 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Container: length = 2 × breadth, height = 3 × breadth. Length = 8 cm.</h4>
+        <div class="ws"><span class="wn">1</span><div>Breadth = 8 ÷ 2 = 4 cm. Height = 3 × 4 = 12 cm.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>V = 8 × 4 × 12 = <span class="wm">384 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c2-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 2 Practice</h2><div id="prac2"></div></div>
+  </div>
+  <div class="sub-panel" id="c2-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 2 Quiz</h2><div id="q2c"></div>
+    <div class="scb" id="sc2"><h2 id="sc2t"></h2><p id="sc2m"></p><button class="rb" onclick="bQ('q2c','sc2','sc2t','sc2m',Q2)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c2 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 3 : MISSING DIMENSIONS
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c3">
+  <div class="sub-panel active" id="c3-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 Standard</span><span class="lv lvF"><span class="ld"></span>P5 Foundation (basic)</span></div>
+    <div class="card">
+      <span class="bg bgt">Two Types</span>
+      <h2>&#x1F50D; Finding a Missing Dimension</h2>
+      <div class="kf">&#x1F4CC; <strong>Type A — Given volume + 2 dimensions:</strong><br>
+        Missing dim = V ÷ (known dim 1 × known dim 2)<br>
+        or: Missing dim = V ÷ base area
+      </div>
+      <div class="kf">&#x1F4CC; <strong>Type B — Given fraction-full + liquid volume:</strong><br>
+        Step 1: Full capacity = liquid volume ÷ fraction<br>
+        Step 2: Missing dim = capacity ÷ (other dim 1 × other dim 2)
+      </div>
+      <div class="wb">&#x26A0;&#xFE0F; Always convert ℓ → cm³ (×1000) before dividing dimensions!</div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c3-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Type A Examples</span>
+      <h2>Given Volume + 2 Dimensions</h2>
+      <div class="we"><h4>Cuboid volume 81 cm³, square base of side 3 cm. Find height.</h4>
+        <div class="ws"><span class="wn">1</span><div>Base area = 3 × 3 = 9 cm²</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Height = 81 ÷ 9 = <span class="wm">9 cm</span></div></div>
+      </div>
+      <div class="we"><h4>Volume 480 cm³, base area 60 cm². Find height.</h4>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Height = 480 ÷ 60 = <span class="wm">8 cm</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="bg bgo">Type B Examples</span>
+      <h2>Given Fraction-Full + Liquid Volume</h2>
+      <div class="we"><h4>A 100 cm × 30 cm tank contained 360 ℓ and is ⁴⁄₅ full. Find the height.</h4>
+        <div class="ws"><span class="wn">1</span><div>360 ℓ = 360 000 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Capacity = 360 000 ÷ (4/5) = 450 000 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Height = 450 000 ÷ (100 × 30) = <span class="wm">150 cm</span></div></div>
+      </div>
+      <div class="we"><h4>Empty tank 20 cm tall. 9000 cm³ fills it to ¾. Find base area.</h4>
+        <div class="ws"><span class="wn">1</span><div>Capacity = 9000 ÷ (3/4) = 12 000 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Base area = 12 000 ÷ 20 = <span class="wm">600 cm²</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c3-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 3 Practice</h2><div id="prac3"></div></div>
+  </div>
+  <div class="sub-panel" id="c3-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 3 Quiz</h2><div id="q3c"></div>
+    <div class="scb" id="sc3"><h2 id="sc3t"></h2><p id="sc3m"></p><button class="rb" onclick="bQ('q3c','sc3','sc3t','sc3m',Q3)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c3 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 4 : LIQUID IN TANK
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c4">
+  <div class="sub-panel active" id="c4-concept">
+    <div class="ls">
+      <span class="lv lv2"><span class="ld"></span>P2</span>
+      <span class="lv lv3"><span class="ld"></span>P3</span>
+      <span class="lv lv4"><span class="ld"></span>P4</span>
+      <span class="lv lv5"><span class="ld"></span>P5</span>
+    </div>
+    <div class="card">
+      <span class="bg bgt">Core Idea</span>
+      <h2>&#x1F4A7; Volume of Liquid in a Tank</h2>
+      <div class="fbox">
+        <div class="fm">Volume of liquid = l × b × depth of water</div>
+        <div class="fm" style="font-size:1rem">If fraction-full: Volume = fraction × (l × b × h)</div>
+      </div>
+      <div class="kf">&#x1F4CC; How much more to fill? = Capacity − current volume</div>
+      <div class="tb">&#x1F4A1; Depth of water ≠ height of tank (unless completely full). Always use the <strong>water depth</strong> in the formula, not the tank height!</div>
+      <div class="wb">&#x26A0;&#xFE0F; Remember to convert your final answer to the units asked — sometimes ℓ, sometimes cm³.</div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c4-examples">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv4"><span class="ld"></span>P4</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>Tank 30 cm × 20 cm × 10 cm, water depth 7 cm. Volume in litres?</h4>
+        <div class="ws"><span class="wn">1</span><div>V = 30 × 20 × 7 = 4200 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>4200 ÷ 1000 = <span class="wm">4.2 ℓ</span></div></div>
+      </div>
+      <div class="we"><h4>Container 14 cm × 12 cm × 10 cm is ⅖ filled. Find volume of water.</h4>
+        <div class="ws"><span class="wn">1</span><div>Capacity = 14 × 12 × 10 = 1680 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Water = 2/5 × 1680 = <span class="wm">672 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Container 8 cm × 6 cm × 5 cm is ¾ filled. How much more to fill it?</h4>
+        <div class="ws"><span class="wn">1</span><div>Capacity = 240 cm³. Water = 3/4 × 240 = 180 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>More needed = 240 − 180 = <span class="wm">60 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c4-practice">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv4"><span class="ld"></span>P4</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 4 Practice</h2><div id="prac4"></div></div>
+  </div>
+  <div class="sub-panel" id="c4-quiz">
+    <div class="ls"><span class="lv lv3"><span class="ld"></span>P3</span><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 4 Quiz</h2><div id="q4c"></div>
+    <div class="scb" id="sc4"><h2 id="sc4t"></h2><p id="sc4m"></p><button class="rb" onclick="bQ('q4c','sc4','sc4t','sc4m',Q4)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c4 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 5 : UNIT CUBES & VIEWS
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c5">
+  <div class="sub-panel active" id="c5-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 Standard</span></div>
+    <div class="card">
+      <span class="bg bgt">Three Question Types</span>
+      <h2>&#x1F9F1; Working with Unit Cubes</h2>
+      <div class="kf">&#x1F4CC; <strong>Type 1 — Count cubes in a stack</strong><br>Count layer by layer. Don't forget hidden cubes at the back!</div>
+      <div class="kf">&#x1F4CC; <strong>Type 2 — Complete an N-cm cube</strong><br>Need = N³ − current count</div>
+      <div class="kf">&#x1F4CC; <strong>Type 3 — Fit K-cm cubes into an L×B×H tank</strong><br>Max = (L÷K) × (B÷K) × (H÷K) — use floor division, discard remainders!</div>
+      <div class="wb">&#x26A0;&#xFE0F; You CANNOT divide total volumes for Type 3. Divide each dimension separately then multiply.</div>
+    </div>
+    <div class="card">
+      <span class="bg bgt">Views on Square Grids</span>
+      <h2>&#x1F5BC;&#xFE0F; Front, Side &amp; Top Views</h2>
+      <div class="kf">
+        &#x1F4CC; <strong>Front view:</strong> look from the front → height × width<br>
+        &#x1F4CC; <strong>Side view:</strong> look from the right → height × depth<br>
+        &#x1F4CC; <strong>Top view:</strong> look from above → width × depth
+      </div>
+      <div class="tb">&#x1F4A1; Each view is a 2D silhouette. Imagine you are a tiny ant standing at that side — draw every square you can see.</div>
+      <p style="font-weight:700;font-size:.9rem;margin:14px 0 8px">Example — L-shape: 3 cubes along the bottom, 1 stacked on the left:</p>
+      <div class="grid-wrap">
+        <div class="grid-view"><p>Front view</p><table class="grid-table"><tr><td class="filled"></td><td></td><td></td></tr><tr><td class="filled"></td><td class="filled"></td><td class="filled"></td></tr></table></div>
+        <div class="grid-view"><p>Side view</p><table class="grid-table"><tr><td class="filled"></td></tr><tr><td class="filled"></td></tr></table></div>
+        <div class="grid-view"><p>Top view</p><table class="grid-table"><tr><td class="filled"></td><td class="filled"></td><td class="filled"></td></tr></table></div>
+      </div>
+      <p style="font-size:.82rem;color:var(--tl);text-align:center">Teal = filled squares visible from that direction.</p>
+    </div>
+  </div>
+  <div class="sub-panel" id="c5-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>Solid of 2-cm cubes, 9 cubes total. What is the total volume?</h4>
+        <div class="ws"><span class="wn">1</span><div>One 2-cm cube = 2³ = 8 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Total = 9 × 8 = <span class="wm">72 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>Solid of 1-cm cubes has 19 cubes. How many more to build a 3-cm cube?</h4>
+        <div class="ws"><span class="wn">1</span><div>3-cm cube needs 3³ = 27 cubes</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>More needed = 27 − 19 = <span class="wm">8 cubes</span></div></div>
+      </div>
+      <div class="we"><h4>How many 2-cm cubes fit in a 14 cm × 5 cm × 19 cm tank? <span class="st">Vol (2)</span></h4>
+        <div class="ws"><span class="wn">1</span><div>14÷2=7, &nbsp; 5÷2=2 (r1 discarded), &nbsp; 19÷2=9 (r1 discarded)</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Total = 7 × 2 × 9 = <span class="wm">126 cubes</span></div></div>
+      </div>
+      <div class="we"><h4>A 26 cm × 16 cm × 30 cm block — cut as many 3-cm cubes as possible. Cubes cut and wood left? <span class="st">Booklet B 4.8</span></h4>
+        <div class="ws"><span class="wn">1</span><div>26÷3=8, 16÷3=5, 30÷3=10 → cubes = 8×5×10 = <span class="wm">400 cubes</span></div></div>
+        <div class="ws"><span class="wn">2</span><div>Wood used = 400 × 27 = 10 800 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Remaining = 12 480 − 10 800 = <span class="wm">1680 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c5-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 5 Practice</h2><div id="prac5"></div></div>
+  </div>
+  <div class="sub-panel" id="c5-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 5 Quiz</h2><div id="q5c"></div>
+    <div class="scb" id="sc5"><h2 id="sc5t"></h2><p id="sc5m"></p><button class="rb" onclick="bQ('q5c','sc5','sc5t','sc5m',Q5)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c5 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 6 : POURING & FILLING
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c6">
+  <div class="sub-panel active" id="c6-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 Standard</span></div>
+    <div class="card">
+      <span class="bg bgt">Two Strategies</span>
+      <h2>&#x1F6B0; Pouring &amp; Filling</h2>
+      <div class="kf">&#x1F4CC; <strong>Pouring between containers:</strong><br>
+        Water moved = initial volume − final volume (of the source tank)<br>
+        OR = capacity of receiving tank − water already in it
+      </div>
+      <div class="kf">&#x1F4CC; <strong>Filling bottles from a tank:</strong><br>
+        Water removed = initial volume − final volume<br>
+        Capacity of each bottle = water removed ÷ number of bottles
+      </div>
+      <div class="wb">&#x26A0;&#xFE0F; Always find both the INITIAL and FINAL volume of the source tank using the l × b × depth formula.</div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c6-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>Container X (base 48 cm²) water to 7 cm. Poured into empty 9-cm cubical Container Y. How much more to fill Y?</h4>
+        <div class="ws"><span class="wn">1</span><div>Water in X = 48 × 7 = 336 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Capacity of Y = 9³ = 729 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>More needed = 729 − 336 = <span class="wm">393 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>60 cm × 20 cm × 48 cm tank is ⁷⁄₈ filled. Water fills 4 bottles. Height drops to 34 cm. Capacity of each bottle in ℓ. <span class="st">Booklet B 4.8</span></h4>
+        <div class="ws"><span class="wn">1</span><div>Initial = 7/8 × 57 600 = 50 400 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Final = 60 × 20 × 34 = 40 800 cm³</div></div>
+        <div class="ws"><span class="wn">3</span><div>In bottles = 9600 cm³. Each = 9600 ÷ 4 = 2400 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div><span class="wm">2.4 ℓ</span></div></div>
+      </div>
+      <div class="we"><h4>18 cm × 15 cm × 14 cm container ⅔ filled. Poured into empty 12-cm cube until full. Water remaining?</h4>
+        <div class="ws"><span class="wn">1</span><div>Water = 2/3 × 3780 = 2520 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Cube = 12³ = 1728 cm³ poured out</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Remaining = 2520 − 1728 = <span class="wm">792 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c6-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 6 Practice</h2><div id="prac6"></div></div>
+  </div>
+  <div class="sub-panel" id="c6-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 6 Quiz</h2><div id="q6c"></div>
+    <div class="scb" id="sc6"><h2 id="sc6t"></h2><p id="sc6m"></p><button class="rb" onclick="bQ('q6c','sc6','sc6t','sc6m',Q6)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c6 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 7 : TAP FLOW
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c7">
+  <div class="sub-panel active" id="c7-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 Standard</span></div>
+    <div class="card">
+      <span class="bg bgt">Key Formula</span>
+      <h2>&#x1F6B0; Tap Flow Problems</h2>
+      <div class="fbox">
+        <div class="fm">Volume added/removed = rate (ℓ/min) × time (min) × 1000</div>
+      </div>
+      <div class="kf">&#x1F4CC; Convert ℓ/min → cm³/min first (×1000), then add or subtract from current volume.<br><br>
+        <strong>Time to fill/empty:</strong> Time = volume remaining ÷ rate (in cm³/min)
+      </div>
+      <div class="wb">&#x26A0;&#xFE0F; Overflow check: if water added + current water exceeds capacity → overflow = total − capacity. Water CANNOT go above the brim.</div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c7-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>20 cm × 12 cm × 30 cm tank, ⅔ full. Tap in at 0.3 ℓ/min. Volume after 7 min?</h4>
+        <div class="ws"><span class="wn">1</span><div>Current = 2/3 × 7200 = 4800 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Added = 0.3 × 7 × 1000 = 2100 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Total = 4800 + 2100 = <span class="wm">6900 cm³</span></div></div>
+      </div>
+      <div class="we"><h4>35 cm × 28 cm × 15 cm tank, ⅔ full. Tap out at 0.7 ℓ/min. How long to empty?</h4>
+        <div class="ws"><span class="wn">1</span><div>Water = 2/3 × 14 700 = 9800 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Rate = 0.7 × 1000 = 700 cm³/min</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Time = 9800 ÷ 700 = <span class="wm">14 minutes</span></div></div>
+      </div>
+      <div class="we"><h4>35 cm × 18 cm × 24 cm tank, ¾ full. Tap in at 0.5 ℓ/min. Overflow after 15 min?</h4>
+        <div class="ws"><span class="wn">1</span><div>Capacity = 15 120. Current = 11 340. Added = 7500. Total = 18 840.</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Overflow = 18 840 − 15 120 = <span class="wm">3720 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c7-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 7 Practice</h2><div id="prac7"></div></div>
+  </div>
+  <div class="sub-panel" id="c7-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 7 Quiz</h2><div id="q7c"></div>
+    <div class="scb" id="sc7"><h2 id="sc7t"></h2><p id="sc7m"></p><button class="rb" onclick="bQ('q7c','sc7','sc7t','sc7m',Q7)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c7 -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAPTER 8 : OBJECTS IN TANK
+═══════════════════════════════════════════════════════════ -->
+<div class="ch-panel" id="ch-c8">
+  <div class="sub-panel active" id="c8-concept">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5 Standard</span></div>
+    <div class="card">
+      <span class="bg bgt">Key Principle</span>
+      <h2>&#x1FA99; Objects Submerged in a Tank</h2>
+      <div class="kf">&#x1F4CC; When an object is placed into water, it displaces water upward.<br><br>
+        New height = (water volume + object volume) ÷ base area of tank
+      </div>
+      <div class="sb">&#x2705; Think of it as: everything occupying space in the tank (water + objects) pushes up to the same height. New height = total volume ÷ base area.</div>
+      <div class="wb">&#x26A0;&#xFE0F; This only works if objects are <strong>fully submerged</strong> and water does <strong>not overflow</strong>.</div>
+      <div class="kf">&#x1F4CC; <strong>Cubes placed in, then water added until fraction-full:</strong><br>
+        Water poured in = target fill volume − volume of cubes
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c8-examples">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card">
+      <span class="bg bgo">Worked Examples</span>
+      <h2>Examples</h2>
+      <div class="we"><h4>23 cm × 22 cm × 15 cm tank, ⅔ filled. 3 balls each 506 cm³. New height?</h4>
+        <div class="ws"><span class="wn">1</span><div>Water = 2/3 × 7590 = 5060 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Balls = 3 × 506 = 1518 cm³. Total = 6578 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Height = 6578 ÷ (23×22) = 6578 ÷ 506 = <span class="wm">13 cm</span></div></div>
+      </div>
+      <div class="we"><h4>18 cm × 16 cm × 27 cm tank, ⁵⁄₉ filled. 6 pebbles each 192 cm³. New height?</h4>
+        <div class="ws"><span class="wn">1</span><div>Water = 5/9 × 7776 = 4320 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Pebbles = 1152 cm³. Total = 5472 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Height = 5472 ÷ 288 = <span class="wm">19 cm</span></div></div>
+      </div>
+      <div class="we"><h4>10 cubes of side 8 cm placed in 26 cm × 18 cm × 30 cm tank. Water poured until ⅔ full. How much water?</h4>
+        <div class="ws"><span class="wn">1</span><div>Target = 2/3 × 14 040 = 9360 cm³</div></div>
+        <div class="ws"><span class="wn">2</span><div>Cubes = 10 × 512 = 5120 cm³</div></div>
+        <div class="ws"><span class="wn ok">&#x2713;</span><div>Water = 9360 − 5120 = <span class="wm">4240 cm³</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sub-panel" id="c8-practice">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgp">Practice</span><h2>&#x270D;&#xFE0F; Chapter 8 Practice</h2><div id="prac8"></div></div>
+  </div>
+  <div class="sub-panel" id="c8-quiz">
+    <div class="ls"><span class="lv lv5"><span class="ld"></span>P5</span></div>
+    <div class="card"><span class="bg bgo">Quiz</span><h2>&#x1F3AF; Chapter 8 Quiz — Final Boss &#x1F525;</h2><div id="q8c"></div>
+    <div class="scb" id="sc8"><h2 id="sc8t"></h2><p id="sc8m"></p><button class="rb" onclick="bQ('q8c','sc8','sc8t','sc8m',Q8)">Try Again &#x21BB;</button></div></div>
+  </div>
+</div><!-- end ch-c8 -->
+
+</div><!-- con -->
+
+<script>
+/* ─── NAV ─────────────────────────────────────── */
+var currentCh='c1';
+var currentSub='concept';
+
+function showCh(ch,el){
+  document.querySelectorAll('.ch-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.ch-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('ch-'+ch).classList.add('active');
+  el.classList.add('active');
+  currentCh=ch;
+  // reset sub to concept
+  document.querySelectorAll('.sub-tab').forEach(function(t,i){t.classList.toggle('active',i===0);});
+  document.querySelectorAll('#ch-'+ch+' .sub-panel').forEach(function(p){p.classList.remove('active');});
+  var cp=document.getElementById(ch+'-concept');
+  if(cp)cp.classList.add('active');
+  currentSub='concept';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showSub(sub,el){
+  document.querySelectorAll('.sub-tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('#ch-'+currentCh+' .sub-panel').forEach(function(p){p.classList.remove('active');});
+  var sp=document.getElementById(currentCh+'-'+sub);
+  if(sp)sp.classList.add('active');
+  currentSub=sub;
+  window.scrollTo({top:60,behavior:'smooth'});
+}
+
+/* ─── PRACTICE DATA ───────────────────────────── */
+var P1=[
+  {q:'Fill in: 5300 cm³ = ___ mℓ',a:'5300',u:'mℓ'},
+  {q:'Fill in: 7.25 ℓ = ___ cm³',a:'7250',u:'cm³'},
+  {q:'Fill in: 4600 mℓ = ___ ℓ',a:'4.6',u:'ℓ'},
+  {q:'Fill in: 0.85 ℓ = ___ mℓ',a:'850',u:'mℓ'},
+  {q:'Fill in: 2380 cm³ = ___ ℓ (to 3 d.p.)',a:'2.380',u:'ℓ'},
+  {q:'Fill in: 3 ℓ 450 mℓ = ___ mℓ',a:'3450',u:'mℓ'},
+];
+var P2=[
+  {q:'Find the volume of a cuboid: 9 cm × 4 cm × 7 cm',a:'252',u:'cm³'},
+  {q:'Find the volume of a cube with side 6 cm',a:'216',u:'cm³'},
+  {q:'A tank 20 cm long, 8 cm wide. Height is twice its breadth. Find volume.',a:'2560',u:'cm³'},
+  {q:'A tank has a square base of 36 cm² and height 12 cm. Find volume.',a:'432',u:'cm³'},
+  {q:'A container: length = 3 × breadth, height = 2 × breadth. Breadth = 4 cm. Find volume.',a:'384',u:'cm³'},
+];
+var P3=[
+  {q:'A cuboid has volume 216 cm³ and base area 24 cm². Find its height.',a:'9',u:'cm'},
+  {q:'A cuboid volume 315 cm³. Base is 7 cm × 9 cm. Find its height.',a:'5',u:'cm'},
+  {q:'An empty tank is 25 cm tall. 6000 cm³ fills it to 3/5. Find the base area.',a:'400',u:'cm²'},
+  {q:'A 90 cm × 40 cm tank held 288 ℓ of water, which is 4/5 full. Find the height.',a:'100',u:'cm'},
+];
+var P4=[
+  {q:'A tank 25 cm × 10 cm × 20 cm has water to a depth of 12 cm. Find the volume of water in litres.',a:'3',u:'ℓ'},
+  {q:'A tank 30 cm × 20 cm × 15 cm is 2/5 filled with water. Find the volume of water in cm³.',a:'3600',u:'cm³'},
+  {q:'A container 10 cm × 8 cm × 6 cm is 3/4 filled. How much more water (cm³) to fill it completely?',a:'120',u:'cm³'},
+  {q:'A tank 40 cm × 25 cm × 18 cm has water at depth 11 cm. Find the volume in ℓ.',a:'11',u:'ℓ'},
+];
+var P5=[
+  {q:'A solid made of 1-cm cubes has 20 cubes. How many more to build a 4-cm cube?',a:'44',u:'cubes'},
+  {q:'A solid made of 5-cm cubes has 8 cubes. Total volume in cm³?',a:'1000',u:'cm³'},
+  {q:'Maximum 3-cm cubes that fit in a 20 cm × 18 cm × 30 cm tank?',a:'360',u:'cubes'},
+];
+var P6=[
+  {q:'A 50 cm × 35 cm × 45 cm tank is 4/5 filled. Water poured into 10 bottles. Height drops to 20 cm. Capacity of each bottle in cm³?',a:'2800',u:'cm³'},
+  {q:'Container X (base 48 cm²) water to 7 cm. All poured into empty 9-cm cubical Container Y. How much more water (cm³) to fill Y?',a:'393',u:'cm³'},
+  {q:'A 60 cm × 20 cm × 48 cm tank is 7/8 filled. Water fills 4 bottles. Height drops to 34 cm. Capacity of each bottle in cm³?',a:'2400',u:'cm³'},
+];
+var P7=[
+  {q:'A 22 cm × 15 cm × 16 cm tank is 1/4 filled. Tap in at 0.6 ℓ/min. Volume after 5 minutes in cm³?',a:'4320',u:'cm³'},
+  {q:'A 35 cm × 28 cm × 15 cm tank is 2/3 full. Tap out at 0.7 ℓ/min. How many minutes to empty?',a:'14',u:'minutes'},
+  {q:'A 32 cm × 20 cm × 15 cm tank is 5/8 full. Tap drains at 0.4 ℓ/min. Volume left after 10 minutes in cm³?',a:'2000',u:'cm³'},
+  {q:'A 30 cm × 20 cm × 25 cm tank is 3/5 filled. Tap in at 0.5 ℓ/min. How many minutes to fill completely?',a:'12',u:'minutes'},
+];
+var P8=[
+  {q:'A 30 cm × 20 cm × 24 cm tank is 5/8 filled. 4 balls each 450 cm³ placed in. Find new height of water in cm.',a:'18',u:'cm'},
+  {q:'A 18 cm × 16 cm × 27 cm tank is 5/9 filled. 6 pebbles each 192 cm³ placed in. Find new water height in cm.',a:'19',u:'cm'},
+  {q:'7 cubes of side 6 cm placed in 30 cm × 24 cm × 20 cm tank. Water poured until 3/5 full. How much water (cm³) poured in?',a:'7128',u:'cm³'},
+];
+
+/* ─── QUIZ DATA ───────────────────────────────── */
+var Q1=[
+  {q:'Which statement is correct?',opts:['1 cm³ = 10 mℓ','1 ℓ = 100 cm³','1 mℓ = 1 cm³','1 ℓ = 10 000 mℓ'],ans:2,exp:'1 mℓ = 1 cm³ is the key bridge between liquid and solid volume.'},
+  {q:'5.2 ℓ = ___ cm³',opts:['52','520','5200','52 000'],ans:2,exp:'Multiply by 1000: 5.2 × 1000 = 5200 cm³.'},
+  {q:'3750 mℓ = ___ ℓ',opts:['37.5','3.75','0.375','375'],ans:1,exp:'Divide by 1000: 3750 ÷ 1000 = 3.75 ℓ.'},
+  {q:'2 ℓ 800 mℓ = ___ mℓ',opts:['280','2800','20 800','28 000'],ans:1,exp:'2 × 1000 + 800 = 2800 mℓ.'},
+  {q:'Which unit suits the volume of a swimming pool?',opts:['cm³','mℓ','ℓ','m³'],ans:3,exp:'A swimming pool is very large — m³ (cubic metres) is most appropriate.'},
+  {q:'4200 cm³ = ___ ℓ',opts:['0.42','4.2','42','420'],ans:1,exp:'4200 ÷ 1000 = 4.2 ℓ.'},
+];
+var Q2=[
+  {q:'Find the volume of a cuboid 10 cm × 6 cm × 4 cm.',opts:['240 cm³','200 cm³','480 cm³','120 cm³'],ans:0,exp:'V = 10 × 6 × 4 = 240 cm³.'},
+  {q:'Find the volume of a cube with edge 5 cm.',opts:['15 cm³','25 cm³','75 cm³','125 cm³'],ans:3,exp:'V = 5 × 5 × 5 = 125 cm³.'},
+  {q:'Tank 15 cm long, 4 cm wide. Height = twice its breadth. Find volume.',opts:['480 cm³','240 cm³','960 cm³','120 cm³'],ans:0,exp:'Breadth = 4 cm. Height = 2 × 4 = 8 cm. V = 15 × 4 × 8 = 480 cm³.'},
+  {q:'A tank has base area 64 cm² and height 9 cm. Find volume.',opts:['576 cm³','648 cm³','512 cm³','450 cm³'],ans:0,exp:'V = 64 × 9 = 576 cm³.'},
+  {q:'Container: length = 2 × breadth, height = breadth. Breadth = 5 cm. Find volume.',opts:['250 cm³','500 cm³','125 cm³','1000 cm³'],ans:0,exp:'l = 10, b = 5, h = 5. V = 10 × 5 × 5 = 250 cm³.'},
+  {q:'A cube has volume 216 cm³. What is the length of its edge?',opts:['6 cm','8 cm','12 cm','54 cm'],ans:0,exp:'6 × 6 × 6 = 216. Edge = 6 cm.'},
+];
+var Q3=[
+  {q:'A cuboid of volume 180 cm³ has base area 36 cm². Find its height.',opts:['5 cm','6 cm','4 cm','7 cm'],ans:0,exp:'Height = 180 ÷ 36 = 5 cm.'},
+  {q:'A cuboid is 8 cm × 6 cm × h cm and has volume 336 cm³. Find h.',opts:['6 cm','7 cm','8 cm','9 cm'],ans:1,exp:'h = 336 ÷ (8 × 6) = 7 cm.'},
+  {q:'A tank is 15 cm tall. 900 cm³ fills it to 3/4. Find the base area.',opts:['80 cm²','60 cm²','100 cm²','75 cm²'],ans:0,exp:'Capacity = 900 ÷ (3/4) = 1200 cm³. Base area = 1200 ÷ 15 = 80 cm².'},
+  {q:'A 50 cm × 30 cm tank holds 45 ℓ when full. Find its height.',opts:['30 cm','25 cm','20 cm','40 cm'],ans:0,exp:'45 ℓ = 45 000 cm³. Height = 45 000 ÷ 1500 = 30 cm.'},
+  {q:'A 20 cm × 10 cm × h cm tank is 2/3 full and contains 2.4 ℓ. Find h.',opts:['18 cm','12 cm','9 cm','15 cm'],ans:0,exp:'2400 = 2/3 × (20 × 10 × h). h = 2400 × 3 ÷ 400 = 18 cm.'},
+  {q:'An empty tank is 20 cm tall. 9000 cm³ fills it to 3/4. Find the base area.',opts:['600 cm²','450 cm²','400 cm²','750 cm²'],ans:0,exp:'Capacity = 9000 ÷ (3/4) = 12 000. Base area = 12 000 ÷ 20 = 600 cm².'},
+];
+var Q4=[
+  {q:'Tank 20 cm × 15 cm × 10 cm, water at depth 6 cm. Volume of water?',opts:['1800 cm³','3000 cm³','1200 cm³','2400 cm³'],ans:0,exp:'V = 20 × 15 × 6 = 1800 cm³.'},
+  {q:'Tank 30 cm × 20 cm × 12 cm is 3/4 filled. Volume of water?',opts:['5400 cm³','6000 cm³','7200 cm³','4800 cm³'],ans:0,exp:'Capacity = 7200. Water = 3/4 × 7200 = 5400 cm³.'},
+  {q:'Container 10 cm × 8 cm × 5 cm is 2/5 filled. How much more to fill it?',opts:['240 cm³','160 cm³','200 cm³','400 cm³'],ans:0,exp:'Capacity = 400. Water = 160. More = 240 cm³.'},
+  {q:'Tank 25 cm × 20 cm × 10 cm, water at depth 10 cm. Volume in ℓ?',opts:['5 ℓ','4 ℓ','6 ℓ','7.5 ℓ'],ans:0,exp:'V = 25 × 20 × 10 = 5000 cm³ = 5 ℓ.'},
+  {q:'Container 12 cm × 9 cm × 8 cm is 5/6 filled. Volume of water in cm³?',opts:['720 cm³','576 cm³','864 cm³','480 cm³'],ans:0,exp:'Capacity = 864. Water = 5/6 × 864 = 720 cm³.'},
+  {q:'Tank 15 cm × 12 cm × 20 cm is 3/4 filled. How much more water (cm³) needed?',opts:['900 cm³','2700 cm³','3600 cm³','1800 cm³'],ans:0,exp:'Capacity = 3600. Water = 2700. More = 900 cm³.'},
+];
+var Q5=[
+  {q:'Solid of 1-cm cubes has 15 cubes. How many more to complete a 3-cm cube?',opts:['12','10','14','8'],ans:0,exp:'3-cm cube = 27. More = 27 − 15 = 12.'},
+  {q:'Solid of 3-cm cubes has 5 cubes. Total volume?',opts:['135 cm³','45 cm³','125 cm³','27 cm³'],ans:0,exp:'5 × 27 = 135 cm³.'},
+  {q:'Maximum 2-cm cubes in a 10 cm × 8 cm × 6 cm tank?',opts:['60','240','30','120'],ans:0,exp:'5 × 4 × 3 = 60.'},
+  {q:'Which view shows the shape as seen from ABOVE?',opts:['Top view','Front view','Side view','Back view'],ans:0,exp:'The top view shows width × depth as seen from above.'},
+  {q:'Solid of 1-cm cubes has 50. How many more to complete a 4-cm cube?',opts:['14','64','114','54'],ans:0,exp:'4³ = 64. More = 64 − 50 = 14.'},
+  {q:'Maximum 3-cm cubes in a 10 cm × 9 cm × 12 cm tank?',opts:['36','10','3','27'],ans:0,exp:'3 × 3 × 4 = 36.'},
+];
+var Q6=[
+  {q:'Container A (base 60 cm²) water to 8 cm. All to empty cubical B (side 7 cm). Volume left in A after B is full?',opts:['137 cm³','480 cm³','343 cm³','0 cm³'],ans:0,exp:'Water = 480. B = 343. Remaining = 137 cm³.'},
+  {q:'50 cm × 35 cm × 45 cm tank 4/5 filled. 10 bottles. Height drops to 20 cm. Each bottle?',opts:['2800 cm³','5250 cm³','3500 cm³','1400 cm³'],ans:0,exp:'Initial 63 000, final 35 000. Removed 28 000 ÷ 10 = 2800 cm³.'},
+  {q:'25 cm × 10 cm × 20 cm tank fully filled. Bottles hold 0.8 ℓ. Water left after max bottles?',opts:['200 cm³','800 cm³','400 cm³','0 cm³'],ans:0,exp:'5000 ÷ 800 = 6 full bottles = 4800 cm³. Left = 200 cm³.'},
+  {q:'60 cm × 20 cm × 48 cm tank 7/8 filled. 4 bottles. Height drops to 34 cm. Each bottle?',opts:['2400 cm³','1200 cm³','9600 cm³','4800 cm³'],ans:0,exp:'Removed = 9600. Each = 9600 ÷ 4 = 2400 cm³.'},
+  {q:'18 cm × 15 cm × 14 cm container ⅔ filled. Poured into empty 12-cm cube until full. Remaining in rect. container?',opts:['792 cm³','1728 cm³','2520 cm³','960 cm³'],ans:0,exp:'Water = 2520. Cube = 1728. Remaining = 792 cm³.'},
+];
+var Q7=[
+  {q:'20 cm × 12 cm × 30 cm tank ⅔ full. Tap in 0.3 ℓ/min. Volume after 7 min?',opts:['6900 cm³','4800 cm³','7200 cm³','2100 cm³'],ans:0,exp:'4800 + 2100 = 6900 cm³.'},
+  {q:'35 cm × 28 cm × 15 cm tank ⅔ full. Tap out 0.7 ℓ/min. Minutes to empty?',opts:['14 min','10 min','20 min','7 min'],ans:0,exp:'9800 ÷ 700 = 14 min.'},
+  {q:'35 cm × 18 cm × 24 cm tank ¾ full. Tap in 0.5 ℓ/min. Overflow after 15 min?',opts:['3720 cm³','7500 cm³','0','1890 cm³'],ans:0,exp:'Total 18 840 > capacity 15 120. Overflow = 3720 cm³.'},
+  {q:'22 cm × 15 cm × 16 cm tank ¼ full. Tap in 0.6 ℓ/min. Volume after 5 min?',opts:['4320 cm³','1320 cm³','3000 cm³','6600 cm³'],ans:0,exp:'1320 + 3000 = 4320 cm³.'},
+  {q:'32 cm × 20 cm × 15 cm tank ⅝ full. Tap drains 0.4 ℓ/min. Volume after 10 min?',opts:['2000 cm³','6000 cm³','4000 cm³','3600 cm³'],ans:0,exp:'6000 − 4000 = 2000 cm³.'},
+];
+var Q8=[
+  {q:'23 cm × 22 cm × 15 cm tank ⅔ filled. 3 balls each 506 cm³. New height?',opts:['13 cm','10 cm','12 cm','15 cm'],ans:0,exp:'(5060 + 1518) ÷ 506 = 13 cm.'},
+  {q:'18 cm × 16 cm × 27 cm tank ⁵⁄₉ filled. 6 pebbles each 192 cm³. New height?',opts:['19 cm','15 cm','18 cm','22 cm'],ans:0,exp:'(4320 + 1152) ÷ 288 = 19 cm.'},
+  {q:'10 cubes side 8 cm in 26 cm × 18 cm × 30 cm tank. Water until ⅔ full. Water poured in?',opts:['4240 cm³','9360 cm³','5120 cm³','3720 cm³'],ans:0,exp:'9360 − 5120 = 4240 cm³.'},
+  {q:'7 cubes side 6 cm in 30 cm × 24 cm × 20 cm tank. Water until ⅗ full. Water poured in?',opts:['7128 cm³','8640 cm³','1512 cm³','6000 cm³'],ans:0,exp:'8640 − 1512 = 7128 cm³.'},
+  {q:'25 cm × 20 cm × 18 cm tank ½ filled. 5 balls each 240 cm³ placed in. New height?',opts:['11.4 cm','9 cm','10 cm','12 cm'],ans:0,exp:'(4500 + 1200) ÷ 500 = 11.4 cm.'},
+];
+
+/* ─── RENDER PRACTICE ─────────────────────────── */
+function renderPrac(data,cid){
+  var c=document.getElementById(cid);if(!c)return;
+  var h='';
+  data.forEach(function(q,i){
+    h+='<div class="pq" id="pq'+cid+i+'"><p class="qt"><span class="qn">'+(i+1)+'</span>'+q.q+'</p>';
+    h+='<div class="ar"><input class="ai" id="ai'+cid+i+'" type="text" placeholder="Answer">';
+    if(q.u)h+='<span style="font-size:.82rem;color:var(--tl)">'+q.u+'</span>';
+    h+='<button class="cb" onclick="chkP(\''+cid+'\','+i+',\''+q.a+'\')">Check</button></div>';
+    h+='<div class="fm2" id="fm'+cid+i+'"></div></div>';
+  });
+  c.innerHTML=h;
+}
+function chkP(cid,i,ans){
+  var inp=document.getElementById('ai'+cid+i);
+  var fm=document.getElementById('fm'+cid+i);
+  var pq=document.getElementById('pq'+cid+i);
+  var val=inp.value.trim().replace(/\s/g,'');
+  var ok=(val===ans.replace(/\s/g,''));
+  inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  fm.classList.add('sh');fm.classList.toggle('ok',ok);fm.classList.toggle('no',!ok);
+  if(ok){fm.textContent='✓ Correct!';pq.classList.add('done');}
+  else{fm.textContent='✗ Answer: '+ans;}
+}
+
+/* ─── RENDER QUIZ ─────────────────────────────── */
+function renderQuiz(data,cid){
+  var c=document.getElementById(cid);if(!c)return;
+  var h='';
+  data.forEach(function(q,i){
+    h+='<div class="qq" id="qq'+cid+i+'"><p class="qt"><span class="qn">'+(i+1)+'</span>'+q.q+'</p><div class="qo">';
+    q.opts.forEach(function(o,j){h+='<button class="qop" onclick="chkQ(\''+cid+'\','+i+','+j+')">'+o+'</button>';});
+    h+='</div><div class="qf" id="qf'+cid+i+'"></div></div>';
+  });
+  c.innerHTML=h;
+}
+var scores={};
+function chkQ(cid,qi,chosen){
+  var key=cid.replace('q','').replace('c','');
+  var data=window['Q'+key];if(!data)return;
+  var q=data[qi];
+  var con=document.getElementById('qq'+cid+qi);
+  var opts=con.querySelectorAll('.qop');
+  opts.forEach(function(o){o.classList.add('dis');});
+  opts[chosen].classList.add(chosen===q.ans?'ok':'no');
+  if(chosen!==q.ans)opts[q.ans].classList.add('ok');
+  var fb=document.getElementById('qf'+cid+qi);
+  fb.classList.add('sh');fb.classList.add(chosen===q.ans?'ok':'no');
+  fb.textContent=(chosen===q.ans?'✓ Correct! ':'✗ Not quite. ')+q.exp;
+  if(!scores[cid])scores[cid]={s:0,t:0};
+  scores[cid].t++;
+  if(chosen===q.ans)scores[cid].s++;
+  if(scores[cid].t===data.length){
+    var scb=document.getElementById('sc'+key);
+    if(scb){
+      scb.style.display='block';
+      var s=scores[cid].s,t=scores[cid].t;
+      document.getElementById('sc'+key+'t').textContent=s+' / '+t;
+      document.getElementById('sc'+key+'m').textContent=s===t?'Perfect! You are a volume master! 🎉':s>=t*.7?'Great work Saina! Review the ones you missed.':'Keep practising — you\'ve got this! 💪';
+    }
+  }
+}
+function bQ(qid,scid,stid,smid,data){
+  scores[qid]={s:0,t:0};
+  document.getElementById(scid).style.display='none';
+  renderQuiz(data,qid);
+}
+
+/* ─── INIT ────────────────────────────────────── */
+window.onload=function(){
+  var pm=[['prac1',P1],['prac2',P2],['prac3',P3],['prac4',P4],
+          ['prac5',P5],['prac6',P6],['prac7',P7],['prac8',P8]];
+  pm.forEach(function(p){renderPrac(p[1],p[0]);});
+  var qm=[['q1c',Q1],['q2c',Q2],['q3c',Q3],['q4c',Q4],
+          ['q5c',Q5],['q6c',Q6],['q7c',Q7],['q8c',Q8]];
+  qm.forEach(function(q){renderQuiz(q[1],q[0]);});
+};
+</script>
+</body>
+</html>
